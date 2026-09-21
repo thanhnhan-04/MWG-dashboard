@@ -5,7 +5,323 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FinSuccess — PVS Tracker</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-<script src="data.js"></script>
+<script>
+// ============================================================
+//  MWG — DỮ LIỆU DASHBOARD  (cập nhật định kỳ, tách khỏi giao diện)
+//  Đơn vị mặc định: tỷ VND. Mỗi khối có trường `src` ghi nguồn.
+//  Nguồn IR: API https://api.mwgshop.vn/gw/ir-api/api/PostAPI?categoryID=431 (KQKD tháng) / 430 (BCTC)
+//  Cửa hàng BHX theo tỉnh: https://api.bachhoaxanh.com/Location/V2/GetStoresByLocation?provinceId=..&pageSize=1
+// ============================================================
+window.PVS_DATA = {
+
+  meta: {
+    ticker: "MWG",
+    name: "CTCP Đầu tư Thế Giới Di Động (Mobile World Group)",
+    exchange: "HOSE",
+    updated: "2026-09-21",
+    view: "TÍCH CỰC",
+    subtitle: "Theo dõi cổ phiếu MWG — canh điểm mua",
+    irUrl: "https://mwg.vn/bao-cao",
+    price: 71700,
+    priceDate: "2026-09-21",
+    priceNote: "DMX (con) 73.000đ · vốn hóa 92.545 tỷ", peNote: "band lịch sử 12–22x",
+    sharesOut: 1475.8,            // triệu cp: 1.468,4 lưu hành 30/06 + 7,34 ESOP (17/07/2026)
+    mcap: 105815,
+    peTTM: 10.7,
+    pb: 2.9,
+    epsTTM: 6681,
+    bvps: 24632,                  // 36.351 tỷ VCSH / 1.475,8 tr cp
+    foreignOwn: null,
+    src: "Simplize 19/09/2026; BCTC hợp nhất bán niên 2026 soát xét (EY, 27/08/2026)"
+  },
+
+  // ---------- CHECKLIST ĐIỀU KIỆN MUA ----------
+  signals: [
+    // TOP 5 tiêu chí quyết định (các tiêu chí phụ đã chuyển vào thesisPillars/risks)
+    { id:"pe",        label:"P/E trượt 4 quý vs. band lịch sử",     value:10.7,  unit:"x", op:"<=", threshold:15,  note:"Trung vị 2019–2026 ~15–16x, band 12–22x (playbook). Đang thấp nhất kể từ Q1/2020 (COVID) dù LN kỷ lục" },
+    { id:"holdco",    label:"P/E ngầm định của phần ngoài DMX",      value:15,    unit:"x", op:"<=", threshold:20,  note:"Vốn hóa MWG ~106.000 − 86% × DMX (92.545) ≈ 26.000 tỷ cho BHX + An Khang + Erablue + AvaKids; BHX 2026F ~1.800 tỷ LN → ~15x" },
+    { id:"sssg",      label:"SSSG chuỗi DMX (lũy kế)",               value:30,    unit:"%", op:">=", threshold:5,   note:"8T2026: +30% — nền 2025 thấp; theo dõi có giữ được 2 chữ số vào Q4 (mùa cao điểm) không" },
+    { id:"bhxmargin", label:"Biên ròng BHX quý gần nhất",            value:3.4,   unit:"%", op:">=", threshold:3,   note:"Q2/2026: 3,4% (Q1: 2,9%). 6T LN ~910 tỷ > cả năm 2025 (755 tỷ)" },
+    { id:"bhxstore",  label:"DT/cửa hàng BHX/tháng (analyst tính)",  value:1.389, unit:"tỷ", op:">=", threshold:1.5, note:"T8/2026: 1,389 tỷ — giảm liên tục từ đỉnh 1,961 (T11/2024) vì mở >1.000 store; đây là tiêu chí ĐỎ duy nhất", pendingNote:"Cần thấy đảo chiều tăng 2 tháng liên tiếp khi cohort 2026 ramp-up" }
+  ],
+
+  // ---------- MẢNG KINH DOANH (số thực tế đã công bố) ----------
+  segments: {
+    title: "Breakdown theo chuỗi",
+    names: ["Điện Máy Xanh (DMX)","Bách Hóa Xanh","Khác (An Khang, AvaKids, dịch vụ)"],  // DMX = TGDĐ + ĐMX + TopZone + Erablue
+    years: ["2023","2024","2025"],
+    revenue: [
+      [83506,85605,105724],
+      [31581,41107,46840],
+      [3213,7758,3436]          // = tổng hợp nhất − DMX − BHX (2023: 118.300; 2024: 134.470; 2025: 156.000) ⚠ 2024 cần verify
+    ],
+    profit: null,
+    profitLabel: "LNST",
+    revTitle: "Doanh thu theo chuỗi (tỷ VND)",
+    tableTitle: "Doanh thu theo chuỗi (tỷ VND) — tổng từ số tháng công bố",
+    tableNote: "DMX/BHX = tổng 11 kỳ tháng (T1+T2 gộp). Dòng 'Khác' = doanh thu hợp nhất − DMX − BHX, sai số do làm tròn.",
+    // Doanh thu hằng tháng (analyst tổng hợp từ báo cáo tháng MWG: DT tổng × tỷ trọng chuỗi)
+    monthly: {
+      months: ["T1+T2","T3","T4","T5","T6","T7","T8","T9","T10","T11","T12"],
+      chains: [
+        { name:"Bách Hóa Xanh", data:{
+          "2023":[4125,2245,2289,2467,2564,2800,2930,2903,3071,2998,3189],
+          "2024":[6045,3104,3246,3443,3651,3549,3703,3587,3522,3572,3685],
+          "2025":[7031,3988,3900,3961,3705,3890,3954,3932,4116,4061,4302],
+          "2026":[8792,4323,4821,5178,5192,5669,6149,null,null,null,null] } },
+        { name:"Điện Máy Xanh (TGDĐ + ĐMX)", data:{
+          "2023":[14543,5403,7358,7630,6645,6759,6863,7163,7837,6554,6751],
+          "2024":[14891,6426,8079,7433,7465,7065,7491,7894,7863,7088,7910],
+          "2025":[16897,7356,8332,8377,8467,8700,8937,9390,10396,9629,9243],
+          "2026":[22800,9616,10894,11151,10818,9912,11528,null,null,null,null] } }
+      ],
+      note: "T1+T2 gộp vì lệch Tết. Cách lấy: mwg.vn/bao-cao › Báo cáo KQKD theo tháng (PDF) → doanh thu tổng × tỷ trọng chuỗi. 8T2026 khớp IR: BHX 40.124 (IR 40,1 nghìn tỷ), DMX 86.719 (IR 86,8 nghìn tỷ)."
+    },
+    marginTitle: "Biên gộp theo mảng (%)",
+    // Biên gộp DMX = BCTC riêng CTCP ĐT Điện Máy Xanh (CafeF). "Bách Hóa Xanh" ở đây = phần dư (MWG hợp nhất − DMX), gồm cả An Khang, AvaKids (~7% doanh thu phần dư)
+    marginSeries: [
+      { label:"2024",    values:{ "Điện Máy Xanh (DMX)":18.3, "Bách Hóa Xanh":25.4, "MWG hợp nhất":20.5 } },
+      { label:"2025",    values:{ "Điện Máy Xanh (DMX)":17.8, "Bách Hóa Xanh":24.8, "MWG hợp nhất":19.9 } },
+      { label:"Q1/2026", values:{ "Điện Máy Xanh (DMX)":19.2, "Bách Hóa Xanh":24.9, "MWG hợp nhất":20.9 } },
+      { label:"Q2/2026", values:{ "Điện Máy Xanh (DMX)":21.1, "Bách Hóa Xanh":24.4, "MWG hợp nhất":22.2 } }
+    ],
+    gmNote: "Cách tính: DMX = LN gộp/DT thuần theo BCTC CTCP ĐT Điện Máy Xanh (2024: 17.089/93.357; 2025: 19.487/109.479; Q1/26: 6.241/32.542; Q2/26: 6.906/32.738). 'Bách Hóa Xanh' = phần dư MWG hợp nhất − DMX (2024: 10.410/40.985; 2025: 11.515/46.449; Q1/26: 3.469/13.920; Q2/26: 3.903/16.014) — gồm cả An Khang, AvaKids nên biên thật của BHX cao hơn chút. Dòng 'MWG hợp nhất' = biên gộp hợp nhất để đối chiếu (20,5% → 19,9% → 20,9% → 22,2%). Biên ròng đã công bố: DMX Q2/26 8,1%; BHX Q1/26 2,9%, Q2/26 3,4%.",
+
+
+    src: "Báo cáo KQKD tháng MWG (analyst tổng hợp); Tài liệu họp NĐT Q2/2026; Vietstock 23/07/2026; Elibook 14/08/2026"
+  },
+
+  // ---------- KQKD THEO QUÝ (hợp nhất) ----------
+  quarterly: {
+    labels: ["Q1/25","Q2/25","Q3/25","Q4/25","Q1/26","Q2/26"],
+    revenue: [36135,37620,39853,42850,46462,48751],
+    npat:    [1546,1648,1771,2072,2714,3303],
+    npatCore:[1546,1648,1771,2072,2714,3303],
+    gm:      [null,null,null,null,null,22.2],
+    note: "LNST cổ đông công ty mẹ theo BCTC từng quý (CafeF; 2025 cả năm 7.034). Q1/26 2.714, Q2/26 3.303 theo BCTC Q2/2026. Không có khoản bất thường lớn được công bố → LNST lõi = LNST.",
+    src: "BCTC MWG; Vietstock; MWG IR"
+  },
+
+  h1_2026: {
+    revenueNet: 95213, revenueYoY: 29, grossProfit: 20519, gmPct: 21.6,
+    finIncome: 1815, finExpense: 875, interestExpense: 852, sga: 14106,
+    pbt: 7361, npat: 6112, npatParent: 6017, npatYoY: 91, npatPlanPct: 66,
+    totalAssets: 104915, equity: 36351, nci: 672,
+    src: "BCTC hợp nhất bán niên 2026 soát xét (EY)"
+  },
+
+  latest: { label:"LNST 6T/2026", value:"6.112 tỷ", sub:"+91% YoY · 66% KH năm 9.200", cls:"pos" },
+  plan2026: { revenue: 185000, npat: 9200, npatGrowth: 30, cashDividend: 2000, src: "ĐHĐCĐ 18/04/2026; Định hướng KD 2026 (30/01/2026)" },
+
+  // ---------- TAB 3: CỬA HÀNG & MẠNG LƯỚI (thay cho Backlog) ----------
+  stores: {
+    tabLabel: "Cửa hàng & Mạng lưới",
+    title: "Mạng lưới cửa hàng",
+    kpis: [
+      { l:"Tổng cửa hàng (8T/2026)", v:"7.447", s:"DMX 3.314 · BHX 3.612 · An Khang 426 · AvaKids 95" },
+      { l:"BHX mở mới 8T/2026", v:">1.000", s:"2.559 (cuối 2025) → 3.612; cohort 2026 EBIT dương" },
+      { l:"BHX DT/cửa hàng/tháng (T8)", v:"1,389 tỷ", s:"đỉnh T11/2024: 1,961 → giảm 29% do mở mới" },
+      { l:"ĐMX + TGDĐ (8T/2026)", v:"3.007", s:"ĐMX 2.002 · TGDĐ 1.005 — đi ngang, không mở mới" }
+    ],
+    network: {
+      // Bảng analyst (cuối năm; cột cuối = lũy kế năm hiện tại, mỗi tháng thay bằng 9T/10T/11T/2026...)
+      periods: ["2019","2020","2021","2022","2023","2024","2025","8T/2026"],
+      chains: [
+        { name:"Bách Hóa Xanh",        counts:[1008,1719,2106,1728,1698,1770,2559,3612] },
+        { name:"Điện Máy Xanh",        counts:[1018,1427,1992,2284,2190,2026,2008,2002] },
+        { name:"TGDĐ (gồm TopZone)",   counts:[1013,913,980,1190,1078,1021,1012,1005] },
+        { name:"An Khang",             counts:[0,0,0,500,527,326,382,426] },
+        { name:"AvaKids",              counts:[0,0,0,64,64,62,83,95] },
+        { name:"Erablue (Indonesia)",  counts:[0,0,0,0,38,87,181,307] }
+      ],
+      note: "Bảng theo dõi của analyst (số cuối kỳ từ báo cáo KQKD tháng/12 tháng MWG). An Khang hợp nhất từ 2022. Câu chuyện: 2022–2024 'giảm lượng – tăng chất' (đóng ~400 BHX, ~300 ĐMX/TGDĐ, ~200 An Khang); 2025–2026 quay lại mở rộng BHX (+1.053 sau 8T) và Erablue. Cập nhật: mỗi tháng thay cột cuối bằng lũy kế mới (9T/2026, 10T/2026…)."
+    },
+    perStore: {
+      title: "BHX — doanh thu / cửa hàng / tháng (tỷ VND)",
+      labels: ["2023","T2/24","T3/24","T4/24","T5/24","T6/24","T7/24","T8/24","T9/24","T10/24","T11/24","T12/24","T2/25","T3/25","T4/25","T5/25","T6/25","T7/25","T8/25","T9/25","T10/25","T11/25","T12/25","T2/26","T3/26","T4/26","T5/26","T6/26","T7/26","T8/26"],
+      series: [ { name:"BHX", values:[1.935,1.780,1.798,1.827,1.865,1.910,1.931,1.942,1.952,1.951,1.961,1.935,1.870,1.835,1.752,1.732,1.724,1.732,1.704,1.668,1.624,1.558,1.526,1.594,1.540,1.514,1.515,1.478,1.437,1.389] } ],
+      note: "Bảng analyst: doanh thu tháng BHX ÷ số cửa hàng (triệu đồng → tỷ). Đỉnh 1,961 tỷ (T11/2024) → 1,389 tỷ (T8/2026): giảm 29% trong 21 tháng khi mạng lưới tăng từ ~1.770 lên 3.612 store. Cập nhật mỗi tháng khi có báo cáo KQKD tháng."
+    },
+    geo: {
+      title: "BHX — số cửa hàng theo tỉnh/thành",
+      seriesLabel: "Cửa hàng",
+      items: [
+        { name:"TP. Hồ Chí Minh", value:1076 }, { name:"Đồng Nai", value:264 }, { name:"Tây Ninh", value:220 }, { name:"Cần Thơ", value:194 },
+        { name:"An Giang", value:176 }, { name:"Đồng Tháp", value:175 }, { name:"Vĩnh Long", value:173 }, { name:"Lâm Đồng", value:166 },
+        { name:"Đà Nẵng", value:121 }, { name:"Đắk Lắk", value:97 }, { name:"Nghệ An", value:93 }, { name:"Ninh Bình", value:91 },
+        { name:"Cà Mau", value:88 }, { name:"Khánh Hòa", value:82 }, { name:"Thanh Hóa", value:78 }, { name:"Gia Lai", value:76 },
+        { name:"Hà Tĩnh", value:61 }, { name:"Quảng Trị", value:60 }, { name:"Huế", value:44 }, { name:"Quảng Ngãi", value:33 }
+      ],
+      note: "Tổng theo API tỉnh: 3.368 (20 tỉnh/thành sau sáp nhập); trang chủ hiển thị 'Xem 3.785 cửa hàng'; IR 8T: 3.612 — chênh lệch do trạng thái cửa hàng (đang mở/sắp mở/ảo) ⚠ đối chiếu. HCM = 32%; miền Tây (Cần Thơ, An Giang, Đồng Tháp, Vĩnh Long, Cà Mau) = 24%; miền Bắc mới có Ninh Bình + Thanh Hóa + Nghệ An + Hà Tĩnh = 323 store."
+    },
+    hideSide: true,   // analyst yêu cầu bỏ Milestone + Bảng theo chuỗi (21/09/2026)
+
+    src: "MWG IR: KQKD 12T 2022/2023/2024/2025, họp NĐT Q4/2021 & Q2/2026, KQKD 8T/2026; api.bachhoaxanh.com (21/09/2026)"
+  },
+
+  // ---------- BẢNG CÂN ĐỐI (số thực tế 30/06/2026) ----------
+  balance: {
+    title: "Chất lượng bảng cân đối",
+    asOf: "30/06/2026 (hợp nhất, soát xét EY)",
+    kpis: [
+      { l:"Tiền mặt ròng", v:"24.218 tỷ", s:"23% vốn hóa · tiền 4.679 + HTM 48.629 − vay 29.090" },
+      { l:"+ Tiền IPO DMX (giải tỏa 07/07)", v:"13.315 tỷ", s:"pro-forma tiền ròng ~37.500 tỷ (35% vốn hóa)" },
+      { l:"LN tài chính / LNST (6T)", v:"15,4%", s:"(1.815 − 875) / 6.112 · DT tài chính / LNST = 29,7%" },
+      { l:"Tồn kho", v:"30.875 tỷ", s:"+13% YTD · dự phòng giảm giá 724 tỷ (2,3%)" }
+    ],
+    // cashBridge & focus đã bỏ theo yêu cầu analyst (21/09/2026) — chỉ giữ KPI + 2 chuỗi thời gian
+
+    netCashSeries: {
+      title: "Tiền mặt ròng qua các năm (tỷ VND)",
+      labels: ["2019","2020","2021","2022","2023","2024","2025","6T/2026"],
+      stacks: [
+        { label:"Tiền & TĐT",            color:"blue",   values:[3115,7348,4944,5061,5366,5697,5000,4679] },
+        { label:"Đầu tư TC ngắn hạn",    color:"navy",   values:[3137,8057,13435,10059,18937,28524,33874,45665] },
+        { label:"Cho vay ngắn hạn",      color:"grey",   values:[0,80,962,17,2086,6038,6910,0] },
+        { label:"Đầu tư HTM dài hạn",    color:"purple", values:[0,0,0,50,460,0,2765,2964] },
+        { label:"Vay ngắn hạn",          color:"neg",    values:[-13031,-15625,-21879,-10688,-19129,-27300,-29931,-29090] },
+        { label:"Vay dài hạn",           color:"gold",   values:[-1122,-1127,-2768,-5901,-5985,0,0,0] }
+      ],
+      net: { label:"Tiền mặt ròng", values:[-7901,-1267,-5306,-1402,1735,12959,18618,24218] },
+      note: "Tiền mặt ròng = Tiền & TĐT + Đầu tư TC ngắn hạn + Cho vay ngắn hạn (tiền gửi/ủy thác hạch toán ở phải thu) + Đầu tư HTM dài hạn − Vay ngắn hạn − Vay dài hạn. Nguồn: BCTC hợp nhất cuối năm (CafeF); 6T/2026 theo BCTC soát xét (cho vay đã gộp vào HTM; chưa cộng 13.315 tỷ tiền IPO DMX phong tỏa). 2024: vay dài hạn về 0 do trái phiếu chuyển sang ngắn hạn. Điểm chuyển: từ âm ~5–8 nghìn tỷ (2019–2022) sang dương từ 2023 và +24 nghìn tỷ giữa 2026."
+    },
+    finSeries: {
+      labels: ["2019","2020","2021","2022","2023","2024","2025","6T/2026"],
+      tableRows: [
+        { label:"Doanh thu tài chính", values:[631,794,1288,1313,2167,2377,3107,1815] },
+        { label:"Chi phí tài chính",   values:[570,594,715,1383,1556,1189,1543,875] },
+        { label:"LNST hợp nhất",       values:[3836,3920,4901,4102,168,3733,7073,6112] }
+      ],
+      ratio: { title:"Lợi nhuận tài chính / LNST (%)", label:"LN tài chính / LNST", values:[1.6,5.1,11.7,-1.7,null,31.8,22.1,15.4], note:"LN tài chính = doanh thu tài chính − chi phí tài chính (gồm lãi vay). 2023 bỏ khỏi chart vì LNST chỉ 168 tỷ (tỷ lệ 364%). Nguồn: BCTC hợp nhất theo năm (CafeF); 6T/2026 theo BCTC soát xét." }
+    },
+
+    todo: ["Cơ cấu vay theo ngân hàng & lãi suất bình quân (TM 23.1)", "Trái phiếu doanh nghiệp BĐS 2.727 tỷ — tổ chức phát hành nào (TM 5)", "Đầu tư HTM dài hạn 2024 (CafeF không tách dòng) — kiểm tra BCTC kiểm toán 2024"],
+    src: "BCTC hợp nhất bán niên 2026 soát xét (EY) — TM 4, 5, 6, 22, 23, 24, 25"
+  },
+
+  // ---------- CATALYST & SỰ KIỆN ----------
+  events: [
+    { d:"2026-10-29", type:"resolution", impact:"+", status:"pending",   t:"ĐHĐCĐ bất thường DMX: cổ tức tiền mặt từ LN 2026; chào bán riêng lẻ trái phiếu kèm chứng quyền", detail:"Chốt DS 05/10. Cổ tức DMX → dòng tiền về MWG (86%).", src:"https://mekongasean.vn/dien-may-xanh-chot-lich-hop-dhdcd-bat-thuong-2026-59645.html" },
+    { d:"2026-10-15", type:"result",     impact:"?", status:"pending",   t:"Cập nhật KQKD 9T/2026 (lịch IR MWG)", src:"https://mwg.vn/bao-cao" },
+    { d:"2026-09-16", type:"corporate",  impact:"0", status:"confirmed", t:"DMX giao dịch ~73.000đ (vốn hóa ~92.500 tỷ), dưới giá chào sàn 80.000đ", detail:"86% × 92.545 = ~79.600 tỷ — bằng 74% vốn hóa MWG.", src:"https://mekongasean.vn/dien-may-xanh-chot-lich-hop-dhdcd-bat-thuong-2026-59645.html" },
+    { d:"2026-09-14", type:"result",     impact:"+", status:"confirmed", t:"KQKD 8T/2026: DT 129.431 tỷ (+29%, 70% KH); T8 kỷ lục 18.037 tỷ (+36%); BHX T8 6.125 tỷ (+52%)", detail:"DMX 86,8 nghìn tỷ (+29%, SSSG 30%); BHX 40,1 nghìn tỷ (+32%), 3.612 store; An Khang +22%; Erablue +88%.", src:"https://cdnv2-tmdt.tgdd.vn/mwgvn/investorrelations/files/posts/2026/9/5006155/2c/1a/2c1a0251ae86672cc42c23210ff4b75b.pdf" },
+    { d:"2026-08-28", type:"result",     impact:"0", status:"confirmed", t:"BCTC hợp nhất bán niên 2026 soát xét (EY) — kết luận chấp nhận toàn phần", src:"https://cdnv2-tmdt.tgdd.vn/mwgvn/investorrelations/files/posts/2026/8/5006093/1d/dc/1ddce6514da9af2bad1b21317825b88d.pdf" },
+    { d:"2026-08-19", type:"corporate",  impact:"+", status:"confirmed", t:"Vietcap nâng TP MWG lên 140.000đ (FCFE 7 năm, tính LN tài chính từ tiền IPO DMX)", src:"https://elibook.vn/2026/08/19/vi-sao-vietcap-choi-troi-dua-ra-gia-muc-tieu-140000-cho-co-phieu-mwg/" },
+    { d:"2026-08-06", type:"corporate",  impact:"+", status:"confirmed", t:"DMX niêm yết HOSE: 1.267,7 tr cp, giá tham chiếu 80.000đ (vốn hóa 101.418 tỷ); chia cổ tức 4.000đ/cp ngay khi lên sàn", detail:"MWG sở hữu 99% → 86% sau IPO.", src:"https://tuoitre.vn/dien-may-xanh-dua-hon-166-trieu-co-phieu-len-san-hose-100260806122546258.htm" },
+    { d:"2026-08-04", type:"corporate",  impact:"0", status:"confirmed", t:"Họp NĐT Q2/2026: DMX Q2 LN 2.658 tỷ (+98%), biên ròng 8,1%; BHX 6T LN ~910 tỷ; An Khang quý đầu có lãi; Erablue xóa lỗ lũy kế", src:"https://cdnv2-tmdt.tgdd.vn/mwgvn/investorrelations/files/posts/2026/8/0/39/6b/396b187438f28ff2ce9bf1e01d97d841.pdf" },
+    { d:"2026-07-30", type:"result",     impact:"+", status:"confirmed", t:"BCTC Q2/2026: DT 48.751 tỷ (+30%, kỷ lục); LNST mẹ 3.303 tỷ (+100%); biên gộp 22,2%", src:"https://cdnv2-tmdt.tgdd.vn/mwgvn/investorrelations/files/posts/2026/7/5006085/80/74/807429f16450b14b3668ded2d2e39a6e.pdf" },
+    { d:"2026-07-17", type:"corporate",  impact:"-", status:"confirmed", t:"Hoàn tất ESOP 2025: 7,34 tr cp giá 10.000đ; VĐL lên 14.770 tỷ", detail:"Pha loãng 0,5%; ESOP hằng năm là đặc điểm cố hữu của MWG.", src:"BCTC bán niên TM 24.1" },
+    { d:"2026-07-07", type:"corporate",  impact:"+", status:"confirmed", t:"IPO DMX hoàn tất: 166,4 tr cp × 80.000đ = 13.315 tỷ; UBCK xác nhận 03/07, giải tỏa tài khoản phong tỏa 07/07", src:"BCTC bán niên TM 4.2, 22" },
+    { d:"2026-06-23", type:"resolution", impact:"0", status:"confirmed", t:"NQ HĐQT 05/NQ-HĐQT-2026 triển khai ESOP 2025", src:"BCTC bán niên TM 24.1" },
+    { d:"2026-04-18", type:"resolution", impact:"+", status:"confirmed", t:"ĐHĐCĐ 2026: KH DT 185.000 tỷ (+18%), LNST 9.200 tỷ (+30%); cổ tức tiền 2025 20% (2.000đ/cp); BHX tầm nhìn 10 tỷ USD", src:"https://vietnambiz.vn/live-dhdcd-mwg-muc-tieu-loi-nhuan-nam-2026-tang-30-bach-hoa-xanh-huong-toi-doanh-thu-10-ty-usd-20264181463536.htm" },
+    { d:"2026-01-30", type:"corporate",  impact:"0", status:"confirmed", t:"Định hướng KD 2026: DMX +15% DT/+20% LN, IPO độc lập; BHX +20% DT, ~1.000 store mới, IPO/niêm yết; Erablue >300 store, IPO trước 2030", src:"https://cdnv2.tgdd.vn/mwgvn/investorrelations/files/posts/2026/1/5627/33/29/3329b29508569abd63f80d72a4c26368.pdf" },
+    { d:"2026",       type:"insider",    impact:"?", status:"pending",   t:"Giao dịch nội bộ / cổ đông lớn — CHƯA QUÉT (Wifeed exchange_news 'Tin giao dịch'; HOSE CBTT). Lưu ý lịch sử: lãnh đạo MWG thường bán ESOP sau khi hết hạn chế chuyển nhượng", src:"" },
+    { d:"2026",       type:"law",        impact:"?", status:"pending",   t:"Chính sách: kích cầu tiêu dùng 2026 (mục tiêu tăng trưởng 2 chữ số), thuế VAT — CHƯA QUÉT", src:"" }
+  ],
+
+  // ---------- CONSENSUS CTCK ----------
+  consensus: [
+    { broker:"Vietcap", date:"2026-08-19", rating:"MUA",       tpRaw:140000, tpAdj:140000, adjusted:false, np2026:null, np2027:null, thesis:"FCFE 7 năm; LN tài chính ròng 2027 ~4.111 tỷ từ tiền IPO DMX; coi MWG như holding", src:"https://elibook.vn/2026/08/19/vi-sao-vietcap-choi-troi-dua-ra-gia-muc-tieu-140000-cho-co-phieu-mwg/" },
+    { broker:"HSC",     date:"2026-08",    rating:"MUA",       tpRaw:109500, tpAdj:109500, adjusted:false, np2026:null, np2027:null, thesis:"WACC thận trọng", src:"https://elibook.vn/2026/08/14/" },
+    { broker:"BVSC",    date:"2026-08",    rating:"OUTPERFORM",tpRaw:106700, tpAdj:106700, adjusted:false, np2026:null, np2027:null, thesis:"—", src:"https://elibook.vn/2026/08/14/" },
+    { broker:"VNDirect",date:"2026-08",    rating:"KHẢ QUAN",  tpRaw:114600, tpAdj:114600, adjusted:false, np2026:null, np2027:null, thesis:"+46% upside tại thời điểm báo cáo", src:"https://finance.vietstock.vn/bao-cao-phan-tich/20992/mwg-khuyen-nghi-kha-quan-voi-gia-muc-tieu-114600-dongco-phieu.htm" },
+    { broker:"DSC",     date:"2026-08-11", rating:"MUA",       tpRaw:106000, tpAdj:106000, adjusted:false, np2026:null, np2027:null, thesis:"+45% từ giá 73.000đ", src:"https://www.dsc.com.vn/bao-cao-phan-tich/bao-cao-khuyen-nghi-dau-tu-mua-mwg-q1-2026" },
+    { broker:"SSI",     date:"2026-08",    rating:"HOLD",      tpRaw:110000, tpAdj:110000, adjusted:false, np2026:null, np2027:null, thesis:"Hạ từ MUA xuống HOLD, TP 115.000 → 110.000 ⚠ cần verify ngày & lý do", src:"https://www.ssi.com.vn/khach-hang-ca-nhan/bao-cao-cong-ty?keyword=MWG" },
+    { broker:"ACBS",    date:"2026-08",    rating:"MUA",       tpRaw:94000,  tpAdj:94000,  adjusted:false, np2026:null, np2027:null, thesis:"Thận trọng nhất nhóm; định giá bán lẻ truyền thống", src:"https://elibook.vn/2026/08/19/" }
+  ],
+  consensusNote: "Không có sự kiện pha loãng trong 2026 (ESOP 0,5% không đáng kể) → TP công bố dùng trực tiếp. Lưu ý: hầu hết TP ra trước/ngay sau khi DMX niêm yết (06/08) — DMX đã giảm ~9% từ giá chào sàn.",
+  myView: { tpAdj: 76000, basis:"SOTP thị trường (bản nháp): 86% DMX theo giá 73.000đ + BHX 20x LN 2026F + tiền mẹ − chiết khấu holding 10%", np2026: 11500, np2027: null },
+
+  // ---------- ĐỊNH GIÁ (bản nháp SOTP thị trường — analyst chỉnh) ----------
+  valuation: {
+    sotp: [
+      { name:"86% CTCP ĐT Điện Máy Xanh (DMX, HOSE)", basis:"Giá TT 73.000đ × 1.267,7 tr cp × 86%", np:5300, value:79590, note:"DMX vốn hóa 92.545 tỷ (16/09). LNST 2026F DMX ~5.300 tỷ ⚠ ước từ Q2 2.658 × 2 (đã gồm tiền IPO 13.315 tỷ trong DMX)" },
+      { name:"Bách Hóa Xanh (100%)", basis:"P/E 20x LNST 2026F", np:1800, value:36000, note:"LN 2026F ~1.800 tỷ (BLĐ: 6T 910 tỷ). Playbook: chuỗi mới có lãi định giá P/E riêng hoặc theo deal; IPO 2028" },
+      { name:"An Khang + AvaKids + Erablue (45%)", basis:"P/S 0,5x / giá vốn", np:null, value:3000, note:"⚠ placeholder — An Khang vừa có lãi, Erablue xóa lỗ lũy kế" },
+      { name:"Tiền mặt ròng công ty mẹ (ngoài DMX)", basis:"Ước", np:null, value:6000, note:"⚠ cần BCTC riêng công ty mẹ: phần lớn 24.218 tỷ tiền ròng hợp nhất nằm ở DMX" },
+      { name:"Chiết khấu holding", basis:"−10%", np:null, value:-12459, note:"Thị trường thường chiết khấu 10–20% với holdco có công ty con niêm yết" }
+    ],
+    history: {
+      labels: ["Q1/2019", "Q2/2019", "Q3/2019", "Q4/2019", "Q1/2020", "Q2/2020", "Q3/2020", "Q4/2020", "Q1/2021", "Q2/2021", "Q3/2021", "Q4/2021", "Q1/2022", "Q2/2022", "Q3/2022", "Q4/2022", "Q1/2023", "Q2/2023", "Q3/2023", "Q4/2023", "Q1/2024", "Q2/2024", "Q3/2024", "Q4/2024", "Q1/2025", "Q2/2025", "Q3/2025", "Q4/2025", "Q1/2026", "Q2/2026", "Hiện tại"],
+      pe: [12.3, 12.3, 15.8, 13.6, 6.9, 9.9, 12.5, 14.1, 14.6, 15.9, 20.9, 19.4, 20.4, 20.4, 17.9, 14.7, 20.3, 39.0, 107.3, null, 69.2, 40.6, 32.9, 23.5, 19.4, 19.4, 19.4, 18.3, 14.5, 11.5, 10.7],
+      pb: [3.81, 4.08, 5.12, 4.3, 2.02, 2.59, 3.14, 3.57, 3.56, 3.87, 4.75, 4.66, 4.67, 4.49, 3.86, 2.52, 2.27, 2.54, 3.21, 2.6, 2.79, 3.38, 3.58, 3.11, 2.85, 3.13, 3.55, 3.87, 3.31, 3.12, 2.91],
+      price: [25.892, 28.821, 39.163, 35.406, 18.293, 25.094, 32.393, 37.444, 40.845, 47.868, 60.558, 64.396, 69.087, 68.204, 61.05, 40.922, 36.773, 41.304, 50.656, 41.218, 49.212, 60.573, 66.106, 59.214, 57.272, 63.582, 76.511, 87.047, 80.548, 76.905, 71.7],
+      eps: [2109, 2344, 2485, 2598, 2660, 2534, 2599, 2655, 2795, 3011, 2899, 3319, 3392, 3335, 3417, 2778, 1814, 1060, 472, 114, 711, 1493, 2009, 2522, 2958, 3280, 3938, 4768, 5560, 6681, 6681],
+      bvps: [6788, 7068, 7650, 8228, 9065, 9671, 10313, 10490, 11488, 12372, 12744, 13808, 14779, 15181, 15797, 16217, 16231, 16238, 15768, 15828, 17641, 17941, 18482, 19055, 20104, 20339, 21546, 22482, 24348, 24632, 24632],
+      peCap: 60,
+      peTitle: "P/E trượt 4 quý (x)",
+      peNote: "P/E = giá điều chỉnh cuối quý ÷ (LNST cổ đông mẹ 4 quý gần nhất ÷ 1.475,8 tr cp hiện hành). 2023–Q1/2024 P/E > 60x (LNST 2023 chỉ 168 tỷ) bị bỏ khỏi chart. Trung vị (đường xám) tính trên các điểm còn lại. Nguồn: giá VNDirect finfo (adClose), BCTC quý CafeF.",
+      pbNote: "P/B = giá điều chỉnh cuối quý ÷ (VCSH ÷ 1.475,8 tr cp). Đỉnh 5,1x (Q3/2019), đáy 2,0x (Q1/2020 COVID); hiện 2,9x ≈ trung vị. Dùng số cp hiện tại cho mọi kỳ nên các kỳ trước ESOP/cổ tức cổ phiếu sai lệch nhỏ (<1%/năm)."
+    },
+    title: "Định giá & Dự phóng",
+    equityValue: 112131,
+    scenarios: { labels:["Worst","Base","Best"], gp:[null,null,null], np:[9500,11500,12500], mcap:[95000,145000,175000] },
+    note: "Bản nháp SOTP: equity ~112.000 tỷ ↔ ~76.000đ/cp trên 1.475,8 tr cp. Kịch bản (Worst/Base/Best) = P/E 10x/12,6x/14x trên LNST 2026F 9.500/11.500/12.500 tỷ — analyst chỉnh lại theo model riêng.",
+    src: "Analyst dựng nhanh 21/09/2026 từ giá thị trường DMX + hướng dẫn playbook; CHƯA có model Excel"
+  },
+
+  // ---------- MÔ HÌNH DỰ PHÓNG & SOTP (analyst nhập biến trên dashboard; lưu localStorage <KEY>_model) ----------
+  model: {
+    hist: {
+      cols: ["2023","2024","2025"],
+      rev_ict:   [83500,89500,105724],
+      rev_bhx:   [31581,41099,46850],
+      bhx_stores:[1698,1770,2559],
+      bhx_rps:   [1550,1935,1526],        // triệu đồng/cửa hàng/tháng
+      rev_other: [3219,3701,3592],
+      np_ict:    [1873,4069,6500],
+      np_bhx:    [-1211,103,750],
+      np_pharm:  [-343,-347,-250],
+      np_other:  [-98,0,0]
+    },
+    // 2026F = năm cơ sở (ICT-CE = 2025 × (1+g)); Worst/Base/Best = ICT-CE 2026F × (1+g)
+    inputs: {
+      "2026F": { g_ict:20,  stores:3600, rps:1400, m_ict:7.2, m_bhx:3.5, rev_other:4000, np_pharm:-100, np_other:50 },
+      "Worst": { g_ict:-10, stores:4500, rps:1250, m_ict:7.0, m_bhx:3.0, rev_other:4500, np_pharm:0,    np_other:0,   ict_base:137441 },
+      "Base":  { g_ict:10,  stores:4900, rps:1300, m_ict:7.5, m_bhx:3.5, rev_other:5500, np_pharm:200,  np_other:50,  ict_base:137441 },
+      "Best":  { g_ict:20,  stores:5200, rps:1350, m_ict:8.0, m_bhx:3.7, rev_other:6000, np_pharm:400,  np_other:100, ict_base:137441 }
+    },
+    sotp: { ps_bhx:0.8, pe_dmx:10, own_bhx:95, own_dmx:86, other:2000 },
+    note: "Doanh thu BHX = số cửa hàng × doanh thu TB/cửa hàng/tháng × 12. LN ròng ICT-CE/BHX = doanh thu × biên. ICT-CE case = DT ICT-CE cơ sở × (1+g); cơ sở mặc định 137.441 tỷ để khớp bảng analyst (đặt 0 để dùng 2026F = 126.869). Ô vàng là biến nhập; thay đổi lưu tự động trên trình duyệt này."
+  },
+
+  forecast: {
+    years: ["2023","2024","2025","2026F"],
+    revenue: [118300,134470,156000,185000],
+    segGP:   [168,3733,7077,9200],
+    gpLabel: "LNST (kế hoạch 2026F = 9.200 theo ĐHĐCĐ)",
+    segNote: "2026F là KẾ HOẠCH ĐHĐCĐ; BLĐ tự tin về đích sớm 2–3 tháng; 6T đã 6.112 tỷ → thực tế có thể ~11.000+ tỷ. 2023–2025 ⚠ verify với BCTC kiểm toán (2025 ≈ 9.200/1,3).",
+    src: "MWG IR; ĐHĐCĐ 2026"
+  },
+
+  risks: [
+    { r:"Chu kỳ ICT/điện máy đảo chiều", m:"SSSG DMX 30% trên nền thấp 2025; nếu Q4/2026 SSSG < 10% khi mùa cao điểm → động lực chính suy yếu", i:"DMX = 80% LN nhóm", lvl:"Cao" },
+    { r:"BHX loãng doanh thu/cửa hàng", m:">1.000 store mới trong 8T; DT/store giảm từ 1,98 (2024) xuống 1,64–1,74 tỷ; nếu biên ròng quý < 3% hoặc cohort 2026 lỗ", i:"Câu chuyện re-rate BHX & IPO 2028 chậm lại", lvl:"TB" },
+    { r:"Holdco discount kéo dài sau khi DMX niêm yết", m:"NĐT có thể mua thẳng DMX; DMX đã giảm 9% từ giá chào sàn", i:"MWG kẹt định giá dù LN tăng", lvl:"TB" },
+    { r:"Tín dụng tiêu dùng", m:"38% DT DMX là trả góp (+44% YoY); siết tín dụng tiêu dùng hoặc nợ xấu CTTC tăng", i:"Doanh thu điện máy giá trị cao giảm", lvl:"TB" },
+    { r:"ESOP & bán ra nội bộ", m:"ESOP hằng năm ~0,5%; lãnh đạo thường bán sau hết hạn chế chuyển nhượng", i:"Áp lực cung ngắn hạn", lvl:"Thấp" },
+    { r:"Lãi suất tiền gửi giảm", m:"~30% LNST 6T là DT tài chính; lãi suất giảm 1 đpt trên ~50k tỷ tiền ≈ −500 tỷ/năm", i:"LN tăng chậm hơn doanh thu", lvl:"TB" }
+  ],
+
+  thesisPillars: [
+    { id:"p1", t:"DMX: SSSG hai chữ số + biên ròng kỷ lục 8%", evidence:"8T SSSG 30%; Q2 biên ròng 8,1%; LN Q2 +98%", status:"holding" },
+    { id:"p2", t:"BHX chuyển từ đốt tiền sang máy in tiền", evidence:"6T LN 910 tỷ > cả năm 2025; biên ròng 3,4%; cohort 2026 EBIT dương", status:"strengthened" },
+    { id:"p3", t:"Kho tiền lớn, LN tài chính bền", evidence:"Tiền ròng 24.218 tỷ + 13.315 tỷ IPO DMX; DT TC 6T 1.815 tỷ", status:"holding" },
+    { id:"p4", t:"Định giá: thị trường trả gần như chỉ cho DMX", evidence:"Vốn hóa MWG 107k ≈ 86% DMX 79,6k + 27k cho BHX & phần còn lại (~15x)", status:"holding" },
+    { id:"p5", t:"Không còn chuỗi lỗ (An Khang, Erablue)", evidence:"An Khang quý đầu lãi; Erablue xóa lỗ lũy kế; AvaKids có lãi 2025", status:"strengthened" }
+  ],
+
+  sources: [
+    { n:"MWG IR – Báo cáo (API PostAPI categoryID 431/430)", u:"https://mwg.vn/bao-cao" },
+    { n:"KQKD 8T/2026 (PDF)", u:"sources/MWG_KQKD_8T2026.pdf" },
+    { n:"Họp NĐT Q2/2026 (PDF)", u:"sources/MWG_HopNDT_Q2-2026.pdf" },
+    { n:"BCTC HN bán niên 2026 soát xét (PDF scan)", u:"sources/MWG_BCTC_HN_BanNien2026_SoatXet.pdf" },
+    { n:"Định hướng KD 2026 (PDF)", u:"sources/MWG_DinhHuong2026.pdf" },
+    { n:"BHX hệ thống cửa hàng", u:"https://www.bachhoaxanh.com/he-thong-cua-hang" }
+  ]
+};
+
+</script>
 <style>
   :root{
     --navy:#201D5E; --navy2:#2A2670; --green:#82BC28; --green-d:#6BA018;
