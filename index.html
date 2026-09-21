@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FinSuccess — PVS Tracker</title>
+<title>FinSuccess — Stock Tracker</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script>
 // ============================================================
@@ -797,7 +797,7 @@ function clearNotes(){ if(confirm('Xóa toàn bộ ghi chú, ngưỡng và thesi
 // =============== header ===============
 (function(){
   const m=D.meta;
-  $('coName').textContent=m.name; $('ticker').textContent=m.ticker; $('subtitle').textContent=m.subtitle||('Theo dõi cổ phiếu '+m.ticker);
+  $('coName').textContent=m.name; $('ticker').textContent=m.ticker; document.title='FinSuccess — '+m.ticker+' Tracker'; $('subtitle').textContent=m.subtitle||('Theo dõi cổ phiếu '+m.ticker);
   $('metaLine').textContent='Cập nhật dữ liệu: '+m.updated.split('-').reverse().join('/')+' · '+m.exchange+' · giá '+m.priceDate.split('-').reverse().join('/');
   $('pxBox').innerHTML=`<div><div class="l">GIÁ</div><div class="v">${vnd(m.price)}đ</div></div><div><div class="l">VỐN HÓA</div><div class="v">${vnd(m.mcap)} tỷ</div></div><div><div class="l">P/E TTM</div><div class="v">${m.peTTM}x</div></div><div><div class="l">P/B</div><div class="v">${m.pb}x</div></div>`;
   const b=$('viewBadge'); b.innerHTML=m.view+'<small>QUAN ĐIỂM</small>';
