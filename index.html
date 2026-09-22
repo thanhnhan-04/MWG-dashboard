@@ -627,7 +627,7 @@ window.PVS_DATA = {
   <div class="callout" id="valNote"></div>
   <div id="modelBlock" hidden>
     <div class="card">
-      <div class="row" style="justify-content:space-between"><h3 class="sub" style="margin:0">Dự phóng — biến đầu vào</h3><div class="row"><span class="saved" id="modelSaved"></span><button class="btn ghost sm" onclick="resetModel()">Về mặc định</button></div></div>
+      <div class="row" style="justify-content:space-between"><h3 class="sub" style="margin:0">Dự phóng — biến đầu vào</h3><div class="row"><span class="saved" id="modelSaved"></span><button class="btn ghost sm" onclick="setModelDefault()">Set làm mặc định</button></div></div>
       <div class="tbl-wrap" style="margin-top:10px"><table id="modelInputs"></table></div>
       <div class="note" id="modelNote"></div>
     </div>
@@ -1084,8 +1084,8 @@ function renderCons(){
 // =============== interactive forecast + SOTP model ===============
 let M=null;
 function loadModel(){ try{ const raw=localStorage.getItem(KEY+'_model'); if(raw)return JSON.parse(raw); }catch(e){} return null; }
-function saveModel(){ try{ localStorage.setItem(KEY+'_model',JSON.stringify(M)); $('modelSaved').textContent='✓ Đã lưu '+new Date().toLocaleTimeString('vi-VN'); }catch(e){} setTimeout(()=>{renderSignal();renderCons();},0); }
-function resetModel(){ if(!confirm('Đưa mọi biến về giá trị mặc định trong data.js?'))return; try{localStorage.removeItem(KEY+'_model');}catch(e){} M=null; renderModel(); }
+function previewModel(){ renderModel(); setTimeout(()=>{renderSignal();renderCons();},0); }
+function setModelDefault(){ try{ localStorage.setItem(KEY+'_model',JSON.stringify(M)); $('modelSaved').textContent='✓ Đã set mặc định '+new Date().toLocaleTimeString('vi-VN'); }catch(e){ $('modelSaved').textContent='Không thể lưu mặc định'; } }
 function calcModel(){
   const md=D.model, h=md.hist, m=D.meta; const cases=['2026F','Worst','Best','Base']; // compute base year first
   const out={}; const baseIct=h.rev_ict[h.rev_ict.length-1];
@@ -1104,7 +1104,7 @@ function renderModel(){
   M=M||loadModel()||deep({inputs:md.inputs,sotp:md.sotp});
   const cols=['2026F','Worst','Base','Best'];
   const VARS=[['g_ict','Tăng trưởng ICT-CE (% YoY)'],['stores','Số cửa hàng BHX'],['rps','Doanh thu TB/cửa hàng/tháng BHX (triệu)'],['m_ict','Biên LN ròng ICT-CE (%)'],['m_bhx','Biên LN ròng BHX (%)'],['rev_other','Doanh thu khác (tỷ)'],['np_pharm','LN ròng nhà thuốc (tỷ)'],['np_other','LN ròng khác (tỷ)'],['ict_base','DT ICT-CE cơ sở cho case (tỷ; 0 = dùng 2026F)']];
-  const inp=(c,k)=>(c==='2026F'&&k==='ict_base')?'—':`<input class="cell" type="number" step="any" value="${M.inputs[c][k]??0}" onchange="M.inputs['${c}']['${k}']=Number(this.value);saveModel();renderModel()">`;
+  const inp=(c,k)=>(c==='2026F'&&k==='ict_base')?'—':`<input class="cell" type="number" step="any" value="${M.inputs[c][k]??0}" onchange="M.inputs['${c}']['${k}']=Number(this.value);previewModel()">`;
   $('modelInputs').innerHTML='<tr><th>Biến</th>'+cols.map(c=>`<th class="num">${c==='2026F'?'2026F':c+' case'}</th>`).join('')+'</tr>'+VARS.map(([k,l],i)=>`<tr ${i>=5?'style="color:var(--muted)"':''}><td>${l}</td>${cols.map(c=>`<td class="num">${inp(c,k)}</td>`).join('')}</tr>`).join('');
   $('modelNote').textContent=md.note||'';
   const o=calcModel(); const h=md.hist; const hc=h.cols; const n=hc.length;
@@ -1127,7 +1127,7 @@ function renderModel(){
     ['sub','Bách hóa xanh',h.np_bhx.map((v,i)=>v/h.rev_bhx[i]*100),cols.map(c=>o[c].m_bhx),f1]
   ];
   $('modelIS').innerHTML='<tr><th>Chỉ tiêu</th>'+hc.map(c=>`<th class="num">${c}</th>`).join('')+cols.map(c=>`<th class="num">${c==='2026F'?'2026F':c+' case'}</th>`).join('')+'</tr>'+rowsIS.map(([cls,l,hv,fv,f])=>`<tr class="${cls}"><td class="${cls}">${l}</td>${hv.map(v=>`<td class="num">${f(v)}</td>`).join('')}${fv.map(v=>`<td class="num">${f(v)}</td>`).join('')}</tr>`).join('');
-  const sp=M.sotp; const sin=(k,l,step)=>`<td>${l}</td><td class="num"><input class="cell" type="number" step="${step}" value="${sp[k]}" onchange="M.sotp['${k}']=Number(this.value);saveModel();renderModel()"></td>`;
+  const sp=M.sotp; const sin=(k,l,step)=>`<td>${l}</td><td class="num"><input class="cell" type="number" step="${step}" value="${sp[k]}" onchange="M.sotp['${k}']=Number(this.value);previewModel()"></td>`;
   $('sotpInputs').innerHTML=`<tr><th>Biến định giá</th><th class="num">Giá trị</th><th>Biến định giá</th><th class="num">Giá trị</th></tr><tr>${sin('ps_bhx','P/S mảng BHX (x)',0.05)}${sin('pe_dmx','P/E mảng DMX (x)',0.5)}</tr><tr>${sin('own_bhx','Sở hữu BHX (%)',1)}${sin('own_dmx','Sở hữu DMX (%)',1)}</tr><tr>${sin('other','Khác (tỷ)',100)}<td></td><td></td></tr>`;
   const cs=['Worst','Base','Best'], m=D.meta;
   $('sotpOut').innerHTML='<tr><th>SOTP (tỷ VND)</th>'+cs.map(c=>`<th class="num">${c} case</th>`).join('')+'<th>Ghi chú</th></tr>'
