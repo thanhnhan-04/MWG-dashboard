@@ -1624,97 +1624,202 @@ window.PVS_DATA = {
   "note": "Các số 660, 960 và 2.000 tỷ trong ảnh là xấp xỉ tổng nguồn 3.300, 4.800 và 10.000 tỷ chia đều cho 5 năm 2026–2030; không phải đầu vào độc lập từng năm. Breakdown chi tiết tháng 5/2025 là 27.699 tỷ. Cập nhật ĐHĐCĐ 2026 nêu quy mô khoảng 32.000 tỷ nhưng chưa có breakdown mới tương ứng, nên mô hình giữ breakdown 27.699 tỷ để tính và hiển thị riêng khoảng chênh 4.301 tỷ chưa phân bổ. Nhóm vốn chủ phát triển dự án không tự động khấu hao trên BCTC hợp nhất; chỉ các khoản được phân loại TSCĐ hợp nhất mới đưa vào mô phỏng khấu hao."
 },
   model: {
-  "version": 2,
+  "version": 3,
   "hist": {
     "cols": [
+      "2021A",
       "2022A",
       "2023A",
       "2024A",
       "2025A"
     ],
     "revenue": [
+      14198.441443708,
       16372.512520831,
       19373.562363761,
       23769.886143043,
       32718.260534319
     ],
     "cogs": [
+      -13422.531443708,
       -15457.885001543,
       -18334.534034521,
       -22704.782953899,
       -30847.707980625
     ],
     "gp": [
+      775.91,
       914.627519288,
       1039.02832924,
       1065.103189144,
       1870.552553694
     ],
     "sga": [
+      -801.92,
       -907.262006949,
       -1052.263346113,
       -1330.380250463,
       -1389.153288878
     ],
     "da": [
+      -500.368315798,
       -471.17246381,
       -493.00613065,
       -601.477056243,
       -779.738120599
     ],
     "jv": [
+      506.796118343,
       657.204081658,
       651.130073326,
       864.280331695,
       825.83189971
     ],
     "netOther": [
+      213.907746469,
       182.642362723,
       66.048377935,
       602.960339164,
       98.564696959
     ],
     "finIncome": [
+      277.549431638,
       489.061740268,
       789.718119202,
       568.81804466,
       927.443659228
     ],
     "finCost": [
+      -94.374867465,
       -162.63355559,
       -216.35392063,
       -217.475364821,
       -128.655663712
     ],
     "ebt": [
+      968.9,
       1173.640141398,
       1277.30763296,
       1553.306289379,
       2204.583857001
     ],
     "tax": [
+      -218.6,
       -229.188204153,
       -217.300106819,
       -298.652018497,
       -283.69842264
     ],
     "npat": [
+      750.3,
       944.451937245,
       1060.007526141,
       1254.654270882,
       1920.885434361
     ],
     "nci": [
+      -75.3,
       -60.815684266,
       -33.546704741,
       -184.880569686,
       -71.359556089
     ],
     "parent": [
+      675,
       883.636252979,
       1026.4608214,
       1069.773701196,
       1849.525878272
+    ]
+  },
+  "assumptionHistory": {
+    "cols": [
+      "2021A",
+      "2022A",
+      "2023A",
+      "2024A",
+      "2025A",
+      "6T/2026A"
+    ],
+    "sgaPct": [
+      5.65,
+      5.54,
+      5.43,
+      5.6,
+      4.25,
+      null
+    ],
+    "interestAssets": [
+      8473.459,
+      9240.344,
+      10071.609,
+      12697.088,
+      15583.661,
+      16602.275
+    ],
+    "depositRate": [
+      null,
+      null,
+      null,
+      1.91,
+      2.43,
+      null
+    ],
+    "fxOther": [
+      null,
+      null,
+      null,
+      326.504,
+      548.3,
+      null
+    ],
+    "avgDebt": [
+      1226.758,
+      1310.56,
+      1557.994,
+      1699.669,
+      1313.149,
+      1492.405
+    ],
+    "debtRate": [
+      null,
+      null,
+      null,
+      null,
+      5.21,
+      null
+    ],
+    "otherFinCost": [
+      null,
+      null,
+      null,
+      null,
+      60.199,
+      null
+    ],
+    "netOther": [
+      213.908,
+      182.642,
+      66.048,
+      602.96,
+      98.565,
+      456.399
+    ],
+    "taxRate": [
+      22.56,
+      19.53,
+      17.01,
+      19.23,
+      12.87,
+      null
+    ],
+    "nciPct": [
+      -10.04,
+      -6.44,
+      -3.16,
+      -14.74,
+      -3.72,
+      null
     ]
   },
   "segments": [
@@ -1857,10 +1962,39 @@ window.PVS_DATA = {
       "nciPct": -4
     }
   },
+  "isAssumptions": {
+    "sgaPct": 4.93,
+    "interestAssets": 16600,
+    "depositRate": 2.5,
+    "fxOther": 546,
+    "avgDebt": 1500,
+    "debtRate": 6,
+    "otherFinCost": 24,
+    "netOther": 100,
+    "taxRate": 15.56,
+    "nciPct": -4
+  },
   "sotp": {
-    "peCore": 12,
+    "coreNpat": 349,
+    "peCore": 14,
+    "jvNpat": 847,
     "peJv": 8,
-    "netCash": 9756
+    "parentCash": 8899,
+    "parentDebt": 1723,
+    "consolidatedCash": 15859.656120231,
+    "consolidatedDebt": 966.97530843,
+    "ownershipProxy": 51,
+    "parentAdvances": 0,
+    "consolidatedAdvances": 2064.842215114,
+    "baseParentCash": 8899,
+    "baseParentDebt": 1723,
+    "baseConsolidatedCash": 15859.656120231,
+    "baseConsolidatedDebt": 966.97530843,
+    "baseParentAdvances": 0,
+    "baseConsolidatedAdvances": 2064.842215114,
+    "basePeriod": "2025A",
+    "sharesOutstanding": 613.7,
+    "currentSharePrice": 33300
   },
   "fso": {
     "baseJv": 825.83189971,
@@ -2143,6 +2277,17 @@ window.PVS_DATA = {
   details.dd>summary .hint{font-size:11.5px;color:var(--muted);font-weight:500}
   details.dd>.body{margin-top:10px}
   table input.cell{width:92px;padding:4px 6px;text-align:right;font-size:13px;border:1px solid #CFD3E6;border-radius:6px;background:#FFFBEA}
+  .model-part{margin-top:16px}
+  .model-part>details>summary{font-size:15px;padding:2px 0}
+  .model-key{background:#FFF8DD;border:2px solid var(--gold);box-shadow:0 3px 12px rgba(243,167,18,.12)}
+  .model-key>details>summary{color:#7A5100}
+  .model-key .key-note{color:#7A5100;font-weight:600}
+  .bridge td:first-child{font-weight:600}
+  .bridge tr.total td{border-top:2px solid var(--navy);font-size:14px}
+  .bridge .deduct td{color:var(--neg)}
+  .bridge .add td{color:var(--pos)}
+  .model-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:760px){.model-form-grid{grid-template-columns:1fr}}
   #modelIS tr.h td,#sotpOut tr.h td{font-weight:800;background:#FAFBFF}
   #modelIS td.sub,#sotpOut td.sub{padding-left:22px;color:var(--muted)}
   @media print{
@@ -2316,16 +2461,25 @@ window.PVS_DATA = {
   <h2 class="sec" id="valTitle">Định giá SOTP & dự phóng</h2>
   <div class="callout" id="valNote"></div>
   <div id="modelBlock" hidden>
-    <div class="card">
-      <div class="row" style="justify-content:space-between"><h3 class="sub" style="margin:0">Dự phóng — biến đầu vào</h3><div class="row"><span class="saved" id="modelSaved"></span><button class="btn ghost sm" onclick="resetModel()">Về mặc định</button></div></div>
-      <div class="tbl-wrap" style="margin-top:10px"><table id="modelInputs"></table></div>
-      <div class="note" id="modelNote"></div>
+    <div class="card model-part" id="modelDriversCard">
+      <details class="dd"><summary>1. Driver doanh thu & biên gộp các mảng <span class="hint">bấm để mở/đóng</span></summary><div class="body">
+        <div class="row" style="justify-content:flex-end"><span class="saved" id="modelSaved"></span><button class="btn ghost sm" onclick="resetModel()">Về mặc định</button></div>
+        <div class="tbl-wrap" style="margin-top:10px"><table id="modelInputs"></table></div>
+        <div class="note" id="modelNote"></div>
+      </div></details>
     </div>
-    <div class="card" style="margin-top:16px"><h3 class="sub">Kết quả dự phóng (tỷ VND)</h3><div class="tbl-wrap"><table id="modelIS"></table></div></div>
-    <div class="card" style="margin-top:16px">
-      <h3 class="sub">SOTP</h3>
-      <div class="tbl-wrap"><table id="sotpInputs"></table></div>
-      <div class="tbl-wrap" style="margin-top:12px"><table id="sotpOut"></table></div>
+    <div class="card model-part model-key" id="modelMcCard">
+      <details class="dd" open><summary>2. M&C — doanh thu Backlog & biên lợi nhuận gộp <span class="hint">key driver</span></summary><div class="body">
+        <p class="key-note">Doanh thu M&C lấy trực tiếp từ Backlog & Dự án. Biến nhập duy nhất tại đây là biên lợi nhuận gộp.</p>
+        <div class="tbl-wrap" style="margin-top:10px"><table id="modelMcInputs"></table></div>
+      </div></details>
+    </div>
+    <div class="card model-part" id="modelIsCard"><details class="dd"><summary>4. Income Statement dự phóng <span class="hint">bấm để mở/đóng</span></summary><div class="body"><div class="tbl-wrap"><table id="modelIS"></table></div></div></details></div>
+    <div class="card model-part" id="sotpCard">
+      <details class="dd"><summary>7. Định giá SOTP & Target Price <span class="hint">bấm để mở/đóng</span></summary><div class="body">
+        <div class="tbl-wrap"><table id="sotpInputs"></table></div>
+        <div class="tbl-wrap" style="margin-top:14px"><table id="sotpOut" class="bridge"></table></div>
+      </div></details>
     </div>
   </div>
   <div class="grid g2" id="valStaticRow1">
@@ -2349,7 +2503,7 @@ window.PVS_DATA = {
     <div class="tbl-wrap"><table id="fcSegTable"></table></div>
     <div class="src" id="fcSrc"></div>
   </div>
-  <div class="card" style="margin-top:16px"><h3 class="sub">Rủi ro chính</h3><div class="tbl-wrap"><table id="riskTable"></table></div></div>
+  <div class="card model-part"><details class="dd"><summary>9. Rủi ro chính <span class="hint">bấm để mở/đóng</span></summary><div class="body"><div class="tbl-wrap"><table id="riskTable"></table></div></div></details></div>
 </section>
 
 <!-- ================= TAB 8: NOTES ================= -->
@@ -2963,7 +3117,7 @@ function fsoProjection(p,fx,margin){
 function renderFso(){
  const box=$('pvsFso');
  const fDefault=D.model?.fso||{baseJv:825.831899710,fx:26000,margin:20,projects:[{name:'Lô B · SEA',value:600,years:23,own:51,start:2027,months:5},{name:'Lạc Đà Vàng · AP',value:416,years:15,own:51,start:2026,months:3}]};let fm=deep(fDefault);try{const saved=JSON.parse(localStorage.getItem(KEY+'_fso_model'));if(saved&&saved.projects?.length===fDefault.projects.length)fm={...fm,...saved};}catch(e){}
- box.innerHTML=`<h3 class="sub">FSO Lô B & Lạc Đà Vàng — kiểm tra phương pháp</h3><details class="dd" open><summary>Hợp đồng, cách tính và điều chỉnh so với hình 4</summary><div class="body"><p><b>Chia giá trị hợp đồng cho số năm chỉ là phép ước tính doanh thu bình quân.</b> Nhân 51% và tỷ giá cho ra doanh thu quy đổi theo phần sở hữu; chỉ tiêu này không phải doanh thu hợp nhất hay lãi liên doanh PVS.</p><p>Lãi liên doanh PVS ≈ (doanh thu JV − OPEX − khấu hao − chi phí lãi vay − thuế ± điều chỉnh) × 51%. Nếu dùng biên LNST đã bao gồm các chi phí này: doanh thu JV × biên LNST × 51%. Khoản lãi trong thuyết minh BCTC đã là phần PVS, không nhân 51% thêm lần nữa.</p><div class="tbl-wrap"><table><tr><th>Dự án / JV</th><th>Thời hạn</th><th>Giá trị công bố</th><th>Cách dùng</th></tr><tr><td>FSO Lô B · PTSC SEA (51%)</td><td>14 năm chắc chắn + tối đa 9 năm gia hạn</td><td>~600 triệu USD, gồm gia hạn</td><td>600/23 ≈ 26,09 triệu USD/năm là bình quân toàn vòng đời có gia hạn; 600/15 không khớp thời hạn. Chưa có giá trị phần chắc chắn riêng để dự báo chính xác.</td></tr><tr><td>FSO Lạc Đà Vàng · PTSC AP (51%)</td><td>10 năm chắc chắn + tối đa 5 năm gia hạn</td><td>Tối đa ~416 triệu USD</td><td>416/15 ≈ 27,73 triệu USD/năm chỉ là giả định bình quân với đủ gia hạn; lịch thuê, phần giá trị chắc chắn và quyền chọn cần hợp đồng chi tiết.</td></tr></table></div><p class="note">Hình 4 ghi Lô B khoảng 34 triệu USD/năm nhưng 600/15 = 40 triệu USD/năm; cần kiểm tra lại công thức ô nguồn. Năm đầu phải nhân số tháng thực tế vận hành. Các khoản phí xây dựng, tài trợ, thuê và O&M có thể có lịch ghi nhận khác nhau; bình quân vòng đời không thay thế lịch doanh thu theo hợp đồng.</p><div class="src">${sourceLinks(fsoSources)}</div></div></details><h4 style="margin-top:18px">Mô phỏng phần đóng góp mới · giả định analyst</h4><p class="note">Tổng LDLK dùng trong IS = nền LDLK kiểm toán 2025 + phần đóng góp mới của hai FSO. Biên LNST 20% là giả định khởi tạo để mô hình chạy, có thể chỉnh; không phải hướng dẫn của doanh nghiệp.</p><div class="row" style="margin:12px 0"><label for="fsoBaseJv">LDLK nền 2025 (tỷ)</label><input id="fsoBaseJv" type="number" min="0" step="1" value="${fm.baseJv}" style="width:145px"><label for="fsoFx">USD/VND</label><input id="fsoFx" type="number" min="1" step="100" value="${fm.fx}" style="width:130px"><label for="fsoMargin">Biên LNST dự án (%)</label><input id="fsoMargin" type="number" min="-100" max="100" step="1" value="${fm.margin}" style="width:130px"><button class="btn ghost sm" id="fsoReset">Về mặc định</button></div><div class="tbl-wrap"><table id="fsoInputs"><tr><th>Dự án</th><th>Tổng HĐ (tr USD)</th><th>Năm phân bổ</th><th>PVS (%)</th><th>Năm vận hành</th><th>Số tháng năm đầu</th></tr>${fm.projects.map((p,i)=>`<tr data-fso="${i}"><td>${p.name}</td>${['value','years','own','start','months'].map(k=>`<td><input aria-label="${p.name} · ${k}" data-field="${k}" type="number" min="${k==='months'?0:1}" ${k==='months'?'max="12"':k==='own'?'max="100"':''} value="${p[k]}" step="1"></td>`).join('')}</tr>`).join('')}</table></div><p id="fsoValidation" role="status" class="note"></p><div class="tbl-wrap"><table id="fsoResults"></table></div><details class="dd" style="margin-top:12px"><summary>Độ nhạy biên LNST & chỉ tiêu cần theo dõi</summary><div class="body"><div class="tbl-wrap"><table id="fsoSensitivity"></table></div><p class="note">Các mức 10% / 20% / 30% chỉ minh họa độ nhạy, không phải biên được doanh nghiệp hướng dẫn. Theo dõi: ngày nghiệm thu/COD (có biên bản → ghi nhận; trễ → giảm tháng khai thác), đơn giá & quyền gia hạn (ký chắc chắn → thêm backlog; chưa ký → chỉ để kịch bản), uptime/OPEX (đạt ngân sách → giữ biên; downtime/vượt ngân sách → giảm biên), dư nợ & lãi vay (tăng chi phí → giảm lãi JV). Cập nhật khi có công bố PTSC/Yinson và BCTC JV.</p></div></details>`;
+ box.innerHTML=`<details class="dd"><summary>10. FSO Lô B & Lạc Đà Vàng — kiểm tra phương pháp <span class="hint">bấm để mở/đóng</span></summary><div class="body"><details class="dd"><summary>Hợp đồng, cách tính và điều chỉnh so với hình 4</summary><div class="body"><p><b>Chia giá trị hợp đồng cho số năm chỉ là phép ước tính doanh thu bình quân.</b> Nhân 51% và tỷ giá cho ra doanh thu quy đổi theo phần sở hữu; chỉ tiêu này không phải doanh thu hợp nhất hay lãi liên doanh PVS.</p><p>Lãi liên doanh PVS ≈ (doanh thu JV − OPEX − khấu hao − chi phí lãi vay − thuế ± điều chỉnh) × 51%. Nếu dùng biên LNST đã bao gồm các chi phí này: doanh thu JV × biên LNST × 51%. Khoản lãi trong thuyết minh BCTC đã là phần PVS, không nhân 51% thêm lần nữa.</p><div class="tbl-wrap"><table><tr><th>Dự án / JV</th><th>Thời hạn</th><th>Giá trị công bố</th><th>Cách dùng</th></tr><tr><td>FSO Lô B · PTSC SEA (51%)</td><td>14 năm chắc chắn + tối đa 9 năm gia hạn</td><td>~600 triệu USD, gồm gia hạn</td><td>600/23 ≈ 26,09 triệu USD/năm là bình quân toàn vòng đời có gia hạn; 600/15 không khớp thời hạn. Chưa có giá trị phần chắc chắn riêng để dự báo chính xác.</td></tr><tr><td>FSO Lạc Đà Vàng · PTSC AP (51%)</td><td>10 năm chắc chắn + tối đa 5 năm gia hạn</td><td>Tối đa ~416 triệu USD</td><td>416/15 ≈ 27,73 triệu USD/năm chỉ là giả định bình quân với đủ gia hạn; lịch thuê, phần giá trị chắc chắn và quyền chọn cần hợp đồng chi tiết.</td></tr></table></div><p class="note">Hình 4 ghi Lô B khoảng 34 triệu USD/năm nhưng 600/15 = 40 triệu USD/năm; cần kiểm tra lại công thức ô nguồn. Năm đầu phải nhân số tháng thực tế vận hành. Các khoản phí xây dựng, tài trợ, thuê và O&M có thể có lịch ghi nhận khác nhau; bình quân vòng đời không thay thế lịch doanh thu theo hợp đồng.</p><div class="src">${sourceLinks(fsoSources)}</div></div></details><h4 style="margin-top:18px">Mô phỏng phần đóng góp mới · giả định analyst</h4><p class="note">Tổng LDLK dùng trong IS = nền LDLK kiểm toán 2025 + phần đóng góp mới của hai FSO. Biên LNST 20% là giả định khởi tạo để mô hình chạy, có thể chỉnh; không phải hướng dẫn của doanh nghiệp.</p><div class="row" style="margin:12px 0"><label for="fsoBaseJv">LDLK nền 2025 (tỷ)</label><input id="fsoBaseJv" type="number" min="0" step="1" value="${fm.baseJv}" style="width:145px"><label for="fsoFx">USD/VND</label><input id="fsoFx" type="number" min="1" step="100" value="${fm.fx}" style="width:130px"><label for="fsoMargin">Biên LNST dự án (%)</label><input id="fsoMargin" type="number" min="-100" max="100" step="1" value="${fm.margin}" style="width:130px"><button class="btn ghost sm" id="fsoReset">Về mặc định</button></div><div class="tbl-wrap"><table id="fsoInputs"><tr><th>Dự án</th><th>Tổng HĐ (tr USD)</th><th>Năm phân bổ</th><th>PVS (%)</th><th>Năm vận hành</th><th>Số tháng năm đầu</th></tr>${fm.projects.map((p,i)=>`<tr data-fso="${i}"><td>${p.name}</td>${['value','years','own','start','months'].map(k=>`<td><input aria-label="${p.name} · ${k}" data-field="${k}" type="number" min="${k==='months'?0:1}" ${k==='months'?'max="12"':k==='own'?'max="100"':''} value="${p[k]}" step="1"></td>`).join('')}</tr>`).join('')}</table></div><p id="fsoValidation" role="status" class="note"></p><div class="tbl-wrap"><table id="fsoResults"></table></div><details class="dd" style="margin-top:12px"><summary>Độ nhạy biên LNST & chỉ tiêu cần theo dõi</summary><div class="body"><div class="tbl-wrap"><table id="fsoSensitivity"></table></div><p class="note">Các mức 10% / 20% / 30% chỉ minh họa độ nhạy, không phải biên được doanh nghiệp hướng dẫn. Theo dõi: ngày nghiệm thu/COD (có biên bản → ghi nhận; trễ → giảm tháng khai thác), đơn giá & quyền gia hạn (ký chắc chắn → thêm backlog; chưa ký → chỉ để kịch bản), uptime/OPEX (đạt ngân sách → giữ biên; downtime/vượt ngân sách → giảm biên), dư nợ & lãi vay (tăng chi phí → giảm lãi JV). Cập nhật khi có công bố PTSC/Yinson và BCTC JV.</p></div></details></div></details>`;
  const update=()=>{
   const baseJv=+$('fsoBaseJv').value,fx=+$('fsoFx').value,raw=$('fsoMargin').value,margin=raw===''?null:+raw;
   const ps=[...box.querySelectorAll('tr[data-fso]')].map((r,i)=>({name:i?'Lạc Đà Vàng · AP':'Lô B · SEA',...Object.fromEntries([...r.querySelectorAll('input')].map(x=>[x.dataset.field,+x.value]))}));
@@ -3026,52 +3180,63 @@ function linkedJvProfit(year){
 function backlogRevenue(label){
  const i=D.backlog.execYears.indexOf(label);return i<0?0:(D.backlog.execConfirmed[i]||0)+(D.backlog.execPending[i]||0);
 }
-function pvsFreshModel(){return deep({version:D.model.version,inputs:D.model.inputs,sotp:D.model.sotp});}
+function pvsFreshModel(){return deep({version:D.model.version,inputs:D.model.inputs,isAssumptions:D.model.isAssumptions,sotp:D.model.sotp});}
 calcModel=function(){
  const md=D.model,a=D.segments.periods.annual,baseRev=a.revenue.map(r=>r[r.length-1]),cases=['2026F','Worst','Base','Best'],out={};
  cases.forEach(c=>{
-  const year=c==='2026F'?2026:2027,label=year+'F',i=M.inputs[c],prior=c==='2026F'?baseRev:out['2026F'].segRev;
+  const year=c==='2026F'?2026:2027,label=year+'F',i=M.inputs[c],ai=M.isAssumptions,prior=c==='2026F'?baseRev:out['2026F'].segRev;
   const segRev=[],segGp=[];
   md.segments.forEach((s,k)=>{const rev=s.backlog?backlogRevenue(label):prior[k]*(1+i['g_'+s.key]/100),gm=i['gm_'+s.key];segRev.push(rev);segGp.push(rev*gm/100);});
-  const revenue=segRev.reduce((x,y)=>x+y,0),gp=segGp.reduce((x,y)=>x+y,0),sga=revenue*i.sgaPct/100,ebit=gp-sga,da=linkedCapexDA(year),ebitda=ebit+da,jv=linkedJvProfit(year);
-  const interest=i.interestAssets*i.depositRate/100,finIncome=interest+i.fxOther,interestCost=i.avgDebt*i.debtRate/100,finCost=interestCost+i.otherFinCost,ebt=ebit+jv+i.netOther+finIncome-finCost,tax=Math.max(0,ebt*i.taxRate/100),npat=ebt-tax,nci=npat*i.nciPct/100,parent=npat-nci,coreParent=parent-jv;
-  out[c]={year,label,segRev,segGp,revenue,gp,gm:gp/revenue*100,cogs:gp-revenue,sga:-sga,ebitda,da:-da,ebit,jv,netOther:i.netOther,interest,finIncome,interestCost,finCost:-finCost,ebt,tax:-tax,npat,nci,parent,coreParent,sgaPct:i.sgaPct,taxRate:i.taxRate,nciPct:i.nciPct};
+  const revenue=segRev.reduce((x,y)=>x+y,0),gp=segGp.reduce((x,y)=>x+y,0),sga=revenue*ai.sgaPct/100,ebit=gp-sga,da=linkedCapexDA(year),ebitda=ebit+da,jv=linkedJvProfit(year);
+  const interest=ai.interestAssets*ai.depositRate/100,finIncome=interest+ai.fxOther,interestCost=ai.avgDebt*ai.debtRate/100,finCost=interestCost+ai.otherFinCost,ebt=ebit+jv+ai.netOther+finIncome-finCost,tax=Math.max(0,ebt*ai.taxRate/100),npat=ebt-tax,nci=npat*ai.nciPct/100,parent=npat-nci;
+  out[c]={year,label,segRev,segGp,revenue,gp,gm:gp/revenue*100,cogs:gp-revenue,sga:-sga,ebitda,da:-da,ebit,jv,netOther:ai.netOther,interest,finIncome,interestCost,finCost:-finCost,ebt,tax:-tax,npat,nci,parent,sgaPct:ai.sgaPct,taxRate:ai.taxRate,nciPct:ai.nciPct};
  });
- const sp=M.sotp,m=D.meta;['Worst','Base','Best'].forEach(c=>{const o=out[c];o.vCore=o.coreParent*sp.peCore;o.vJv=o.jv*sp.peJv;o.vCash=sp.netCash;o.equity=o.vCore+o.vJv+o.vCash;o.px=o.equity/m.sharesOut*1000;o.up=(o.equity/m.mcap-1)*100;});
  return out;
 };
+function calcPvsSotp(){
+ const s=M.sotp,p=s.ownershipProxy/100;
+ const parentNet=s.parentCash-s.parentDebt,consolidatedNet=s.consolidatedCash-s.consolidatedDebt,subsidiaryNet=(consolidatedNet-parentNet)*p,attributableNet=parentNet+subsidiaryNet;
+ const baseParentNet=s.baseParentCash-s.baseParentDebt,baseConsolidatedNet=s.baseConsolidatedCash-s.baseConsolidatedDebt,baseSubsidiaryNet=(baseConsolidatedNet-baseParentNet)*p,baseAttributableNet=baseParentNet+baseSubsidiaryNet;
+ const attributableAdvances=s.parentAdvances+(s.consolidatedAdvances-s.parentAdvances)*p,baseAttributableAdvances=s.baseParentAdvances+(s.baseConsolidatedAdvances-s.baseParentAdvances)*p;
+ const deltaNet=attributableNet-baseAttributableNet,deltaAdvances=attributableAdvances-baseAttributableAdvances,advanceAdjustment=Math.min(Math.max(deltaNet,0),Math.max(deltaAdvances,0)),adjustedNetCash=attributableNet-advanceAdjustment;
+ const coreValue=s.coreNpat*s.peCore,jvValue=s.jvNpat*s.peJv,equity=coreValue+jvValue+adjustedNetCash,px=s.sharesOutstanding?equity/s.sharesOutstanding*1000:null,up=px!=null&&s.currentSharePrice?px/s.currentSharePrice*100-100:null;
+ return {parentNet,consolidatedNet,subsidiaryNet,attributableNet,baseParentNet,baseConsolidatedNet,baseSubsidiaryNet,baseAttributableNet,attributableAdvances,baseAttributableAdvances,deltaNet,deltaAdvances,advanceAdjustment,adjustedNetCash,coreValue,jvValue,equity,px,up};
+}
 renderModel=function(){
  const md=D.model;if(!md)return;
  $('modelBlock').hidden=false;['valStaticRow1','valStaticRow2','valStaticRow3','valHistRow'].forEach(id=>{const e=$(id);if(e)e.style.display='none';});
  const old=loadModel();if(!M||M.version!==md.version)M=old&&old.version===md.version?old:pvsFreshModel();
  const cases=['2026F','Worst','Base','Best'],heads=['2026F','2027F Worst','2027F Base','2027F Best'];
  const input=(c,k,step=.1)=>`<input class="cell" type="number" step="${step}" value="${M.inputs[c][k]}" onchange="M.inputs['${c}']['${k}']=Number(this.value);saveModel();renderModel()">`;
- const first=$('modelInputs').closest('.card');first.querySelector('h3').textContent='Dự phóng theo mảng — biến đầu vào';
- let segRows='';md.segments.forEach(s=>{if(s.backlog){segRows+=`<tr class="h"><td>${esc(s.name)} · doanh thu từ backlog</td>${cases.map(c=>`<td class="num">${fmt(backlogRevenue(c==='2026F'?'2026F':'2027F'),0)}</td>`).join('')}</tr><tr><td>↳ Biên lợi nhuận gộp (%)</td>${cases.map(c=>`<td class="num">${input(c,'gm_'+s.key)}</td>`).join('')}</tr>`;}else{segRows+=`<tr class="h"><td>${esc(s.name)} · tăng trưởng DT (% YoY)</td>${cases.map(c=>`<td class="num">${input(c,'g_'+s.key)}</td>`).join('')}</tr><tr><td>↳ Biên lợi nhuận gộp (%)</td>${cases.map(c=>`<td class="num">${input(c,'gm_'+s.key)}</td>`).join('')}</tr>`;}});
+ let segRows='';md.segments.filter(s=>!s.backlog).forEach(s=>{segRows+=`<tr class="h"><td>${esc(s.name)} · tăng trưởng DT (% YoY)</td>${cases.map(c=>`<td class="num">${input(c,'g_'+s.key)}</td>`).join('')}</tr><tr><td>↳ Biên lợi nhuận gộp (%)</td>${cases.map(c=>`<td class="num">${input(c,'gm_'+s.key)}</td>`).join('')}</tr>`;});
  $('modelInputs').innerHTML='<tr><th>Driver mảng</th>'+heads.map(h=>`<th class="num">${h}</th>`).join('')+'</tr>'+segRows;
- $('modelNote').innerHTML=esc(md.note)+'<br><b>Liên kết:</b> M&C → tab Backlog; D&A → tab Kế hoạch CAPEX; LDLK → mô hình FSO phía dưới.';
- let ac=$('pvsISAssumptions');if(!ac){ac=document.createElement('div');ac.id='pvsISAssumptions';ac.className='card';ac.style.marginTop='16px';first.after(ac);}
- const vars=[['sgaPct','CP bán hàng & QLDN / doanh thu (%)',.1],['interestAssets','Tiền + đầu tư ngắn hạn bình quân (tỷ)',100],['depositRate','Lợi suất tiền gửi/cho vay (%)',.1],['fxOther','DT tài chính từ tỷ giá & khác (tỷ)',10],['avgDebt','Dư nợ vay bình quân (tỷ)',100],['debtRate','Lãi suất vay bình quân (%)',.1],['otherFinCost','CP tài chính khác (tỷ)',10],['netOther','Thu nhập khác ròng (tỷ)',10],['taxRate','Thuế suất hiệu dụng (%)',.1],['nciPct','NCI / LNST hợp nhất (%)',.1]];
- ac.innerHTML='<h3 class="sub">Giả định Income Statement</h3><div class="tbl-wrap"><table><tr><th>Biến</th>'+heads.map(h=>`<th class="num">${h}</th>`).join('')+'</tr>'+vars.map(([k,l,step])=>`<tr><td>${l}</td>${cases.map(c=>`<td class="num">${input(c,k,step)}</td>`).join('')}</tr>`).join('')+'</table></div><p class="note">'+esc(md.financialNote)+'</p><div class="src"><a href="'+esc(D.capexPlan.depreciationSource)+'" target="_blank" rel="noopener">PTSC · BCTC 2025 kiểm toán, thuyết minh 25 & 36</a></div>';
+ $('modelMcInputs').innerHTML='<tr><th>Driver M&C</th>'+heads.map(h=>`<th class="num">${h}</th>`).join('')+'</tr><tr class="h"><td>Doanh thu từ Backlog & Dự án (tỷ)</td>'+cases.map(c=>`<td class="num">${fmt(backlogRevenue(c==='2026F'?'2026F':'2027F'),0)}</td>`).join('')+'</tr><tr><td>Biên lợi nhuận gộp M&C (%)</td>'+cases.map(c=>`<td class="num">${input(c,'gm_mc')}</td>`).join('')+'</tr>';
+ $('modelNote').innerHTML=esc(md.note)+'<br><b>Liên kết:</b> D&A → Kế hoạch CAPEX; LDLK → mô hình FSO phía dưới.';
+ let ac=$('pvsISAssumptions');if(!ac){ac=document.createElement('div');ac.id='pvsISAssumptions';ac.className='card model-part';$('modelMcCard').after(ac);}
+ const vars=[['sgaPct','CP bán hàng & QLDN / doanh thu (%)',.1,'%'],['interestAssets','Tiền + đầu tư ngắn hạn bình quân (tỷ)',100,'n'],['depositRate','Lợi suất tiền gửi/cho vay (%)',.1,'%'],['fxOther','Lãi tỷ giá & DT tài chính khác (tỷ)',10,'n'],['avgDebt','Dư nợ vay bình quân (tỷ)',100,'n'],['debtRate','Lãi suất vay bình quân (%)',.1,'%'],['otherFinCost','CP tài chính khác (tỷ)',10,'n'],['netOther','Thu nhập khác ròng (tỷ)',10,'n'],['taxRate','Thuế suất hiệu dụng (%)',.1,'%'],['nciPct','NCI / LNST hợp nhất (%)',.1,'%']];
+ const hist=md.assumptionHistory,ai=M.isAssumptions,aiInput=(k,step)=>`<input class="cell" type="number" step="${step}" value="${ai[k]}" onchange="M.isAssumptions['${k}']=Number(this.value);saveModel();renderModel()">`,hf=(v,t)=>v==null?'—':t==='%'?Number(v).toFixed(2)+'%':fmt(v,1);
+ ac.innerHTML='<details class="dd"><summary>3. Giả định Income Statement <span class="hint">một bộ giả định chung cho mọi case</span></summary><div class="body"><div class="tbl-wrap"><table><tr><th>Biến</th>'+hist.cols.map(h=>`<th class="num">${h}</th>`).join('')+'<th class="num">Giả định F</th></tr>'+vars.map(([k,l,step,t])=>`<tr><td>${l}</td>${hist[k].map(v=>`<td class="num">${hf(v,t)}</td>`).join('')}<td class="num">${aiInput(k,step)}</td></tr>`).join('')+'</table></div><p class="note">6T/2026 không annualize; tiền sinh lãi và dư nợ dùng bình quân 31/12/2025–30/06/2026. Dấu — là chưa đủ chi tiết để tách đáng tin cậy. '+esc(md.financialNote)+'</p><div class="src"><a href="'+esc(D.capexPlan.depreciationSource)+'" target="_blank" rel="noopener">PTSC · BCTC 2025 kiểm toán</a> · <a href="https://www.ptsc.com.vn/Data/Sites/1/media/codong/1367%20PTSC-BTK.pdf" target="_blank" rel="noopener">PTSC · BCTC 6T/2026 soát xét</a></div></div></details>';
  const o=calcModel(),h=md.hist,hc=h.cols,fa=v=>v==null?'—':v<0?'('+money(-v)+')':money(v),fp=v=>v==null?'—':Number(v).toFixed(2)+'%';
  const histEbit=h.gp.map((v,i)=>v+h.sga[i]),histEbitda=histEbit.map((v,i)=>v-h.da[i]),histGm=h.gp.map((v,i)=>v/h.revenue[i]*100),histSga=h.sga.map((v,i)=>-v/h.revenue[i]*100),histTax=h.tax.map((v,i)=>-v/h.ebt[i]*100),histNci=h.nci.map((v,i)=>v/h.npat[i]*100),histYoy=h.parent.map((v,i)=>i?(v/h.parent[i-1]-1)*100:null);
  const fv=k=>cases.map(c=>o[c][k]),pctRows=k=>cases.map(c=>o[c][k]);
  const rows=[['h','Doanh thu',h.revenue,fv('revenue'),fa],['sub','Giá vốn',h.cogs,fv('cogs'),fa],['h','Lợi nhuận gộp',h.gp,fv('gp'),fa],['sub','Biên lợi nhuận gộp',histGm,pctRows('gm'),fp],['sub','CP bán hàng & QLDN',h.sga,fv('sga'),fa],['h','EBITDA',histEbitda,fv('ebitda'),fa],['sub','Khấu hao',h.da,fv('da'),fa],['h','EBIT',histEbit,fv('ebit'),fa],['sub','Lãi/lỗ từ LDLK',h.jv,fv('jv'),fa],['sub','Thu nhập khác ròng',h.netOther,fv('netOther'),fa],['sub','Doanh thu tài chính',h.finIncome,fv('finIncome'),fa],['sub','Chi phí tài chính',h.finCost,fv('finCost'),fa],['h','Lợi nhuận trước thuế',h.ebt,fv('ebt'),fa],['sub','Thuế TNDN',h.tax,fv('tax'),fa],['sub','LNST hợp nhất',h.npat,fv('npat'),fa],['sub','LNST cổ đông không kiểm soát',h.nci,fv('nci'),fa],['h','LNST công ty mẹ',h.parent,fv('parent'),fa],['sub','Tăng trưởng LNST công ty mẹ',histYoy,[o['2026F'].parent/h.parent.at(-1)*100-100,...['Worst','Base','Best'].map(c=>o[c].parent/o['2026F'].parent*100-100)],fp],['sub','CP BH & QLDN / DT',histSga,pctRows('sgaPct'),fp],['sub','Thuế suất hiệu dụng',histTax,pctRows('taxRate'),fp],['sub','NCI / LNST hợp nhất',histNci,pctRows('nciPct'),fp]];
- $('modelIS').closest('.card').querySelector('h3').textContent='Income Statement dự phóng (tỷ VND)';
  $('modelIS').innerHTML='<tr><th>Chỉ tiêu</th>'+hc.concat(heads).map(x=>`<th class="num">${x}</th>`).join('')+'</tr>'+rows.map(([cls,l,hv,ov,f])=>`<tr class="${cls}"><td>${l}</td>${hv.concat(ov).map(v=>`<td class="num">${f(v)}</td>`).join('')}</tr>`).join('');
- let charts=$('pvsModelCharts');if(!charts){charts=document.createElement('div');charts.id='pvsModelCharts';charts.className='grid g2';charts.style.marginTop='16px';charts.innerHTML=chartCard('pvsModelRevenue','Doanh thu theo mảng (tỷ VND)')+chartCard('pvsModelProfit','LNG, EBIT & LNST công ty mẹ (tỷ VND)');$('modelIS').closest('.card').after(charts);}
+ let charts=$('pvsModelCharts');if(!charts){charts=document.createElement('div');charts.id='pvsModelCharts';charts.className='card model-part';charts.innerHTML='<details class="dd"><summary>5. Biểu đồ kết quả dự phóng <span class="hint">bấm để mở/đóng</span></summary><div class="body"><div class="grid g2">'+chartCard('pvsModelRevenue','Doanh thu theo mảng (tỷ VND)')+chartCard('pvsModelProfit','LNG, EBIT & LNST công ty mẹ (tỷ VND)')+'</div></div></details>';$('modelIsCard').after(charts);}
  timeChart('pvsModelRevenue',heads,md.segments.map((s,k)=>({name:s.name,values:cases.map(c=>o[c].segRev[k])})),{stacked:true});
  timeChart('pvsModelProfit',heads,[{name:'Lợi nhuận gộp',values:fv('gp')},{name:'EBIT',values:fv('ebit')},{name:'LNST công ty mẹ',values:fv('parent')}]);
- const sp=M.sotp,sin=(k,l,step)=>`<td>${l}</td><td class="num"><input class="cell" type="number" step="${step}" value="${sp[k]}" onchange="M.sotp['${k}']=Number(this.value);saveModel();renderModel()"></td>`;
- $('sotpInputs').innerHTML=`<tr><th>Biến định giá</th><th class="num">Giá trị</th><th>Biến định giá</th><th class="num">Giá trị</th></tr><tr>${sin('peCore','P/E hoạt động lõi (x)',.5)}${sin('peJv','P/E LDLK FSO (x)',.5)}</tr><tr>${sin('netCash','Tiền mặt ròng điều chỉnh (tỷ)',100)}<td></td><td></td></tr>`;
- const vc=['Worst','Base','Best'];$('sotpOut').innerHTML='<tr><th>SOTP 2027F (tỷ VND)</th>'+vc.map(c=>`<th class="num">${c}</th>`).join('')+'<th>Ghi chú</th></tr>'+`<tr><td>Hoạt động lõi</td>${vc.map(c=>`<td class="num">${fmt(o[c].vCore,0)}</td>`).join('')}<td>LNST công ty mẹ trừ LDLK × ${sp.peCore}x</td></tr>`+`<tr><td>LDLK FSO</td>${vc.map(c=>`<td class="num">${fmt(o[c].vJv,0)}</td>`).join('')}<td>LDLK liên kết từ mô hình FSO × ${sp.peJv}x</td></tr>`+`<tr><td>Tiền mặt ròng điều chỉnh</td>${vc.map(c=>`<td class="num">${fmt(o[c].vCash,0)}</td>`).join('')}<td>Nhập trực tiếp</td></tr>`+`<tr class="h"><td>Equity value</td>${vc.map(c=>`<td class="num">${fmt(o[c].equity,0)}</td>`).join('')}<td>Hiện tại ${fmt(D.meta.mcap,0)} tỷ</td></tr>`+`<tr><td>Giá/cp</td>${vc.map(c=>`<td class="num">${fmt(o[c].px,0)}đ</td>`).join('')}<td>${fmt(D.meta.sharesOut,1)} triệu cp</td></tr>`+`<tr><td>Upside</td>${vc.map(c=>`<td class="num">${fp(o[c].up)}</td>`).join('')}<td></td></tr>`;
+ const sp=M.sotp,snum=(k,step=1)=>`<input class="cell" type="number" step="${step}" value="${sp[k]}" onchange="M.sotp['${k}']=Number(this.value);saveModel();renderModel()">`,stext=k=>`<input type="text" value="${esc(sp[k])}" onchange="M.sotp['${k}']=this.value;saveModel();renderModel()">`,so=calcPvsSotp();
+ let nc=$('pvsNetCashModel');if(!nc){nc=document.createElement('div');nc.id='pvsNetCashModel';nc.className='card model-part';$('sotpCard').parentNode.insertBefore(nc,$('sotpCard'));}
+ nc.innerHTML='<details class="dd"><summary>6. Adjusted Net Cash <span class="hint">incremental matching customer advances</span></summary><div class="body"><div class="model-form-grid"><div><h4>Current</h4><div class="tbl-wrap"><table><tr><td>Parent Cash (tỷ)</td><td class="num">'+snum('parentCash',100)+'</td></tr><tr><td>Parent Debt (tỷ)</td><td class="num">'+snum('parentDebt',100)+'</td></tr><tr><td>Consolidated Cash (tỷ)</td><td class="num">'+snum('consolidatedCash',100)+'</td></tr><tr><td>Consolidated Debt (tỷ)</td><td class="num">'+snum('consolidatedDebt',100)+'</td></tr><tr><td>Ownership proxy (%)</td><td class="num">'+snum('ownershipProxy',1)+'</td></tr><tr><td>Parent Customer Advances (tỷ)</td><td class="num">'+snum('parentAdvances',100)+'</td></tr><tr><td>Consolidated Customer Advances (tỷ)</td><td class="num">'+snum('consolidatedAdvances',100)+'</td></tr></table></div></div><div><h4>Base</h4><div class="tbl-wrap"><table><tr><td>Base Period</td><td>'+stext('basePeriod')+'</td></tr><tr><td>Base Parent Cash (tỷ)</td><td class="num">'+snum('baseParentCash',100)+'</td></tr><tr><td>Base Parent Debt (tỷ)</td><td class="num">'+snum('baseParentDebt',100)+'</td></tr><tr><td>Base Consolidated Cash (tỷ)</td><td class="num">'+snum('baseConsolidatedCash',100)+'</td></tr><tr><td>Base Consolidated Debt (tỷ)</td><td class="num">'+snum('baseConsolidatedDebt',100)+'</td></tr><tr><td>Base Parent Customer Advances (tỷ)</td><td class="num">'+snum('baseParentAdvances',100)+'</td></tr><tr><td>Base Consolidated Customer Advances (tỷ)</td><td class="num">'+snum('baseConsolidatedAdvances',100)+'</td></tr></table></div></div></div><div class="tbl-wrap" style="margin-top:16px"><table class="bridge"><tr><th>Net Cash bridge (tỷ VND)</th><th class="num">Current</th><th class="num">Base · '+esc(sp.basePeriod)+'</th></tr><tr><td>Parent Net Cash</td><td class="num">'+fmt(so.parentNet,1)+'</td><td class="num">'+fmt(so.baseParentNet,1)+'</td></tr><tr class="add"><td>+ '+fmt(sp.ownershipProxy,0)+'% Subsidiary Net Cash</td><td class="num">'+fmt(so.subsidiaryNet,1)+'</td><td class="num">'+fmt(so.baseSubsidiaryNet,1)+'</td></tr><tr><td>= Attributable Net Cash</td><td class="num"><b>'+fmt(so.attributableNet,1)+'</b></td><td class="num"><b>'+fmt(so.baseAttributableNet,1)+'</b></td></tr><tr><td>Attributable Customer Advances</td><td class="num">'+fmt(so.attributableAdvances,1)+'</td><td class="num">'+fmt(so.baseAttributableAdvances,1)+'</td></tr><tr><td>Delta Net Cash</td><td class="num">'+fmt(so.deltaNet,1)+'</td><td></td></tr><tr><td>Delta Customer Advances</td><td class="num">'+fmt(so.deltaAdvances,1)+'</td><td></td></tr><tr class="deduct"><td>− Customer Advance Adjustment</td><td class="num">'+fmt(so.advanceAdjustment,1)+'</td><td></td></tr><tr class="total"><td>= Adjusted Net Cash</td><td class="num">'+fmt(so.adjustedNetCash,1)+'</td><td></td></tr></table></div><p class="note">'+fmt(sp.ownershipProxy,0)+'% là proxy bảo thủ, không phải tỷ lệ sở hữu thực tế của từng công ty con. Adjustment chỉ khớp phần tăng dương của Net Cash và Customer Advances, không trừ toàn bộ ứng trước.</p></div></details>';
+ $('sotpInputs').innerHTML='<tr><th>Biến định giá</th><th class="num">Giá trị</th><th>Biến định giá</th><th class="num">Giá trị</th></tr><tr><td>Core NPAT (tỷ)</td><td class="num">'+snum('coreNpat',10)+'</td><td>Target P/E Core (x)</td><td class="num">'+snum('peCore',.5)+'</td></tr><tr><td>NPAT từ LDLK (tỷ)</td><td class="num">'+snum('jvNpat',10)+'</td><td>Target P/E LDLK (x)</td><td class="num">'+snum('peJv',.5)+'</td></tr><tr><td>Shares Outstanding (triệu cp)</td><td class="num">'+snum('sharesOutstanding',1)+'</td><td>Current Share Price (đ)</td><td class="num">'+snum('currentSharePrice',100)+'</td></tr>';
+ $('sotpOut').innerHTML='<tr><th>SOTP bridge</th><th class="num">Giá trị</th><th>Công thức</th></tr><tr><td>Core Business Value</td><td class="num">'+fmt(so.coreValue,0)+' tỷ</td><td>Core NPAT × Target P/E</td></tr><tr class="add"><td>+ LDLK Value</td><td class="num">'+fmt(so.jvValue,0)+' tỷ</td><td>NPAT từ LDLK × Target P/E</td></tr><tr class="add"><td>+ Adjusted Net Cash</td><td class="num">'+fmt(so.adjustedNetCash,0)+' tỷ</td><td>từ bridge Net Cash</td></tr><tr class="total"><td>= Total Equity Value</td><td class="num">'+fmt(so.equity,0)+' tỷ</td><td></td></tr><tr class="total"><td>= Implied Value / Share</td><td class="num">'+fmt(so.px,0)+'đ</td><td>Equity Value ÷ số cổ phiếu</td></tr><tr><td>= Upside / Downside</td><td class="num">'+fp(so.up)+'</td><td>so với '+fmt(sp.currentSharePrice,0)+'đ/cp</td></tr>';
  let watch=$('pvsWatchKpis');if(!watch){watch=document.createElement('div');watch.id='pvsWatchKpis';watch.className='card';watch.style.marginTop='16px';$('sotpOut').closest('.card').after(watch);}watch.innerHTML='<h3 class="sub">Watch KPIs của mô hình</h3><div class="tbl-wrap"><table><tr><th>KPI</th><th>Nguồn</th><th>Tần suất</th><th>Trigger tích cực</th><th>Trigger tiêu cực</th></tr>'+md.watchKpis.map(k=>`<tr><td><b>${esc(k.name)}</b></td><td>${esc(k.source)}</td><td>${esc(k.frequency)}</td><td>${esc(k.bull)}</td><td>${esc(k.bear)}</td></tr>`).join('')+'</table></div>';
- const fc=$('fcSegTable');if(fc)fc.closest('.card').style.display='none';D.myView.tpAdj=Math.round(o.Base.px);D.myView.basis='Base case SOTP 2027F · model driver trên tab Định giá';
+ watch.className='card model-part';watch.innerHTML='<details class="dd"><summary>8. Watch KPIs của mô hình <span class="hint">bấm để mở/đóng</span></summary><div class="body"><div class="tbl-wrap"><table><tr><th>KPI</th><th>Nguồn</th><th>Tần suất</th><th>Trigger tích cực</th><th>Trigger tiêu cực</th></tr>'+md.watchKpis.map(k=>`<tr><td><b>${esc(k.name)}</b></td><td>${esc(k.source)}</td><td>${esc(k.frequency)}</td><td>${esc(k.bull)}</td><td>${esc(k.bear)}</td></tr>`).join('')+'</table></div></div></details>';
+ const fc=$('fcSegTable');if(fc)fc.closest('.card').style.display='none';D.myView.tpAdj=Math.round(so.px||0);D.myView.basis='SOTP nhập tay · Core + LDLK + Adjusted Net Cash';
 };
 // Install optional sections before the original DOMContentLoaded handler activates a deep link.
 const capexTab=document.createElement('button');capexTab.dataset.tab='capex';capexTab.textContent='Kế hoạch CAPEX';$('tabbar').insertBefore(capexTab,$('tabbar').querySelector('[data-tab="events"]'));
 const capexSection=document.createElement('section');capexSection.className='tab';capexSection.id='capex';$('bs').after(capexSection);
-const fsoBox=document.createElement('div');fsoBox.id='pvsFso';fsoBox.className='card';fsoBox.style.marginTop='16px';$('val').appendChild(fsoBox);
+const fsoBox=document.createElement('div');fsoBox.id='pvsFso';fsoBox.className='card model-part';$('val').appendChild(fsoBox);
 document.addEventListener('DOMContentLoaded',()=>{renderFso();renderCapex();});
 
 </script>
