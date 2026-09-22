@@ -144,15 +144,18 @@ window.PVS_DATA = {
     },
     geo: {
       title: "BHX — số cửa hàng theo tỉnh/thành",
+      regionTitle: "BHX — số cửa hàng theo miền",
+      regionOrder: ["Miền Bắc", "Miền Trung", "Miền Nam"],
+      regionNote: "Quy ước 3 miền: miền Bắc đến Ninh Bình; miền Trung từ Thanh Hóa đến duyên hải Nam Trung Bộ, gồm Tây Nguyên (Lâm Đồng, Đắk Lắk, Gia Lai); miền Nam gồm Đông Nam Bộ và Đồng bằng sông Cửu Long. Cộng theo tỉnh/thành sau sáp nhập trong dữ liệu hiện có; các tỉnh chưa có dữ liệu không được mặc định là 0 cửa hàng.",
       seriesLabel: "Cửa hàng",
       items: [
-        { name:"TP. Hồ Chí Minh", value:1076 }, { name:"Đồng Nai", value:264 }, { name:"Tây Ninh", value:220 }, { name:"Cần Thơ", value:194 },
-        { name:"An Giang", value:176 }, { name:"Đồng Tháp", value:175 }, { name:"Vĩnh Long", value:173 }, { name:"Lâm Đồng", value:166 },
-        { name:"Đà Nẵng", value:121 }, { name:"Đắk Lắk", value:97 }, { name:"Nghệ An", value:93 }, { name:"Ninh Bình", value:91 },
-        { name:"Cà Mau", value:88 }, { name:"Khánh Hòa", value:82 }, { name:"Thanh Hóa", value:78 }, { name:"Gia Lai", value:76 },
-        { name:"Hà Tĩnh", value:61 }, { name:"Quảng Trị", value:60 }, { name:"Huế", value:44 }, { name:"Quảng Ngãi", value:33 }
+        { name:"TP. Hồ Chí Minh", value:1076, region:"Miền Nam" }, { name:"Đồng Nai", value:264, region:"Miền Nam" }, { name:"Tây Ninh", value:220, region:"Miền Nam" }, { name:"Cần Thơ", value:194, region:"Miền Nam" },
+        { name:"An Giang", value:176, region:"Miền Nam" }, { name:"Đồng Tháp", value:175, region:"Miền Nam" }, { name:"Vĩnh Long", value:173, region:"Miền Nam" }, { name:"Lâm Đồng", value:166, region:"Miền Trung" },
+        { name:"Đà Nẵng", value:121, region:"Miền Trung" }, { name:"Đắk Lắk", value:97, region:"Miền Trung" }, { name:"Nghệ An", value:93, region:"Miền Trung" }, { name:"Ninh Bình", value:91, region:"Miền Bắc" },
+        { name:"Cà Mau", value:88, region:"Miền Nam" }, { name:"Khánh Hòa", value:82, region:"Miền Trung" }, { name:"Thanh Hóa", value:78, region:"Miền Trung" }, { name:"Gia Lai", value:76, region:"Miền Trung" },
+        { name:"Hà Tĩnh", value:61, region:"Miền Trung" }, { name:"Quảng Trị", value:60, region:"Miền Trung" }, { name:"Huế", value:44, region:"Miền Trung" }, { name:"Quảng Ngãi", value:33, region:"Miền Trung" }
       ],
-      note: "Tổng theo API tỉnh: 3.368 (20 tỉnh/thành sau sáp nhập); trang chủ hiển thị 'Xem 3.785 cửa hàng'; IR 8T: 3.612 — chênh lệch do trạng thái cửa hàng (đang mở/sắp mở/ảo) ⚠ đối chiếu. HCM = 32%; miền Tây (Cần Thơ, An Giang, Đồng Tháp, Vĩnh Long, Cà Mau) = 24%; miền Bắc mới có Ninh Bình + Thanh Hóa + Nghệ An + Hà Tĩnh = 323 store."
+      note: "Tổng theo API tỉnh: 3.368 (20 tỉnh/thành sau sáp nhập); trang chủ hiển thị 'Xem 3.785 cửa hàng'; IR 8T: 3.612 — chênh lệch do trạng thái cửa hàng (đang mở/sắp mở/ảo) ⚠ đối chiếu."
     },
     hideSide: true,   // analyst yêu cầu bỏ Milestone + Bảng theo chuỗi (21/09/2026)
 
@@ -566,7 +569,7 @@ window.PVS_DATA = {
     <div class="card"><h3 class="sub" id="stPerStoreTitle">Doanh thu / cửa hàng / tháng (tỷ VND)</h3><div class="chart tall"><canvas id="stPerStore"></canvas></div><div class="note" id="stPerStoreNote"></div></div>
   </div>
   <div class="grid g2" style="margin-top:16px">
-    <div class="card"><h3 class="sub" id="stGeoTitle">Phân bổ theo tỉnh/thành</h3><div class="chart" style="height:520px"><canvas id="stGeo"></canvas></div><div class="note" id="stGeoNote"></div></div>
+    <div class="card"><h3 class="sub"><span id="stGeoTitle">Phân bổ theo tỉnh/thành</span></h3><div class="filters" id="stGeoView" role="group" aria-label="Xem số cửa hàng theo địa lý" hidden><button type="button" data-view="province" class="on" aria-pressed="true">Tỉnh/thành</button><button type="button" data-view="region" aria-pressed="false">Bắc – Trung – Nam</button></div><div class="chart" style="height:520px"><canvas id="stGeo"></canvas></div><div class="note" id="stGeoNote"></div><details class="dd" id="stGeoRegions" hidden><summary>Phân loại tỉnh/thành theo miền <span class="hint">bấm để mở/đóng</span></summary><p id="stGeoRegionNote" class="note"></p><div class="tbl-wrap"><table id="stGeoRegionTable"></table></div></details></div>
     <div class="card" id="stSideCard"><h3 class="sub">Milestone</h3><ul class="list" id="stMilestones"></ul><h3 class="sub" style="margin-top:14px">Bảng theo chuỗi</h3><div class="tbl-wrap"><table id="stTable"></table></div><div class="src" id="stSrc"></div></div>
   </div>
   </div>
@@ -928,10 +931,34 @@ function renderStores(){
     if(ps.threshold) ds.push({label:ps.threshold.label,data:ps.labels.map(()=>ps.threshold.value),borderColor:NEG,borderDash:[6,4],pointRadius:0,borderWidth:2});
     mk('stPerStore',{type:'line',data:{labels:ps.labels,datasets:ds},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:12,usePointStyle:true}},tooltip:{callbacks:{label:c=>c.dataset.label+': '+Number(c.parsed.y).toFixed(2)+' tỷ'}}},scales:{x:{grid:{display:false}},y:{grid:{color:'#EEF0F6'}}}}});
     $('stPerStoreNote').textContent=ps.note||''; }
-  // geo
-  const g=st.geo; if(g){ if(g.title)$('stGeoTitle').textContent=g.title;
-    mk('stGeo',{type:'bar',data:{labels:g.items.map(x=>x.name),datasets:[{label:g.seriesLabel||'Cửa hàng',data:g.items.map(x=>x.value),backgroundColor:BLUE,borderRadius:3,maxBarThickness:16}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>vnd(c.parsed.x)+' cửa hàng ('+(c.parsed.x/g.items.reduce((a,b)=>a+b.value,0)*100).toFixed(1)+'%)'}}},scales:{x:{grid:{color:'#EEF0F6'}},y:{grid:{display:false},ticks:{font:{size:11}}}}}});
-    $('stGeoNote').textContent=g.note||''; }
+  // Optional regional grouping uses the same province values as the original view.
+  const g=st.geo; if(g){
+    const regionNames=g.regionOrder||[];
+    const hasRegions=regionNames.length>0 && g.items.every(x=>regionNames.includes(x.region));
+    const regions=regionNames.map(name=>({name,items:g.items.filter(x=>x.region===name)})).map(r=>({...r,value:r.items.reduce((sum,x)=>sum+x.value,0)}));
+    const total=g.items.reduce((sum,x)=>sum+x.value,0);
+    const share=value=>total?(value/total*100).toFixed(1)+'%':'—';
+    const view=$('stGeoView'); view.hidden=!hasRegions;
+    // .filters uses display:flex, so explicitly hide it when grouping is unavailable.
+    view.style.display=hasRegions?'':'none';
+    $('stGeoNote').textContent=g.note||'';
+    $('stGeoRegions').hidden=!hasRegions;
+    if(hasRegions){
+      $('stGeoRegionNote').textContent=g.regionNote||'';
+      $('stGeoRegionTable').innerHTML='<tr><th>Miền</th><th>Tỉnh/thành trong dữ liệu</th><th class="num">Cửa hàng</th><th class="num">Tỷ trọng</th></tr>'+regions.map(r=>`<tr><td>${esc(r.name)}</td><td>${r.items.map(x=>esc(x.name)).join(', ')||'Chưa có dữ liệu'}</td><td class="num">${r.items.length?vnd(r.value):'—'}</td><td class="num">${r.items.length?share(r.value):'—'}</td></tr>`).join('')+`<tr class="total"><td>Tổng</td><td>${g.items.length} tỉnh/thành có dữ liệu</td><td class="num">${vnd(total)}</td><td class="num">${share(total)}</td></tr>`;
+    }
+    const drawGeo=mode=>{
+      const regional=hasRegions&&mode==='region';
+      const items=regional?regions.filter(r=>r.items.length):g.items;
+      $('stGeoTitle').textContent=regional?(g.regionTitle||'Số cửa hàng theo miền'):(g.title||'Phân bổ theo tỉnh/thành');
+      $('stGeo').parentElement.style.height=regional?'280px':'520px';
+      view.querySelectorAll('button').forEach(b=>{const active=b.dataset.view===(regional?'region':'province');b.classList.toggle('on',active);b.setAttribute('aria-pressed',String(active));});
+      mk('stGeo',{type:'bar',data:{labels:items.map(x=>x.name),datasets:[{label:g.seriesLabel||'Cửa hàng',data:items.map(x=>x.value),backgroundColor:regional?items.map(x=>CAT[regionNames.indexOf(x.name)%CAT.length]):BLUE,borderRadius:3,maxBarThickness:regional?40:16}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>{const value=c.dataset.data[c.dataIndex];return vnd(value)+' cửa hàng ('+share(value)+')';}}}},scales:{x:{beginAtZero:true,grid:{color:'#EEF0F6'}},y:{grid:{display:false},ticks:{font:{size:11}}}}}});
+    };
+    let mode='province'; try{mode=localStorage.getItem(KEY+'_geo_view')||mode;}catch(e){}
+    drawGeo(mode);
+    view.onclick=e=>{const button=e.target.closest('button[data-view]');if(!button)return;drawGeo(button.dataset.view);try{localStorage.setItem(KEY+'_geo_view',button.dataset.view);}catch(e){}};
+  }
   if(st.hideSide){ $('stSideCard').style.display='none'; $('stGeo').closest('.card').style.gridColumn='1/-1'; }
   $('stMilestones').innerHTML=(st.milestones||[]).map(m=>`<li><span class="d">${m.d}</span><span>${m.ok?'✅':'⏳'} ${esc(m.t)}</span></li>`).join('');
   $('stTable').innerHTML='<tr><th>Chuỗi</th>'+nw.periods.map(p=>`<th class="num">${p}</th>`).join('')+'<th class="num">Thay đổi</th></tr>'+nw.chains.map(c=>{ const a=c.counts; const f=a.find(v=>v!=null), l=[...a].reverse().find(v=>v!=null); const nn=a.filter(v=>v!=null).length; return `<tr><td>${esc(c.name)}</td>${a.map(v=>`<td class="num">${v==null?'—':vnd(v)}</td>`).join('')}<td class="num">${nn>=2?(l-f>=0?'+':'')+vnd(l-f):'—'}</td></tr>`; }).join('')
