@@ -569,7 +569,7 @@ window.PVS_DATA = {
     <div class="card"><h3 class="sub" id="stPerStoreTitle">Doanh thu / cửa hàng / tháng (tỷ VND)</h3><div class="chart tall"><canvas id="stPerStore"></canvas></div><div class="note" id="stPerStoreNote"></div></div>
   </div>
   <div class="grid g2" style="margin-top:16px">
-    <div class="card"><h3 class="sub"><span id="stGeoTitle">Phân bổ theo tỉnh/thành</span></h3><div class="filters" id="stGeoView" role="group" aria-label="Xem số cửa hàng theo địa lý" hidden><button type="button" data-view="province" class="on" aria-pressed="true">Tỉnh/thành</button><button type="button" data-view="region" aria-pressed="false">Bắc – Trung – Nam</button></div><div class="chart" style="height:520px"><canvas id="stGeo"></canvas></div><div class="note" id="stGeoNote"></div><details class="dd" id="stGeoRegions" hidden><summary>Phân loại tỉnh/thành theo miền <span class="hint">bấm để mở/đóng</span></summary><p id="stGeoRegionNote" class="note"></p><div class="tbl-wrap"><table id="stGeoRegionTable"></table></div></details></div>
+    <div class="card"><h3 class="sub"><span id="stGeoTitle">Phân bổ theo tỉnh/thành</span></h3><div class="filters" id="stGeoView" role="group" aria-label="Xem số cửa hàng theo địa lý" hidden><button type="button" data-view="province" class="on" aria-pressed="true">Tỉnh/thành</button><button type="button" data-view="region" aria-pressed="false">Bắc – Trung – Nam</button></div><div class="filters" id="stGeoMetric" role="group" aria-label="Đơn vị biểu đồ theo miền" style="display:none"><button type="button" data-metric="region" aria-pressed="true" class="on">Số cửa hàng</button><button type="button" data-metric="region-pie" aria-pressed="false">Tỷ trọng (%) · Tròn</button></div><div class="chart" style="height:520px"><canvas id="stGeo"></canvas></div><div class="note" id="stGeoNote"></div><details class="dd" id="stGeoRegions" hidden><summary>Phân loại tỉnh/thành theo miền <span class="hint">bấm để mở/đóng</span></summary><p id="stGeoRegionNote" class="note"></p><div class="tbl-wrap"><table id="stGeoRegionTable"></table></div></details></div>
     <div class="card" id="stSideCard"><h3 class="sub">Milestone</h3><ul class="list" id="stMilestones"></ul><h3 class="sub" style="margin-top:14px">Bảng theo chuỗi</h3><div class="tbl-wrap"><table id="stTable"></table></div><div class="src" id="stSrc"></div></div>
   </div>
   </div>
@@ -741,7 +741,7 @@ const charts={}, chartBase={};
 let chartTypes={}; try{ chartTypes=JSON.parse(localStorage.getItem('chart_types_v1')||'{}'); }catch(e){}
 // debug/test: ?ct=chartId:type,chartId2:type
 try{ const q=new URLSearchParams(location.search).get('ct'); if(q) q.split(',').forEach(p=>{const [k,v]=p.split(':'); if(k&&v)chartTypes[k]=v;}); }catch(e){}
-const TYPE_LBL_CH={column:'Cột',stacked:'Cột chồng',barh:'Thanh',line:'Đường',doughnut:'Tròn'};
+const TYPE_LBL_CH={column:'Cột',stacked:'Cột chồng',barh:'Thanh',line:'Đường',doughnut:'Tròn',pie:'Tròn (%)'};
 function deep(o){ if(Array.isArray(o))return o.map(deep); if(o&&typeof o==='object')return Object.fromEntries(Object.entries(o).map(([k,v])=>[k,deep(v)])); return o; } // giữ nguyên function (callback định dạng)
 function applyType(cfg,t){
   const c=deep(cfg); const base=cfg.type; c.options=c.options||{}; c.options.scales=c.options.scales||{};
@@ -756,13 +756,14 @@ function applyType(cfg,t){
   if(t==='barh'){ const sx=c.options.scales.x, sy=c.options.scales.y; c.options.scales.x={...sy,grid:{color:'#EEF0F6'}}; c.options.scales.y={...sx,grid:{display:false}}; }
   return c;
 }
-function defaultType(cfg){ if(cfg.type==='doughnut')return 'doughnut'; if(cfg.options?.indexAxis==='y')return 'barh'; const ds=cfg.data.datasets; if(ds.some(d=>d.stack)||cfg.options?.scales?.x?.stacked)return 'stacked'; if(cfg.type==='line'||ds.every(d=>d.type==='line'))return 'line'; return 'column'; }
+function defaultType(cfg){ if(cfg.type==='pie')return 'pie'; if(cfg.type==='doughnut')return 'doughnut'; if(cfg.options?.indexAxis==='y')return 'barh'; const ds=cfg.data.datasets; if(ds.some(d=>d.stack)||cfg.options?.scales?.x?.stacked)return 'stacked'; if(cfg.type==='line'||ds.every(d=>d.type==='line'))return 'line'; return 'column'; }
 function mk(id,cfg){
-  chartBase[id]=cfg; const t=chartTypes[id]||defaultType(cfg);
+  chartBase[id]=cfg; const opts=cfg.type==='pie'?['pie']:cfg.type==='doughnut'?['doughnut','column','barh']:['column','stacked','barh','line'];
+  const t=opts.includes(chartTypes[id])?chartTypes[id]:defaultType(cfg);
   if(charts[id])charts[id].destroy(); charts[id]=new Chart($(id),t===defaultType(cfg)?cfg:applyType(cfg,t));
   const card=$(id).closest('.card'); const h=card&&card.querySelector('h3.sub'); if(!h)return;
   let ctl=h.querySelector('.ctl'); if(!ctl){ ctl=document.createElement('span'); ctl.className='ctl'; h.appendChild(ctl); }
-  const opts=cfg.type==='doughnut'?['doughnut','column','barh']:['column','stacked','barh','line'];
+  ctl.style.display=opts.length>1?'':'none';
   ctl.innerHTML=opts.map(o=>`<button class="${o===t?'on':''}" data-t="${o}" title="${TYPE_LBL_CH[o]}">${TYPE_LBL_CH[o]}</button>`).join('');
   ctl.onclick=e=>{ const b=e.target.closest('button'); if(!b)return; chartTypes[id]=b.dataset.t; try{localStorage.setItem('chart_types_v1',JSON.stringify(chartTypes));}catch(x){} mk(id,chartBase[id]); };
 }
@@ -948,16 +949,25 @@ function renderStores(){
       $('stGeoRegionTable').innerHTML='<tr><th>Miền</th><th>Tỉnh/thành trong dữ liệu</th><th class="num">Cửa hàng</th><th class="num">Tỷ trọng</th></tr>'+regions.map(r=>`<tr><td>${esc(r.name)}</td><td>${r.items.map(x=>esc(x.name)).join(', ')||'Chưa có dữ liệu'}</td><td class="num">${r.items.length?vnd(r.value):'—'}</td><td class="num">${r.items.length?share(r.value):'—'}</td></tr>`).join('')+`<tr class="total"><td>Tổng</td><td>${g.items.length} tỉnh/thành có dữ liệu</td><td class="num">${vnd(total)}</td><td class="num">${share(total)}</td></tr>`;
     }
     const drawGeo=mode=>{
-      const regional=hasRegions&&mode==='region';
+      const regional=hasRegions&&(mode==='region'||mode==='region-pie');
+      const pie=regional&&mode==='region-pie';
       const items=regional?regions.filter(r=>r.items.length):g.items;
       $('stGeoTitle').textContent=regional?(g.regionTitle||'Số cửa hàng theo miền'):(g.title||'Phân bổ theo tỉnh/thành');
-      $('stGeo').parentElement.style.height=regional?'280px':'520px';
+      $('stGeo').parentElement.style.height=pie?'340px':regional?'280px':'520px';
+      const metric=$('stGeoMetric'); metric.style.display=regional?'':'none';
+      metric.querySelectorAll('button').forEach(b=>{const active=b.dataset.metric===(pie?'region-pie':'region');b.classList.toggle('on',active);b.setAttribute('aria-pressed',String(active));});
       view.querySelectorAll('button').forEach(b=>{const active=b.dataset.view===(regional?'region':'province');b.classList.toggle('on',active);b.setAttribute('aria-pressed',String(active));});
+      if(pie){
+        $('stGeoTitle').textContent=(g.regionTitle||'Số cửa hàng theo miền').replace('số cửa hàng','tỷ trọng cửa hàng')+' (%)';
+        mk('stGeo',{type:'pie',data:{labels:items.map(x=>x.name+' · '+share(x.value).replace('.',',')),datasets:[{label:'Tỷ trọng cửa hàng',data:items.map(x=>x.value),backgroundColor:items.map(x=>CAT[regionNames.indexOf(x.name)%CAT.length]),borderColor:'#fff',borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:12,padding:16,usePointStyle:true},onClick:()=>{}},tooltip:{callbacks:{label:c=>{const value=c.dataset.data[c.dataIndex];return vnd(value)+' cửa hàng ('+share(value).replace('.',',')+')';}}}}}});
+        return;
+      }
       mk('stGeo',{type:'bar',data:{labels:items.map(x=>x.name),datasets:[{label:g.seriesLabel||'Cửa hàng',data:items.map(x=>x.value),backgroundColor:regional?items.map(x=>CAT[regionNames.indexOf(x.name)%CAT.length]):BLUE,borderRadius:3,maxBarThickness:regional?40:16}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>{const value=c.dataset.data[c.dataIndex];return vnd(value)+' cửa hàng ('+share(value)+')';}}}},scales:{x:{beginAtZero:true,grid:{color:'#EEF0F6'}},y:{grid:{display:false},ticks:{font:{size:11}}}}}});
     };
     let mode='province'; try{mode=localStorage.getItem(KEY+'_geo_view')||mode;}catch(e){}
     drawGeo(mode);
     view.onclick=e=>{const button=e.target.closest('button[data-view]');if(!button)return;drawGeo(button.dataset.view);try{localStorage.setItem(KEY+'_geo_view',button.dataset.view);}catch(e){}};
+    $('stGeoMetric').onclick=e=>{const button=e.target.closest('button[data-metric]');if(!button)return;drawGeo(button.dataset.metric);try{localStorage.setItem(KEY+'_geo_view',button.dataset.metric);}catch(e){}};
   }
   if(st.hideSide){ $('stSideCard').style.display='none'; $('stGeo').closest('.card').style.gridColumn='1/-1'; }
   $('stMilestones').innerHTML=(st.milestones||[]).map(m=>`<li><span class="d">${m.d}</span><span>${m.ok?'✅':'⏳'} ${esc(m.t)}</span></li>`).join('');
