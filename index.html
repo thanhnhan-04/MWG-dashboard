@@ -64,16 +64,16 @@ window.PVS_DATA = {
       period: "8T/2026",
       nodes: [
         { name:"Điện Máy Xanh (ICT-CE)", sub:"ĐMX 2.002 + TGDĐ/TopZone 1.005", rev:86719, revYoY:29, stores:3007,
-          storesNote:"cuối 8T/2026 · 2025: 3.020 (đi ngang)", perStore:3.597,
-          perStoreNote:"8T · bình quân (đầu kỳ+cuối kỳ)/2 = 3.013,5 · 2025: 2,90", gm:21.1, nm:8.1 },
+          storesNote:"cuối 8T/2026 · 2025: 3.020 (đi ngang)", perStore:3.605,
+          perStoreNote:"DT 8T ÷ 3.007 cửa hàng ÷ 8 tháng · 2025: 2,92", gm:21.1, nm:8.1 },
         { name:"Bách Hóa Xanh", sub:"mở >1.000 cửa hàng trong 8T", rev:40124, revYoY:32, stores:3612,
-          storesNote:"cuối 8T/2026 · 2025: 2.559 (+1.053)", perStore:1.626,
-          perStoreNote:"8T · bình quân 3.085,5 · số điểm T8: 1,389", gm:24.4, nm:3.4 },
+          storesNote:"cuối 8T/2026 · 2025: 2.559 (+1.053)", perStore:1.389,
+          perStoreNote:"DT 8T ÷ 3.612 cửa hàng ÷ 8 tháng · 2025: 1,53", gm:24.4, nm:3.4 },
         { name:"Khác (An Khang, AvaKids, Erablue)", sub:"426 + 95 + 307 cửa hàng", rev:2588, revYoY:null, stores:828,
           storesNote:"An Khang 426 · AvaKids 95 · Erablue 307", perStore:null,
           perStoreNote:"MWG không tách doanh thu từng chuỗi nhỏ", gm:null, nm:null }
       ],
-      note: "Doanh thu 8T/2026 theo báo cáo KQKD tháng của MWG (ICT-CE 86,7 nghìn tỷ; BHX 40,1 nghìn tỷ; tổng 129,4 nghìn tỷ → phần còn lại 2,6 nghìn tỷ). DT/cửa hàng/tháng = doanh thu kỳ ÷ số cửa hàng bình quân (đầu kỳ + cuối kỳ)/2 ÷ số tháng — analyst tính. Biên gộp theo BCTC riêng DMX và phần dư hợp nhất Q2/2026; biên ròng theo công bố của MWG tại họp NĐT Q2/2026.",
+      note: "Doanh thu 8T/2026 theo báo cáo KQKD tháng của MWG (ICT-CE 86,7 nghìn tỷ; BHX 40,1 nghìn tỷ; tổng 129,4 nghìn tỷ → phần còn lại 2,6 nghìn tỷ). DT/cửa hàng/tháng = doanh thu lũy kế của kỳ ÷ số cửa hàng CUỐI KỲ ÷ số tháng — đúng cách analyst tính (khớp dãy 1.550/1.935/1.526 của BHX trong model). Biên gộp theo BCTC riêng DMX và phần dư hợp nhất Q2/2026; biên ròng theo công bố của MWG tại họp NĐT Q2/2026.",
       src: "MWG IR — KQKD 8T/2026 & họp NĐT Q2/2026; BCTC CTCP ĐT Điện Máy Xanh"
     },
     revTitle: "Doanh thu theo chuỗi (tỷ VND)",
@@ -146,7 +146,7 @@ window.PVS_DATA = {
       { l:"Tổng cửa hàng (8T/2026)", v:"7.447", s:"DMX 3.314 · BHX 3.612 · An Khang 426 · AvaKids 95" },
       { l:"BHX mở mới 8T/2026", v:">1.000", s:"2.559 (cuối 2025) → 3.612; cohort 2026 EBIT dương" },
       { l:"BHX DT/cửa hàng/tháng (T8)", v:"1,389 tỷ", s:"đỉnh T11/2024: 1,961 → giảm 29% do mở mới" },
-      { l:"ICT-CE DT/cửa hàng/tháng (8T/26)", v:"3,60 tỷ", s:"3.007 cửa hàng đi ngang · 2025: 2,90 tỷ (+24%)" }
+      { l:"ICT-CE DT/cửa hàng/tháng (8T/26)", v:"3,61 tỷ", s:"3.007 cửa hàng đi ngang · 2025: 2,92 tỷ (+24%)" }
     ],
     network: {
       // Bảng analyst (cuối năm; cột cuối = lũy kế năm hiện tại, mỗi tháng thay bằng 9T/10T/11T/2026...)
@@ -166,12 +166,12 @@ window.PVS_DATA = {
       labels: ["2023","T2/24","T3/24","T4/24","T5/24","T6/24","T7/24","T8/24","T9/24","T10/24","T11/24","T12/24","T2/25","T3/25","T4/25","T5/25","T6/25","T7/25","T8/25","T9/25","T10/25","T11/25","T12/25","T2/26","T3/26","T4/26","T5/26","T6/26","T7/26","T8/26"],
       series: [ { name:"BHX", values:[1.935,1.780,1.798,1.827,1.865,1.910,1.931,1.942,1.952,1.951,1.961,1.935,1.870,1.835,1.752,1.732,1.724,1.732,1.704,1.668,1.624,1.558,1.526,1.594,1.540,1.514,1.515,1.478,1.437,1.389] } ],
       note: "Bảng analyst: doanh thu tháng BHX ÷ số cửa hàng (triệu đồng → tỷ). Đỉnh 1,961 tỷ (T11/2024) → 1,389 tỷ (T8/2026): giảm 29% trong 21 tháng khi mạng lưới tăng từ ~1.770 lên 3.612 store. Cập nhật mỗi tháng khi có báo cáo KQKD tháng. Chọn chu kỳ 'Năm' để xem cả ICT-CE.",
-      // Chuỗi năm (analyst tính): doanh thu kỳ ÷ số cửa hàng bình quân (đầu kỳ+cuối kỳ)/2 ÷ số tháng
+      // Chuỗi năm (analyst tính): doanh thu cả kỳ ÷ số cửa hàng CUỐI KỲ ÷ số tháng
       annual: {
         labels: ["2023","2024","2025","8T/2026"],
         series: [
-          { name:"ICT-CE (ĐMX + TGDĐ)", values:[2.064,2.365,2.904,3.597] },
-          { name:"Bách Hóa Xanh",       values:[1.536,1.976,1.803,1.626] }
+          { name:"ICT-CE (ĐMX + TGDĐ)", values:[2.129,2.451,2.917,3.605] },
+          { name:"Bách Hóa Xanh",       values:[1.550,1.935,1.525,1.389] }
         ]
       }
     },
@@ -198,6 +198,7 @@ window.PVS_DATA = {
   // ---------- BẢNG CÂN ĐỐI (số thực tế 30/06/2026) ----------
   balance: {
     title: "Chất lượng bảng cân đối",
+    hideSeriesTable: true,     // bỏ card "Bảng số liệu" — đã có bảng tóm tắt tài chính bên dưới
     asOf: "30/06/2026 (hợp nhất, soát xét EY)",
     kpis: [
       { l:"Tiền mặt ròng", v:"24.218 tỷ", s:"23% vốn hóa · tiền 4.679 + HTM 48.629 − vay 29.090" },
@@ -248,50 +249,31 @@ window.PVS_DATA = {
       { t:"KẾT QUẢ KINH DOANH", rows:[
         { l:"Doanh thu thuần", cls:"h", a:[134341,155928], q:[39852,42321,46462,48751] },
         { l:"Tăng trưởng doanh thu (YoY)", cls:"sub", u:"g", a:[13.6,16.1], q:[16.7,22.4,28.6,29.6] },
-        { l:"Giá vốn hàng bán", a:[106842,124926], q:[32374,33566,36752,37942] },
         { l:"Lợi nhuận gộp", cls:"h", a:[27499,31002], q:[7478,8755,9710,10809] },
         { l:"Biên lợi nhuận gộp", cls:"sub", u:"p", a:[20.5,19.9], q:[18.8,20.7,20.9,22.2] },
-        { l:"Doanh thu hoạt động tài chính", a:[2376,3107], q:[809,836,858,957] },
-        { l:"Chi phí tài chính", a:[1188,1542], q:[411,390,422,453] },
-        { l:"Trong đó: chi phí lãi vay", cls:"sub", a:[1137,1471], q:[388,385,415,436] },
-        { l:"Lãi/lỗ trong công ty liên doanh, liên kết", a:[-45,24], q:[4,6,9,19] },
-        { l:"Chi phí bán hàng", a:[19850,19331], q:[4571,5654,5285,5980] },
-        { l:"Chi phí quản lý doanh nghiệp", a:[3566,4596], q:[1119,1060,1523,1318] },
-        { l:"Chi phí bán hàng & QLDN / doanh thu", cls:"sub", u:"p", a:[17.4,15.3], q:[14.3,15.9,14.7,15.0] },
+        { l:"Chi phí bán hàng & quản lý", a:[23416,23927], q:[5690,6714,6808,7298] },
+        { l:"Chi phí bán hàng & quản lý / doanh thu", cls:"sub", u:"p", a:[17.4,15.3], q:[14.3,15.9,14.7,15.0] },
+        { l:"Lợi nhuận tài chính ròng", a:[1188,1565], q:[398,446,436,504] },
         { l:"Lợi nhuận thuần từ HĐKD", cls:"h", a:[5227,8664], q:[2190,2492,3347,4034] },
         { l:"Biên lợi nhuận từ HĐKD", cls:"sub", u:"p", a:[3.9,5.6], q:[5.5,5.9,7.2,8.3] },
-        { l:"Lợi nhuận khác", a:[-401,-31], q:[-18,6,-20,-1] },
-        { l:"Lợi nhuận trước thuế", cls:"h", a:[4826,8633], q:[2172,2498,3328,4033] },
-        { l:"Chi phí thuế TNDN", a:[1092,1560], q:[389,414,570,678] },
-        { l:"Thuế suất hiệu dụng", cls:"sub", u:"p", a:[22.6,18.1], q:[17.9,16.6,17.1,16.8] },
-        { l:"Lợi nhuận sau thuế", a:[3733,7073], q:[1784,2084,2758,3355] },
         { l:"LNST cổ đông công ty mẹ", cls:"h", a:[3722,7034], q:[1771,2069,2714,3302] },
         { l:"Tăng trưởng LNST (YoY)", cls:"sub", u:"g", a:[2119.4,89.0], q:[121.3,144.2,75.6,100.4] },
         { l:"Biên lợi nhuận ròng", cls:"sub", u:"p", a:[2.8,4.5], q:[4.4,4.9,5.8,6.8] }
       ]},
-      { t:"BẢNG CÂN ĐỐI & VỐN LƯU ĐỘNG", rows:[
-        { l:"Tổng tài sản", a:[70438,83946], q:[80288,83946,83994,104915] },
-        { l:"Hàng tồn kho (ròng)", a:[22245,27267], q:[24101,27267,27601,30875] },
-        { l:"Số ngày tồn kho", cls:"sub", u:"d", a:[76.0,79.7], q:[67.7,73.9,68.3,74.1] },
-        { l:"Phải thu khách hàng", a:[241,253], q:[203,253,255,422] },
-        { l:"Phải trả người bán", a:[9180,13114], q:[12680,13114,11892,14019] },
-        { l:"Số ngày phải trả", cls:"sub", u:"d", a:[31.4,38.3], q:[35.6,35.6,29.4,33.6] },
-        { l:"Chu kỳ tiền mặt (CCC)", cls:"sub", u:"d", a:[45.3,41.9], q:[32.6,38.9,39.4,41.2] },
-        { l:"Tiền, đầu tư tài chính & cho vay", a:[40260,48549], q:[48094,48549,48088,52275] },
-        { l:"Vay & nợ thuê tài chính", a:[27300,29931], q:[28706,29931,28101,29090] },
-        { l:"Tiền mặt ròng", cls:"h", a:[12960,18618], q:[19388,18618,19987,23186] },
-        { l:"Vốn chủ sở hữu", a:[28122,33176], q:[31797,33176,35933,36351] },
-        { l:"Vay / vốn chủ sở hữu", cls:"sub", u:"p", a:[97.1,90.2], q:[90.3,90.2,78.2,80.0] },
-        { l:"ROE (trượt 4 quý)", cls:"sub", u:"p", a:[14.5,22.9], q:[19.7,22.9,25.0,29.7] }
+      { t:"VẬN HÀNH — MẠNG LƯỚI & NĂNG SUẤT CỬA HÀNG", rows:[
+        { l:"Số cửa hàng ICT-CE (ĐMX + TGDĐ)", a:[3047,3020], q:[null,3020,3020,3013] },
+        { l:"DT/cửa hàng/tháng — ICT-CE", cls:"sub", u:"n2", a:[2.451,2.917], q:[null,3.230,3.578,3.636] },
+        { l:"Số cửa hàng Bách Hóa Xanh", a:[1770,2559], q:[null,2559,2839,3191] },
+        { l:"DT/cửa hàng/tháng — Bách Hóa Xanh", cls:"sub", u:"n2", a:[1.935,1.525], q:[null,1.626,1.540,1.587] }
       ]},
-      { t:"MẠNG LƯỚI & NĂNG SUẤT (ANALYST TÍNH — THEO NĂM)", rows:[
-        { l:"Số cửa hàng ICT-CE cuối kỳ", a:[3047,3020], q:[null,null,null,null] },
-        { l:"Số cửa hàng Bách Hóa Xanh cuối kỳ", a:[1770,2559], q:[null,null,null,null] },
-        { l:"DT/cửa hàng/tháng — ICT-CE", cls:"sub", u:"n2", a:[2.365,2.904], q:[null,null,null,null] },
-        { l:"DT/cửa hàng/tháng — Bách Hóa Xanh", cls:"sub", u:"n2", a:[1.976,1.803], q:[null,null,null,null] }
+      { t:"SỨC KHỎE TÀI CHÍNH", rows:[
+        { l:"Số ngày tồn kho", u:"d", a:[76.0,79.7], q:[67.7,73.9,68.3,74.1] },
+        { l:"Chu kỳ tiền mặt (CCC)", u:"d", a:[45.3,41.9], q:[32.6,38.9,39.4,41.2] },
+        { l:"Tiền mặt ròng", cls:"h", a:[12960,18618], q:[19388,18618,19987,23186] },
+        { l:"ROE (trượt 4 quý)", cls:"sub", u:"p", a:[14.5,22.9], q:[19.7,22.9,25.0,29.7] }
       ]}
     ],
-    note: "Cột năm = BCTC hợp nhất đã kiểm toán; cột quý = BCTC quý (Q2/2026 theo bản soát xét EY). Số ngày tính trên 365 ngày (năm) và 91 ngày (quý). Tiền mặt ròng = tiền & tương đương + đầu tư tài chính ngắn hạn + cho vay ngắn hạn + HTM dài hạn − vay ngắn & dài hạn; số Q2/2026 (23.186) CHƯA gồm 13.315 tỷ tiền IPO DMX đã giải tỏa 07/07 và thấp hơn ~1.000 tỷ so với cách tính 24.218 tỷ ở khối KPI (khác nhau ở phần HTM được tính). MWG công bố số cửa hàng theo THÁNG chứ không theo quý — 8T/2026: ICT-CE 3.007, BHX 3.612; DT/cửa hàng/tháng 8T/2026: ICT-CE 3,60 tỷ · BHX 1,63 tỷ.",
+    note: "Cột năm = BCTC hợp nhất đã kiểm toán; cột quý = BCTC quý (Q2/2026 theo bản soát xét EY). Lợi nhuận tài chính ròng = doanh thu tài chính − chi phí tài chính (gồm lãi vay). Số ngày tính trên 365 ngày (năm) và 91 ngày (quý); CCC = số ngày tồn kho + phải thu − phải trả. DT/cửa hàng/tháng = doanh thu của kỳ ÷ số cửa hàng CUỐI KỲ ÷ số tháng. Số cửa hàng cuối quý lấy từ báo cáo KQKD tháng của MWG (31/03/2026: TGDĐ 1.014 + ĐMX 2.006, BHX 2.839; 30/06/2026: TGDĐ 1.008 + ĐMX 2.005, BHX 3.191); Q3/2025 chưa có báo cáo tháng nên để trống. Tiền mặt ròng = tiền & tương đương + đầu tư tài chính ngắn hạn + cho vay ngắn hạn + HTM dài hạn − vay; số Q2/2026 (23.186) CHƯA gồm 13.315 tỷ tiền IPO DMX giải tỏa 07/07 và thấp hơn ~1.000 tỷ so với 24.218 tỷ ở khối KPI (khác nhau ở phần HTM được tính).",
     src: "BCTC hợp nhất MWG (Wifeed/BCTC gốc); BCTC bán niên 2026 soát xét EY; báo cáo KQKD tháng MWG"
   },
 
@@ -596,6 +578,7 @@ window.PVS_DATA = {
 
 
 
+
 <style>/*V2CSS-BEGIN*/
 /* ===== v2: bộ điều khiển thời gian, flow mảng, bảng tài chính chuẩn, sankey, band định giá ===== */
 /* --- bộ chọn chu kỳ & khung thời gian, RIÊNG mỗi chart --- */
@@ -649,12 +632,17 @@ body.isolate .wrap>section.tab>*{display:none!important}
 body.isolate .wrap>section.tab>.iso-keep{display:block!important}
 body.isolate .wrap{padding-top:10px}
 /* --- sankey / waterfall --- */
-.brkctl{display:flex;gap:6px;margin:0 0 8px}
+.brkctl{display:flex;gap:8px;margin:2px 0 12px}
+.brkctl button{border:1px solid var(--line);background:#fff;color:#514f75;border-radius:9px;padding:8px 20px;font-size:14px;font-weight:750;cursor:pointer}
+.brkctl button.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.brkctl button:hover{border-color:var(--green-d)}
+.chart.xl{height:540px}
 .sankeywrap{width:100%;overflow-x:auto}
-.sankeywrap svg{width:100%;min-width:760px;height:auto;display:block}
+.sankeywrap svg{width:100%;min-width:900px;height:auto;display:block}
 .sankeywrap text{font-family:'Segoe UI',system-ui,Arial;fill:#3a3a52}
-.sankeywrap text.nm{font-size:11.5px;font-weight:750}
-.sankeywrap text.vl{font-size:11px;fill:#6b6b85;font-variant-numeric:tabular-nums}
+.sankeywrap text.nm{font-size:13.5px;font-weight:750}
+.sankeywrap text.vl{font-size:12.5px;fill:#6b6b85;font-variant-numeric:tabular-nums}
+.sankeywrap text.ttl{font-size:15px;font-weight:800;fill:var(--navy)}
 /* --- band định giá --- */
 .bandctl{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px}
 .bandctl button{border:1px solid var(--line);background:#fff;color:#514f75;border-radius:7px;padding:3px 10px;font-size:11.5px;font-weight:700;cursor:pointer}
@@ -1472,6 +1460,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 
 
 
+
 <script>//V2JS-BEGIN
 /* ============================================================================
    FINSUCCESS DASHBOARD — LỚP v2 (dùng chung cho mọi mã)
@@ -1706,7 +1695,7 @@ function renderBreakdown(){
       <div class="filters" style="margin:0">${B.periods.map((x,i)=>`<button class="${i===brkIdx?'on':''}" data-i="${i}">${esc(x.label)}</button>`).join('')}</div>
     </div>
     <div class="brkctl seg" id="brkMode"><button data-m="waterfall" class="${brkMode==='waterfall'?'on':''}">Waterfall</button><button data-m="sankey" class="${brkMode==='sankey'?'on':''}">Sankey (dòng chảy)</button></div>
-    <div id="brkWF" ${brkMode==='sankey'?'hidden':''}><div class="chart tall"><canvas id="wfChart"></canvas></div></div>
+    <div id="brkWF" ${brkMode==='sankey'?'hidden':''}><div class="chart xl"><canvas id="wfChart"></canvas></div></div>
     <div id="brkSK" class="sankeywrap" ${brkMode==='waterfall'?'hidden':''}></div>
     ${B.note?'<div class="note">'+esc(B.note)+'</div>':''}
     ${B.src?'<div class="src">Nguồn: '+esc(B.src)+'</div>':''}`;
@@ -1726,29 +1715,29 @@ function drawWaterfall(c,p){
     if(k==='t'||k==='s'){ data.push([0,v]); run=v; colors.push(k==='t'?NAVY:GREEN); delta.push(v); }
     else { const to=run+v; data.push([Math.min(run,to),Math.max(run,to)]); colors.push(v<0?NEG:BLUE); delta.push(v); run=to; }
   });
-  mk('wfChart',{type:'bar',data:{labels,datasets:[{label:'tỷ VND',data,backgroundColor:colors,borderRadius:3,maxBarThickness:52}]},
+  mk('wfChart',{type:'bar',data:{labels,datasets:[{label:'tỷ VND',data,backgroundColor:colors,borderRadius:3,maxBarThickness:78}]},
     options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},
       tooltip:{callbacks:{label:ctx=>{const d=delta[ctx.dataIndex];return (d<0?'−':'+')+money(Math.abs(d))+' tỷ'+(c.rev?' ('+(d/c.rev*100).toFixed(1)+'% DT)':'');}}}},
-      scales:{x:{grid:{display:false},ticks:{maxRotation:40,minRotation:0,font:{size:10.5}}},y:{beginAtZero:true,grid:{color:'#EEF0F6'},ticks:{callback:v=>vnd(v)}}}}});
+      scales:{x:{grid:{display:false},ticks:{maxRotation:38,minRotation:0,font:{size:12}}},y:{beginAtZero:true,grid:{color:'#EEF0F6'},ticks:{callback:v=>vnd(v)}}}}});
   // waterfall dùng cột nổi [đáy,đỉnh] — đổi loại chart sẽ làm sai, nên ẩn bộ nút
   const cd=$('wfChart').closest('.card'), ct=cd&&cd.querySelector('h3.sub .ctl'); if(ct)ct.style.display='none';
 }
 function drawSankey(c,p){
   const host=$('brkSK'); if(!host)return;
   const extra0=c.finNet+c.jv+c.other, hasEx=Math.abs(extra0)>=Math.max(1,c.rev*0.002);
-  const W=1100,H=460,TOP=42,BOT=30,RES=hasEx?58:0,HMAX=H-TOP-BOT-RES,BW=14;
-  const X=[120,380,640,900];
+  const W=1180,H=580,TOP=54,BOT=34,RES=hasEx?68:0,HMAX=H-TOP-BOT-RES,BW=17;
+  const X=[132,420,712,1000];
   const sc=v=>c.rev?Math.max(1.5,Math.abs(v)/c.rev*HMAX):0;
   const GRN='#6BA018',RED='#D1495B',GRY='#9AA0C4',DGRN='#2F7D1F';
   const cur=[0,0,0,0];                       // con trỏ dọc cho nhãn từng cột (tránh chồng chữ)
   let nodes='',ribs='';
   function node(col,y,h,col2,nm,vl,anchor){
     const x=X[col];
-    let ty=Math.max(y+Math.min(h/2,11)+2,cur[col]+12); cur[col]=ty+16;
+    let ty=Math.max(y+Math.min(h/2,13)+3,cur[col]+14); cur[col]=ty+19;
     const tx=anchor==='end'?x-8:x+BW+8;
     nodes+=`<rect x="${x}" y="${y}" width="${BW}" height="${h}" fill="${col2}" rx="2"></rect>`
       +`<text class="nm" x="${tx}" y="${ty}" text-anchor="${anchor}">${esc(nm)}</text>`
-      +`<text class="vl" x="${tx}" y="${ty+14}" text-anchor="${anchor}">${money(vl)} tỷ</text>`;
+      +`<text class="vl" x="${tx}" y="${ty+17}" text-anchor="${anchor}">${money(vl)} tỷ</text>`;
   }
   const rib=(x1,y1,h1,x2,y2,h2,col)=>{ const m=(x1+x2)/2;
     ribs+=`<path d="M${x1},${y1} C${m},${y1} ${m},${y2} ${x2},${y2} L${x2},${y2+h2} C${m},${y2+h2} ${m},${y1+h1} ${x1},${y1+h1} Z" fill="${col}" opacity=".38"></path>`; };
@@ -1761,7 +1750,7 @@ function drawSankey(c,p){
   // ribbons trước, node/nhãn sau (nhãn nằm trên)
   rib(X[0]+BW,yRev,hGP,X[1],yGP,hGP,GRN);
   rib(X[0]+BW,yRev+hGP,hCOGS,X[1],yCOGS,hCOGS,RED);
-  const yEx=TOP+HMAX+30;
+  const yEx=TOP+HMAX+36;
   const keepGP=Math.max(0,hGP-hSell-hAdm);
   rib(X[1]+BW,yGP,keepGP,X[2],yPBT,keepGP,GRN);
   rib(X[1]+BW,yGP+keepGP,hSell,X[2],ySell,hSell,RED);
@@ -1779,7 +1768,7 @@ function drawSankey(c,p){
   node(3,yNP,hNP,DGRN,'Lợi nhuận sau thuế',c.npat,'start');
   node(3,yTax,hTax,RED,'Thuế TNDN',c.tax,'start');
   host.innerHTML=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Sơ đồ dòng chảy kết quả kinh doanh ${esc(p.label)}">
-    <text class="nm" x="${W/2}" y="20" text-anchor="middle">${esc(p.label)} · biên lợi nhuận ròng ${c.rev?(c.npat/c.rev*100).toFixed(1):'—'}% · bề dày tỷ lệ với doanh thu</text>${ribs}${nodes}</svg>`;
+    <text class="ttl" x="${W/2}" y="26" text-anchor="middle">${esc(p.label)} · biên lợi nhuận ròng ${c.rev?(c.npat/c.rev*100).toFixed(1):'—'}% · bề dày tỷ lệ với doanh thu</text>${ribs}${nodes}</svg>`;
 }
 
 /* ---------- 3c. Bội số định giá theo thời gian: P/E · P/B · EV/EBITDA ---------- */
@@ -2063,6 +2052,12 @@ function v2Scaffold(){
   }
   // chart P/E-P/B cũ ở tab Định giá: bỏ (đã dời sang tab Tài chính, bản có ±1σ/±2σ)
   const vh=document.getElementById('valHistRow'); if(vh)vh.remove();
+  // tab Tài chính: bỏ card "Bảng số liệu" nếu data khai balance.hideSeriesTable
+  if(D.balance&&D.balance.hideSeriesTable){
+    const t=document.getElementById('bsSeriesTable'), c=t&&t.closest('.card');
+    if(c){ const row=c.parentElement; c.remove();
+      const left=row&&row.querySelector('.card'); if(left)left.style.gridColumn='1/-1'; }
+  }
   // tab Mảng kinh doanh: chỗ cho dải flow
   const seg=$('seg');
   if(seg&&!$('segFlow')){ const e=document.createElement('div'); e.id='segFlow'; seg.insertBefore(e,seg.querySelector('#segMonthly')||seg.children[1]); }
