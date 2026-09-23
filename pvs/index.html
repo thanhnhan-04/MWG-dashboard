@@ -934,28 +934,27 @@ window.PVS_DATA = {
 
   // ---------- BACKLOG & DỰ ÁN ----------
   backlog: {
-    execYears: ["2025","2026F","2027F"],
-    execConfirmed: [21945,35695,24961],
-    execPending:   [0,0,7000],
-    execNote: "2027 gồm ~24.961 tỷ đã xác nhận và ~7.000 tỷ dự kiến. Chưa gồm Qatar EPIC-1.",
-    remainingUSDbn: 2.0,          // backlog còn lại hiện hữu (Elibook 08/2026)
-    remainingNote: "Lô B, LĐV, STT 2B, điện gió",
-    pendingAward: { label:"Qatar EPIC-1 (LOA)", value:"~3 tỷ USD", sub:"chưa ký — T10/2026 · 2027–2030" },
+    config: {
+      usdVnd: 25500,
+      years: [2025,2026,2027,2028,2029,2030]
+    },
+    remainingConfirmedUSDbn: 2.0,
+    remainingNote: "Chỉ gồm backlog đã ký/confirmed; không gồm Qatar LOA và pipeline",
     projects: [
-      { name:"Lô B – EPCI#1",            type:"Dầu khí trong nước", valueUSDm:550, status:"Đang thi công", prog:{"2025":32,"2026F":60,"2027F":100}, note:"Hạ thủy chân đế giàn nhà ở (2026)" },
-      { name:"Lô B – EPCI#2",            type:"Dầu khí trong nước", valueUSDm:400, status:"Đang thi công", prog:{"2025":70,"2026F":90,"2027F":100} },
-      { name:"Lô B – EPCI#3",            type:"Dầu khí trong nước", valueUSDm:257, status:"Đang thi công", prog:{"2025":30,"2026F":80,"2027F":100} },
-      { name:"Lạc Đà Vàng GĐ1 (CPP)",    type:"Dầu khí trong nước", valueUSDm:245, status:"Hạ thủy T7/2026", prog:{"2025":85,"2026F":100}, note:"First oil dự kiến Q4/2026" },
-      { name:"Lạc Đà Vàng GĐ2",          type:"Dầu khí trong nước", valueUSDm:88,  status:"Bắt đầu", prog:{"2026F":20,"2027F":30,"2028F":65,"2029F":100} },
-      { name:"Sư Tử Trắng GĐ2B",         type:"Dầu khí trong nước", valueUSDm:140, status:"Ký HĐ 2026", prog:{"2026F":15,"2027F":60}, note:"Đóng góp LN lớn hơn vào 2027" },
-      { name:"Nam Du – U Minh",          type:"Dầu khí trong nước", valueUSDm:90,  status:"Kỳ vọng", prog:{"2026F":10,"2027F":50} },
-      { name:"Qatar – EPIC-1 Maydan Mahzam", type:"Dầu khí nước ngoài", valueUSDm:3000, status:"LOA 13/09/2026 — ký T10", prog:{"2027F":10,"2028F":40,"2029F":75,"2030F":100}, note:"HĐ EPC quốc tế lớn nhất lịch sử PVS (~2,7x ba gói Lô B). Vietcap: biên ròng 1,5% → ~45 tr USD LN, ~11% tổng LNST 2027–30", pending:true },
-      { name:"CRPO 125/126/135 – Saudi", type:"Dầu khí nước ngoài", valueUSDm:79,  status:"Đang thi công", prog:{"2026F":60,"2027F":90} },
-      { name:"Điện gió Baltica 2 (4 OSS, Ba Lan)", type:"Điện gió", valueUSDm:180, status:"Đang chế tạo", prog:{"2025":10,"2026F":60,"2027F":100}, note:"Xuất khẩu 4 trạm biến áp sang châu Âu 13/09/2026" },
-      { name:"Điện gió Fengmiao (OSS, Đài Loan)", type:"Điện gió", valueUSDm:100, status:"Đang chế tạo", prog:{"2025":25,"2026F":70,"2027F":100} },
-      { name:"Formosa 4 – OSS",          type:"Điện gió", valueUSDm:20,  status:"Đang thi công", prog:{"2026F":50,"2027F":100} },
-      { name:"Formosa – 35 chân đế",     type:"Điện gió", valueUSDm:160, status:"ĐÃ HỦY — nhận bồi thường ~456 tỷ (Q2/26)", prog:{}, cancelled:true },
-      { name:"Điện gió khách hàng Hàn Quốc", type:"Điện gió", valueUSDm:80, status:"Kỳ vọng", prog:{"2026F":20,"2027F":70} }
+      { id:"lo-b-epci-1", name:"Lô B – EPCI#1", category:"Dầu khí trong nước", valueUsdM:550, valueType:"official", statusGroup:"confirmed", statusLabel:"Đang thi công", recognition:{2025:.32,2026:.60,2027:1}, notes:"Hạ thủy chân đế giàn nhà ở trong 2026.", sourceLabel:"Giá trị hợp đồng công bố; % ghi nhận là giả định analyst" },
+      { id:"lo-b-epci-2", name:"Lô B – EPCI#2", category:"Dầu khí trong nước", valueUsdM:400, valueType:"official", statusGroup:"confirmed", statusLabel:"Đang thi công", recognition:{2025:.70,2026:.90,2027:1}, notes:"% ghi nhận là giả định analyst.", sourceLabel:"Giá trị hợp đồng công bố" },
+      { id:"lo-b-epci-3", name:"Lô B – EPCI#3", category:"Dầu khí trong nước", valueUsdM:257, valueType:"official", statusGroup:"confirmed", statusLabel:"Đang thi công", recognition:{2025:.30,2026:.80,2027:1}, notes:"% ghi nhận là giả định analyst.", sourceLabel:"Giá trị hợp đồng công bố" },
+      { id:"lac-da-vang-1", name:"Lạc Đà Vàng GĐ1 (CPP)", category:"Dầu khí trong nước", valueUsdM:245, valueType:"official", statusGroup:"confirmed", statusLabel:"Hạ thủy T7/2026", recognition:{2025:.85,2026:1}, notes:"First oil dự kiến Q4/2026; đạt 100% lũy kế trong mô hình năm 2026.", sourceLabel:"Giá trị hợp đồng công bố; % ghi nhận là giả định analyst" },
+      { id:"lac-da-vang-2", name:"Lạc Đà Vàng GĐ2", category:"Dầu khí trong nước", valueUsdM:88, valueType:"official", statusGroup:"confirmed", statusLabel:"Bắt đầu", recognition:{2026:.20,2027:.30,2028:.65,2029:1}, notes:"Đang triển khai theo dữ liệu hiện có; % ghi nhận là giả định analyst.", sourceLabel:"Dữ liệu dự án hiện hành" },
+      { id:"su-tu-trang-2b", name:"Sư Tử Trắng GĐ2B", category:"Dầu khí trong nước", valueUsdM:385, valueType:"estimate", valueNote:"Giá trị HĐ >10.000 tỷ VND; USD value là quy đổi/ước tính", statusGroup:"confirmed", statusLabel:"Ký HĐ 22/04/2026", recognition:{2026:.15,2027:.60}, notes:"Lịch ghi nhận hiện mới phân bổ 60%; phần còn lại chưa đưa vào năm cụ thể.", sourceLabel:"Giá trị HĐ công bố bằng VND; USD là analyst estimate" },
+      { id:"nam-du-u-minh", name:"Nam Du – U Minh", category:"Dầu khí trong nước", valueUsdM:90, valueType:"estimate", statusGroup:"pipeline", statusLabel:"Kỳ vọng", recognition:{2026:.10,2027:.50}, notes:"Chưa có definitive signed award trong dữ liệu hiện tại; không vào tổng confirmed.", sourceLabel:"Pipeline / giả định analyst" },
+      { id:"qatar-epic-1", name:"Qatar – EPIC-1 Maydan Mahzam", category:"Dầu khí nước ngoài", valueUsdM:3000, valueType:"estimate", valueNote:"Analyst estimate; contract value chưa công bố chính thức", statusGroup:"loa", statusLabel:"LOA 13/09/2026", recognition:{2026:0,2027:.10,2028:.40,2029:.75,2030:1}, notes:"Definitive contract dự kiến ký sau LOA; tách khỏi confirmed backlog.", sourceLabel:"LOA công bố; giá trị và % ghi nhận là analyst estimate" },
+      { id:"crpo-saudi", name:"CRPO 125/126/135 – Saudi", category:"Dầu khí nước ngoài", valueUsdM:79, valueType:"official", statusGroup:"confirmed", statusLabel:"Đang thi công", recognition:{2026:.60,2027:.90}, notes:"Lịch ghi nhận hiện mới phân bổ 90%; phần còn lại chưa đưa vào năm cụ thể.", sourceLabel:"Giá trị hợp đồng công bố; % ghi nhận là giả định analyst" },
+      { id:"baltica-2", name:"Điện gió Baltica 2 (4 OSS, Ba Lan)", category:"Điện gió", valueUsdM:180, valueType:"official", statusGroup:"confirmed", statusLabel:"Đã giao 4 OSS T9/2026", recognition:{2025:.10,2026:.95,2027:1}, notes:"Tiến độ giao hàng không đồng nghĩa tiến độ ghi nhận kế toán; % là base-case analyst.", sourceLabel:"Giá trị hợp đồng công bố; tiến độ ghi nhận là analyst assumption" },
+      { id:"fengmiao-1", name:"Điện gió Fengmiao 1 (OSS, Đài Loan)", category:"Điện gió", valueUsdM:100, valueType:"official", statusGroup:"confirmed", statusLabel:"Gần hoàn thành", recognition:{2025:.25,2026:.98,2027:1}, notes:"% ghi nhận là base-case analyst, không phải tiến độ kế toán được công bố.", sourceLabel:"Giá trị hợp đồng công bố; tiến độ ghi nhận là analyst assumption" },
+      { id:"formosa-4", name:"Formosa 4 – OSS", category:"Điện gió", valueUsdM:100, valueType:"estimate", valueNote:"Giá trị ước tính attributable to PVS", statusGroup:"confirmed", statusLabel:"Đang thi công", recognition:{2026:.50,2027:1}, notes:"Giá trị và % ghi nhận là base-case analyst.", sourceLabel:"Analyst estimate" },
+      { id:"formosa-35", name:"Formosa – 35 chân đế", category:"Điện gió", valueUsdM:160, valueType:"official", statusGroup:"cancelled", statusLabel:"Đã hủy", recognition:{}, notes:"Bồi thường ~459 tỷ VND ghi nhận trong 6T/2026 là one-off; không phải backlog revenue.", sourceLabel:"BCTC/Bản tin 6T/2026" },
+      { id:"korea-offshore-wind", name:"Điện gió khách hàng Hàn Quốc", category:"Điện gió", valueUsdM:80, valueType:"estimate", statusGroup:"pipeline", statusLabel:"Kỳ vọng", recognition:{2026:.20,2027:.70}, notes:"Chưa ký chính thức; không vào tổng confirmed.", sourceLabel:"Pipeline / giả định analyst" }
     ],
     pipeline: [
       { name:"Cá Voi Xanh (~5 tỷ USD)",        window:"FID 2027",  prob:45, type:"Dầu khí" },
@@ -2177,6 +2176,26 @@ window.PVS_DATA = {
   .bar{height:8px;background:#ECEDF5;border-radius:4px;overflow:hidden}
   .bar i{display:block;height:100%;background:var(--green);border-radius:4px}
   .bar i.pend{background:var(--gold)}
+  #projTable{min-width:1340px}
+  #projTable th:first-child,#projTable td:first-child{position:sticky;left:0;z-index:2;min-width:250px;background:#fff;box-shadow:1px 0 0 var(--line)}
+  #projTable th:first-child{z-index:3;background:#F0F1F8}
+  #projTable td.rec-year{min-width:118px;text-align:center;vertical-align:middle}
+  .rec-cell{display:flex;min-height:58px;flex-direction:column;align-items:center;justify-content:center;gap:3px}
+  .rec-cell .bar{width:86px}
+  .rec-pct{font-weight:750;color:var(--navy);font-variant-numeric:tabular-nums}
+  .rec-value{font-size:11.5px;font-weight:650;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+  #projTable tr.loa-row td{background:#FFFBED}
+  #projTable tr.loa-row td:first-child{background:#FFFBED}
+  #projTable tr.pipeline-row td{background:#FAFBFF;color:var(--muted)}
+  #projTable tr.pipeline-row td:first-child{background:#FAFBFF}
+  #projTable tr.cancelled-row{opacity:.58}
+  #projTable tr.total-confirmed td{background:#EAF6E4;font-weight:800;color:var(--navy);border-top:2px solid var(--green)}
+  #projTable tr.total-loa td{background:#FFF4DC;font-weight:700;color:#8A5A00}
+  #projTable tr.total-incl td{background:#EEF1F8;font-weight:800;color:var(--navy);border-bottom:2px solid var(--navy)}
+  #projTable tr.total-confirmed td:first-child{background:#EAF6E4}
+  #projTable tr.total-loa td:first-child{background:#FFF4DC}
+  #projTable tr.total-incl td:first-child{background:#EEF1F8}
+  .info-dot{display:inline-flex;align-items:center;justify-content:center;width:17px;height:17px;margin-left:5px;border-radius:50%;background:#E3EEF8;color:var(--blue);font-size:11px;font-weight:800;cursor:help;vertical-align:1px}
 
   ul.list{list-style:none}
   ul.list li{padding:7px 0;border-bottom:1px solid var(--line);font-size:13px;display:flex;gap:10px;align-items:flex-start}
@@ -3130,6 +3149,85 @@ function renderCapex(){
   if(D.model&&typeof renderModel==='function')renderModel();
  };$('capexInputs').oninput=update;$('capexInputs').onchange=update;$('capexBase').oninput=update;$('capexTiming').onchange=update;$('capexSetDefault').onclick=()=>{if(!currentCapex)return;try{localStorage.setItem(KEY+'_capex_model',JSON.stringify(currentCapex));$('capexSaved').textContent='✓ Đã set mặc định '+new Date().toLocaleTimeString('vi-VN');}catch(e){$('capexSaved').textContent='Không thể lưu mặc định';}};update();applyChartTips($('capex'));
 }
+
+// Backlog has one source of truth: project value + cumulative recognition assumptions.
+function getCumulativeRecognitionPct(project,year){
+ const points=Object.entries(project.recognition||{}).map(([y,p])=>[Number(y),Number(p)]).filter(([y,p])=>Number.isFinite(y)&&Number.isFinite(p)&&y<=Number(year)).sort((a,b)=>a[0]-b[0]);
+ return points.length?points.at(-1)[1]:0;
+}
+function getPreviousCumulativePct(project,year){
+ const points=Object.entries(project.recognition||{}).map(([y,p])=>[Number(y),Number(p)]).filter(([y,p])=>Number.isFinite(y)&&Number.isFinite(p)&&y<Number(year)).sort((a,b)=>a[0]-b[0]);
+ return points.length?points.at(-1)[1]:0;
+}
+function getIncrementalRecognitionPct(project,year){
+ return Math.max(0,getCumulativeRecognitionPct(project,year)-getPreviousCumulativePct(project,year));
+}
+function getAnnualRecognitionUsd(project,year){
+ return Number(project.valueUsdM||0)*getIncrementalRecognitionPct(project,year);
+}
+function getAnnualRecognitionVnd(project,year){
+ return getAnnualRecognitionUsd(project,year)*D.backlog.config.usdVnd/1000;
+}
+function getAnnualTotalVnd(projects,year,statusGroups){
+ const groups=Array.isArray(statusGroups)?statusGroups:[statusGroups];
+ return projects.filter(p=>groups.includes(p.statusGroup)).reduce((sum,p)=>sum+getAnnualRecognitionVnd(p,year),0);
+}
+function validateBacklogModel(){
+ const errors=[],years=D.backlog.config.years;
+ D.backlog.projects.forEach(project=>{
+  const points=Object.entries(project.recognition||{}).map(([y,p])=>[Number(y),Number(p)]).sort((a,b)=>a[0]-b[0]);
+  points.forEach(([year,pct],i)=>{if(pct<0||pct>1)errors.push(`${project.id}: ${year} nằm ngoài 0–100%`);if(i&&pct<points[i-1][1])errors.push(`${project.id}: tỷ lệ lũy kế giảm tại ${year}`);});
+  if(points.length&&Math.abs(points.at(-1)[1]-1)<1e-9){
+   const annual=years.reduce((sum,year)=>sum+getAnnualRecognitionVnd(project,year),0),contract=project.valueUsdM*D.backlog.config.usdVnd/1000;
+   if(Math.abs(annual-contract)>1e-6)errors.push(`${project.id}: tổng ghi nhận không khớp giá trị hợp đồng`);
+  }
+ });
+ return errors;
+}
+const backlogYearLabel=year=>year===2025?'2025':year+'F';
+const formatBacklogVnd=value=>fmt(Math.round(value),0)+' tỷ';
+const backlogStatusPill=project=>{
+ const map={confirmed:['pos','Confirmed'],loa:['warn','LOA / chưa ký'],pipeline:['grey','Pipeline'],cancelled:['neg','Đã hủy']},m=map[project.statusGroup]||['grey',project.statusGroup];
+ return `<span class="pill ${m[0]}">${m[1]}</span><div class="note">${esc(project.statusLabel||'')}</div>`;
+};
+function backlogRecognitionCell(project,year){
+ if(project.statusGroup==='cancelled')return '<td class="rec-year"><span class="rec-value">—</span></td>';
+ const cumulative=getCumulativeRecognitionPct(project,year),annual=getAnnualRecognitionVnd(project,year),loa=project.statusGroup==='loa';
+ return `<td class="rec-year"><div class="rec-cell"><div class="bar"><i class="${loa?'pend':''}" style="width:${Math.max(0,Math.min(100,cumulative*100))}%"></i></div><div class="rec-pct">${Math.round(cumulative*100)}%</div><div class="rec-value">${annual>0?'~'+formatBacklogVnd(annual):'—'}</div></div></td>`;
+}
+renderProjTable=function(){
+ const b=D.backlog,years=b.config.years,shown=b.projects.filter(p=>projFilter==='Tất cả'||p.category===projFilter);
+ const rows=shown.map(p=>{
+  const rowClass=p.statusGroup==='loa'?'loa-row':p.statusGroup==='pipeline'?'pipeline-row':p.statusGroup==='cancelled'?'cancelled-row':'';
+  const estimate=p.valueType==='estimate',value=(estimate?'~':'')+fmt(p.valueUsdM,0)+(p.id==='qatar-epic-1'?'*':'');
+  const valueNote=p.valueNote?`<div class="note">${esc(p.valueNote)}</div>`:`<div class="note">${estimate?'Ước tính analyst':'Giá trị công bố'}</div>`;
+  return `<tr class="${rowClass}"><td><b>${esc(p.name)}</b>${p.notes?`<div class="note">${esc(p.notes)}</div>`:''}${p.sourceLabel?`<div class="src">${esc(p.sourceLabel)}</div>`:''}</td><td><span class="pill blue">${esc(p.category)}</span></td><td class="num"><b>${value}</b>${valueNote}</td><td>${backlogStatusPill(p)}</td>${years.map(year=>backlogRecognitionCell(p,year)).join('')}</tr>`;
+ }).join('');
+ const totalRow=(cls,label,groups)=>`<tr class="${cls}"><td>${label}</td><td colspan="3">tỷ VND · toàn danh mục</td>${years.map(year=>`<td class="num">${getAnnualTotalVnd(b.projects,year,groups)>0?formatBacklogVnd(getAnnualTotalVnd(b.projects,year,groups)):'—'}</td>`).join('')}</tr>`;
+ $('projTable').innerHTML='<tr><th>Dự án</th><th>Loại</th><th class="num">GT PVS (tr USD)</th><th>Trạng thái</th>'+years.map(year=>`<th class="num">${backlogYearLabel(year)}</th>`).join('')+'</tr>'+rows+totalRow('total-confirmed','TỔNG CONFIRMED',['confirmed'])+totalRow('total-loa','+ LOA / chưa ký chính thức',['loa'])+totalRow('total-incl','= TỔNG GỒM LOA',['confirmed','loa']);
+};
+renderBacklog=function(){
+ const b=D.backlog,years=b.config.years,confirmed=years.map(y=>getAnnualTotalVnd(b.projects,y,['confirmed'])),loa=years.map(y=>getAnnualTotalVnd(b.projects,y,['loa'])),confirmedValue=b.projects.filter(p=>p.statusGroup==='confirmed').reduce((sum,p)=>sum+p.valueUsdM,0),loaValue=b.projects.filter(p=>p.statusGroup==='loa').reduce((sum,p)=>sum+p.valueUsdM,0),total2026=getAnnualTotalVnd(b.projects,2026,['confirmed']),loa2026=getAnnualTotalVnd(b.projects,2026,['loa']);
+ $('blKpi').innerHTML=[
+  ['Backlog confirmed thực hiện 2026F',formatBacklogVnd(total2026),loa2026?`+ ${formatBacklogVnd(loa2026)} LOA`:'Không gồm LOA, pipeline và dự án đã hủy'],
+  ['Backlog còn lại hiện hữu','~'+fmt(b.remainingConfirmedUSDbn,1)+' tỷ USD',b.remainingNote],
+  ['Qatar EPIC-1 (LOA)','~3 tỷ USD*','Analyst estimate; chưa vào confirmed backlog'],
+  ['Giá trị dự án đang theo dõi',fmt(confirmedValue,0)+' + '+fmt(loaValue,0)+' tr USD','Confirmed + LOA; pipeline tách riêng']
+ ].map(k=>`<div class="card kpi tight"><div class="l">${k[0]}</div><div class="v">${k[1]}</div><div class="s">${k[2]}</div></div>`).join('');
+ mk('blExec',{type:'bar',data:{labels:years.map(backlogYearLabel),datasets:[{label:'Confirmed',data:confirmed,backgroundColor:GREEN,stack:'s',borderRadius:4,maxBarThickness:70},{label:'LOA / chưa ký chính thức',data:loa,backgroundColor:GOLD,stack:'s',borderRadius:4,maxBarThickness:70}]},options:baseOpts({scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,beginAtZero:true,grid:{color:'#EEF0F6'},ticks:{callback:v=>vnd(v)}}},plugins:{tooltip:{callbacks:{label:c=>c.dataset.label+': '+formatBacklogVnd(c.parsed.y)}}}})});
+ $('blExecNote').textContent='Confirmed và LOA được tính trực tiếp từ phần tăng thêm của tỷ lệ ghi nhận lũy kế từng dự án. Pipeline không được đưa vào biểu đồ.';
+ $('milestones').innerHTML=(b.milestones||[]).map(m=>`<li><span class="d">${m.d}</span><span>${m.ok?'✅':'⏳'} ${esc(m.t)}</span></li>`).join('');
+ const title=$('projTable').closest('.card').querySelector('h3.sub');
+ title.innerHTML='Dự án — giá trị & tiến độ ghi nhận ước tính <span class="info-dot" title="% thể hiện tỷ lệ ghi nhận lũy kế ước tính đến cuối năm. Giá trị VND bên dưới là phần giá trị tăng thêm được ước tính ghi nhận riêng trong năm." aria-label="Giải thích tỷ lệ và giá trị ghi nhận">i</span>';
+ const categories=['Tất cả',...new Set(b.projects.map(p=>p.category))];
+ $('projFilters').innerHTML=categories.map(category=>`<button class="${category===projFilter?'on':''}" data-category="${esc(category)}">${esc(category)}</button>`).join('');
+ $('projFilters').onclick=e=>{const button=e.target.closest('button[data-category]');if(!button)return;projFilter=button.dataset.category;renderBacklog();};
+ renderProjTable();
+ const projectPipeline=b.projects.filter(p=>p.statusGroup==='pipeline').map(p=>({name:p.name,type:p.category,window:p.statusLabel,prob:null}));
+ $('pipeTable').innerHTML='<tr><th>Dự án</th><th>Loại</th><th>Window / trạng thái</th><th>Xác suất (analyst)</th></tr>'+projectPipeline.concat(b.pipeline||[]).map(p=>`<tr><td>${esc(p.name)}</td><td><span class="pill blue">${esc(p.type)}</span></td><td>${esc(p.window)}</td><td>${p.prob==null?'<span class="pill grey">Chưa vào backlog</span>':`<div class="row"><div class="bar" style="width:120px"><i style="width:${p.prob}%"></i></div><span>${p.prob}%</span></div>`}</td></tr>`).join('');
+ const errors=validateBacklogModel();
+ $('blSrc').innerHTML='<b>Quy đổi USD/VND: '+fmt(b.config.usdVnd,0)+'.</b> % ghi nhận là ước tính mô hình, thể hiện tỷ lệ ghi nhận lũy kế theo năm và không đồng nghĩa với tiến độ thi công vật lý. Giá trị theo năm được tính từ phần thay đổi của tỷ lệ ghi nhận lũy kế. Tổng luôn tính toàn danh mục, không thay đổi theo bộ lọc. Nguồn: '+esc(b.src)+'.'+(errors.length?' <span style="color:var(--neg)">Lỗi kiểm tra: '+esc(errors.join('; '))+'</span>':'');
+};
 function linkedCapexDA(year){
  const i=year-2026;if(i<0||i>4)return null;
  if(window.pvsCapexForecast&&window.pvsCapexForecast[i]!=null)return window.pvsCapexForecast[i];
@@ -3142,7 +3240,7 @@ function linkedJvProfit(year){
  return f.baseJv+inc;
 }
 function backlogRevenue(label){
- const i=D.backlog.execYears.indexOf(label);return i<0?0:(D.backlog.execConfirmed[i]||0)+(D.backlog.execPending[i]||0);
+ const year=Number.parseInt(label,10);return Number.isFinite(year)?getAnnualTotalVnd(D.backlog.projects,year,['confirmed']):0;
 }
 function pvsFreshModel(){return deep({version:D.model.version,inputs:D.model.inputs,isAssumptions:D.model.isAssumptions,sotp:D.model.sotp});}
 calcModel=function(){
