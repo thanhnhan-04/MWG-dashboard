@@ -2370,6 +2370,7 @@ window.PVS_DATA = {
 
 
 
+
 <style>/*V2CSS-BEGIN*/
 /* ===== v2: bộ điều khiển thời gian, flow mảng, bảng tài chính chuẩn, sankey, band định giá ===== */
 /* --- bộ chọn chu kỳ & khung thời gian, RIÊNG mỗi chart --- */
@@ -3518,6 +3519,7 @@ document.addEventListener('DOMContentLoaded',()=>{renderFso();renderCapex();});
 
 
 
+
 <script>//V2JS-BEGIN
 /* ============================================================================
    FINSUCCESS DASHBOARD — LỚP v2 (dùng chung cho mọi mã)
@@ -3620,6 +3622,18 @@ const sumOrNull=a=>a.some(v=>v==null)?null:a.reduce((x,y)=>x+y,0);
 const avgOrNull=a=>{ const v=a.filter(x=>x!=null); return v.length?v.reduce((x,y)=>x+y,0)/v.length:null; };
 const monthsToQSum=v=>M2Q.map(ix=>sumOrNull(ix.map(i=>v[i])));
 const monthsToYSum=v=>sumOrNull(v);
+// {năm:[11 giá trị tháng]} -> chuỗi QUÝ LIÊN TỤC qua các năm (Q1/23,Q2/23,...,Q2/26),
+// để "Số kỳ" có ý nghĩa (thay vì chỉ 4 vị trí Q1-Q4 chồng năm lên nhau).
+function monthsToFlatQ(chainData){
+  const years=Object.keys(chainData);
+  const labels=[], values=[];
+  years.forEach(y=>{
+    const qv=monthsToQSum(chainData[y]);
+    qv.forEach((v,qi)=>{ labels.push('Q'+(qi+1)+'/'+y.slice(-2)); values.push(v); });
+  });
+  while(values.length&&values[values.length-1]==null){ values.pop(); labels.pop(); }
+  return {labels,values};
+}
 
 /* ---------- 2. Gộp tab Mảng kinh doanh + Cửa hàng & Mạng lưới ---------- */
 function mergeSegTab(){
@@ -4077,20 +4091,25 @@ function tsWire(){
     mkTS('stChain',{y:{labels:nw.periods,datasets:nw.chains.map((c,k)=>({label:c.name,data:c.counts,backgroundColor:CAT[k%CAT.length],borderRadius:3,maxBarThickness:40}))},
       cfg:(labels,datasets)=>({type:'bar',data:{labels,datasets},options:baseOpts({plugins:{legend:{position:'bottom',labels:{boxWidth:12,usePointStyle:true}},tooltip:{callbacks:{label:c=>c.dataset.label+': '+vnd(c.parsed.y)+' cửa hàng'}}}})})});
   }
-  // 6.4 Doanh thu tháng theo chuỗi (bán lẻ): Tháng (gốc) · Quý (gộp) · Năm (cộng dồn)
+  // 6.4 Doanh thu tháng theo chuỗi (bán lẻ):
+  //   Tháng = so sánh mùa vụ (mỗi năm 1 đường, chồng lên trục T1-T12, đúng rule CLAUDE.md).
+  //           "Số kỳ" ở mức này cắt bớt các THÁNG cuối trục (vd 6 tháng gần nhất của mọi năm),
+  //           không phải cắt bớt năm — vẫn hợp lý vì đang cùng trục thời gian trong năm.
+  //   Quý/Năm = xu hướng LIÊN TỤC qua các năm (1 chuỗi), "Số kỳ" cắt N kỳ gần nhất bình thường.
   const mo=D.segments&&D.segments.monthly;
   if(mo){
     mo.chains.forEach((c,i)=>{
       const years=Object.keys(c.data);
-      const dsFor=getter=>years.map((y,k)=>({label:y,data:getter(c.data[y]),borderColor:CAT[k%CAT.length],backgroundColor:CAT[k%CAT.length],borderWidth:k===years.length-1?3:2,pointRadius:3,tension:.25,spanGaps:false}));
+      const mDs=years.map((y,k)=>({label:y,data:c.data[y],borderColor:CAT[k%CAT.length],backgroundColor:CAT[k%CAT.length],borderWidth:k===years.length-1?3:2,pointRadius:3,tension:.25,spanGaps:false}));
       const yLab=years.map(y=>{ const n=c.data[y].filter(v=>v!=null).length; const doneM=n?n+1:0; return doneM>=12?y:y+' ('+doneM+'T)'; });
       const yVal=years.map(y=>{ const a=c.data[y].filter(v=>v!=null); return a.length?a.reduce((x,z)=>x+z,0):null; });
+      const fq=monthsToFlatQ(c.data);
       mkTS('segM'+i,{
-        m:{labels:mo.months,datasets:dsFor(v=>v)},
-        q:{labels:['Q1','Q2','Q3','Q4'],datasets:dsFor(monthsToQSum)},
+        m:{labels:mo.months,datasets:mDs},
+        q:{labels:fq.labels,datasets:[{label:'Doanh thu',data:fq.values,backgroundColor:BLUE,borderRadius:4,maxBarThickness:44}]},
         y:{labels:yLab,datasets:[{label:'Doanh thu',data:yVal,backgroundColor:BLUE,borderRadius:4,maxBarThickness:60}]},
         cfg:(labels,datasets,p)=>{
-          if(p==='y')return {type:'bar',data:{labels,datasets},
+          if(p==='q'||p==='y')return {type:'bar',data:{labels,datasets},
             options:baseOpts({plugins:{legend:{display:false},tooltip:{callbacks:{label:x=>x.parsed.y==null?'chưa có số':money(x.parsed.y)+' tỷ'}}}})};
           return {type:'line',data:{labels,datasets},options:{responsive:true,maintainAspectRatio:false,
             plugins:{legend:{position:'bottom',labels:{boxWidth:12,usePointStyle:true}},tooltip:{mode:'index',intersect:false,callbacks:{label:x=>x.dataset.label+': '+money(x.parsed.y)+' tỷ'}}},
