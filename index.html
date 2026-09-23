@@ -595,18 +595,18 @@ window.PVS_DATA = {
 
 
 
+
 <style>/*V2CSS-BEGIN*/
 /* ===== v2: bộ điều khiển thời gian, flow mảng, bảng tài chính chuẩn, sankey, band định giá ===== */
-.tsbar{background:#F7F8FC;border-bottom:1px solid var(--line)}
-.tsbar .in{max-width:1180px;margin:0 auto;padding:8px 20px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.tsbar .lbl{font-size:11px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:var(--muted)}
-.seg{display:flex;gap:4px}
-.seg button{border:1px solid var(--line);background:#fff;color:#514f75;border-radius:7px;padding:4px 11px;font-size:12.5px;font-weight:700;cursor:pointer}
-.seg button.on{background:var(--navy);color:#fff;border-color:var(--navy)}
-.seg button:disabled{opacity:.4;cursor:not-allowed}
-.tsbar .hint{font-size:11.5px;color:var(--muted);margin-left:auto}
-h3.sub .tsb{display:inline-block;margin-left:8px;padding:1px 7px;border-radius:6px;background:#EEF0F6;color:#514f75;font-size:10.5px;font-weight:800;letter-spacing:.3px;vertical-align:middle}
-h3.sub .tsb.alt{background:#FDF0DC;color:#8A5B00}
+/* --- bộ chọn chu kỳ & khung thời gian, RIÊNG mỗi chart --- */
+.tsctl{display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin:2px 0 8px}
+.tsctl .lb{font-size:10px;font-weight:800;letter-spacing:.3px;text-transform:uppercase;color:var(--muted);margin-right:2px}
+.tsctl .sep{width:1px;height:14px;background:var(--line);margin:0 6px}
+.tsctl button{border:1px solid var(--line);background:#fff;color:#514f75;border-radius:6px;padding:2px 9px;font-size:11.5px;font-weight:700;cursor:pointer;line-height:1.5}
+.tsctl button:hover{border-color:var(--green-d)}
+.tsctl button.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.tsctl button:focus-visible{outline:2px solid var(--green-d);outline-offset:1px}
+@media(max-width:560px){.tsctl .lb{display:none}}
 /* --- flow mảng kinh doanh --- */
 .flowlegend{font-size:11.5px;color:var(--muted);margin:2px 0 12px}
 .flowrow{display:flex;align-items:stretch;gap:6px;flex-wrap:wrap;padding:12px 0;border-top:1px solid var(--line)}
@@ -644,7 +644,7 @@ table.fintbl tr.sect td{background:var(--navy);color:#fff;font-weight:850;font-s
 table.fintbl td.qcol{background:#FFF9FA}
 table.fintbl tr.h td.qcol{background:#FBEEF2}
 table.fintbl td.neg{color:var(--neg)}
-body.isolate .brandbar,body.isolate .titleband,body.isolate nav.tabs,body.isolate .tsbar,body.isolate footer,body.isolate .btn{display:none!important}
+body.isolate .brandbar,body.isolate .titleband,body.isolate nav.tabs,body.isolate footer,body.isolate .btn{display:none!important}
 body.isolate .wrap>section.tab>*{display:none!important}
 body.isolate .wrap>section.tab>.iso-keep{display:block!important}
 body.isolate .wrap{padding-top:10px}
@@ -669,12 +669,13 @@ body.isolate .wrap{padding-top:10px}
 .subnav{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 16px;border-bottom:2px solid var(--line);padding-bottom:10px}
 .subnav button{border:1px solid var(--line);background:#fff;color:#514f75;border-radius:9px;padding:7px 16px;font-size:13px;font-weight:750;cursor:pointer}
 .subnav button.on{background:var(--navy);color:#fff;border-color:var(--navy)}
-@media print{.tsbar,.subnav,.brkctl,.bandctl,.seg{display:none!important}.subpane{display:block!important}}
+@media print{.tsctl,.subnav,.brkctl,.bandctl,.seg{display:none!important}.subpane{display:block!important}}
 
 .g1{grid-template-columns:1fr}
 
 #consTable td:nth-last-child(2){white-space:normal;max-width:300px;min-width:200px}
 #consTable td:last-child{min-width:54px}
+.chip{display:inline-block;margin-left:8px;padding:1px 8px;border-radius:6px;background:#EEF0F6;color:#514f75;font-size:10.5px;font-weight:800;letter-spacing:.3px;vertical-align:middle}
 
 /*V2CSS-END*/</style>
 <style>
@@ -1470,6 +1471,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 
 
 
+
 <script>//V2JS-BEGIN
 /* ============================================================================
    FINSUCCESS DASHBOARD — LỚP v2 (dùng chung cho mọi mã)
@@ -1482,56 +1484,63 @@ document.addEventListener('DOMContentLoaded',()=>{
    Mọi khối đều TÙY CHỌN: thiếu dữ liệu trong data.js thì khối tự ẩn.
    ========================================================================== */
 
-/* ---------- 1. Bộ điều khiển thời gian ---------- */
-const TSKEY='ts_ctl_v1';
-const TS={period:'m',horizon:'all'};
-try{ Object.assign(TS,JSON.parse(localStorage.getItem(TSKEY)||'{}')); }catch(e){}
-try{ const u=new URLSearchParams(location.search); if(u.get('per'))TS.period=u.get('per'); if(u.get('hor'))TS.horizon=u.get('hor'); }catch(e){}
+/* ---------- 1. Bộ điều khiển thời gian — RIÊNG CHO TỪNG CHART ---------- */
+const TSKEY='ts_chart_v1';
+let TSC={};                       // { chartId: {p:'m|q|y', h:'1|3|5|10|all'} }
+try{ TSC=JSON.parse(localStorage.getItem(TSKEY)||'{}'); }catch(e){}
 const TSREG={};
 const TS_PER=[['m','Tháng'],['q','Quý'],['y','Năm']];
 const TS_HOR=[['1','1N'],['3','3N'],['5','5N'],['10','10N'],['all','Tất cả']];
 const TS_PTS={m:12,q:4,y:1};
 const TS_NAME={m:'tháng',q:'quý',y:'năm'};
-function tsSave(){ try{ localStorage.setItem(TSKEY,JSON.stringify(TS)); }catch(e){} }
-function tsCut(labels,datasets,period){
-  if(TS.horizon==='all')return {labels,datasets};
-  const n=Math.max(2,parseInt(TS.horizon,10)*TS_PTS[period]);
+// ghi đè toàn cục để test: ?per=q&hor=3
+let TS_FORCE={};
+try{ const u=new URLSearchParams(location.search); if(u.get('per'))TS_FORCE.p=u.get('per'); if(u.get('hor'))TS_FORCE.h=u.get('hor'); }catch(e){}
+function tsSave(){ try{ localStorage.setItem(TSKEY,JSON.stringify(TSC)); }catch(e){} }
+function tsAvail(spec){ return ['m','q','y'].filter(p=>spec[p]&&spec[p].labels&&spec[p].labels.length); }
+function tsState(id,spec){
+  const av=tsAvail(spec); if(!av.length)return null;
+  const saved=TSC[id]||{};
+  let p=TS_FORCE.p||saved.p||spec.def;
+  if(!av.includes(p))p=av[0];                      // mặc định = chu kỳ chi tiết nhất mà khối có
+  const h=TS_FORCE.h||saved.h||'all';
+  return {p,h,av};
+}
+function tsCut(labels,datasets,period,h){
+  if(h==='all')return {labels,datasets};
+  const n=Math.max(2,parseInt(h,10)*TS_PTS[period]);
   if(labels.length<=n)return {labels,datasets};
   const c=labels.length-n;
   return {labels:labels.slice(c),datasets:datasets.map(d=>Object.assign({},d,{data:d.data.slice(c)}))};
 }
-// spec = {m:{labels,datasets}, q:{...}, y:{...}, cfg:(labels,datasets,period)=>chartConfig}
+// spec = {m:{labels,datasets}, q:{...}, y:{...}, def:'m|q|y', cfg:(labels,datasets,period)=>chartConfig}
 function mkTS(id,spec){
   if(!$(id))return; TSREG[id]=spec;
-  const av=['m','q','y'].filter(p=>spec[p]&&spec[p].labels&&spec[p].labels.length);
-  if(!av.length)return;
-  const p=av.includes(TS.period)?TS.period:(av.includes('y')?'y':av[av.length-1]);
-  const cut=tsCut(spec[p].labels,deep(spec[p].datasets),p);
-  mk(id,spec.cfg(cut.labels,cut.datasets,p));
-  const card=$(id).closest('.card'), h=card&&card.querySelector('h3.sub');
-  if(!h)return;
-  let b=h.querySelector('.tsb');
-  if(!b){ b=document.createElement('span'); b.className='tsb'; h.insertBefore(b,h.querySelector('.ctl')||null); }
-  b.textContent=TS_NAME[p];
-  b.className='tsb'+(p===TS.period?'':' alt');
-  b.title=p===TS.period?'Dữ liệu theo '+TS_NAME[p]:'Khối này chỉ có dữ liệu theo '+TS_NAME[p]+' — không đổi theo lựa chọn chung';
+  const st=tsState(id,spec); if(!st)return;
+  const cut=tsCut(spec[st.p].labels,deep(spec[st.p].datasets),st.p,st.h);
+  mk(id,spec.cfg(cut.labels,cut.datasets,st.p));
+  tsControls(id,spec,st,spec[st.p].labels.length);
+}
+function tsControls(id,spec,st,npts){
+  const box=$(id).closest('.chart'); if(!box)return;
+  const showP=st.av.length>1, showH=npts>4;
+  let bar=box.previousElementSibling;
+  if(!bar||!bar.classList||!bar.classList.contains('tsctl')){
+    if(!showP&&!showH)return;
+    bar=document.createElement('div'); bar.className='tsctl'; box.parentNode.insertBefore(bar,box);
+  }
+  if(!showP&&!showH){ bar.remove(); return; }
+  bar.innerHTML=(showP?'<span class="lb">Chu kỳ</span>'+TS_PER.filter(x=>st.av.includes(x[0]))
+      .map(([k,l])=>`<button data-p="${k}" class="${k===st.p?'on':''}">${l}</button>`).join(''):'')
+    +(showP&&showH?'<span class="sep"></span>':'')
+    +(showH?'<span class="lb">Xem</span>'+TS_HOR.map(([k,l])=>`<button data-h="${k}" class="${k===st.h?'on':''}">${l}</button>`).join(''):'');
+  bar.onclick=e=>{
+    const b=e.target.closest('button[data-p],button[data-h]'); if(!b)return;
+    TSC[id]=Object.assign({},TSC[id],b.dataset.p?{p:b.dataset.p}:{h:b.dataset.h});
+    TS_FORCE={}; tsSave(); mkTS(id,TSREG[id]); applyChartTips();
+  };
 }
 function tsRedrawAll(){ Object.keys(TSREG).forEach(id=>{ if($(id))mkTS(id,TSREG[id]); }); }
-function renderTSBar(){
-  const avail={m:false,q:false,y:false};
-  Object.values(TSREG).forEach(s=>['m','q','y'].forEach(p=>{ if(s[p]&&s[p].labels&&s[p].labels.length)avail[p]=true; }));
-  $('tsPeriod').innerHTML=TS_PER.map(([k,l])=>`<button data-p="${k}" class="${k===TS.period?'on':''}" ${avail[k]?'':'disabled title="Chưa có dữ liệu theo '+TS_NAME[k]+'"'}>${l}</button>`).join('');
-  $('tsHorizon').innerHTML=TS_HOR.map(([k,l])=>`<button data-h="${k}" class="${k===TS.horizon?'on':''}">${l}</button>`).join('');
-}
-function tsInit(){
-  $('tsPeriod').onclick=e=>{ const b=e.target.closest('button[data-p]'); if(!b||b.disabled)return; TS.period=b.dataset.p; tsSave(); renderTSBar(); tsRedrawAll(); applyChartTips(); };
-  $('tsHorizon').onclick=e=>{ const b=e.target.closest('button[data-h]'); if(!b)return; TS.horizon=b.dataset.h; tsSave(); renderTSBar(); tsRedrawAll(); applyChartTips(); };
-}
-// gộp 11 kỳ tháng (T1+T2 gộp) -> 4 quý
-const M2Q=[[0,1],[2,3,4],[5,6,7],[8,9,10]];
-const sumOrNull=a=>a.some(v=>v==null)?null:a.reduce((x,y)=>x+y,0);
-const monthsToQ=v=>M2Q.map(ix=>sumOrNull(ix.map(i=>v[i])));
-const monthsToY=v=>sumOrNull(v);
 
 /* ---------- tiện ích thống kê ---------- */
 function statOf(arr){
@@ -1543,6 +1552,12 @@ function statOf(arr){
   const sd=Math.sqrt(a.reduce((x,y)=>x+(y-mean)*(y-mean),0)/(a.length-1));
   return {med,mean,sd,min:s[0],max:s[s.length-1],n:a.length,last:[...arr].reverse().find(v=>v!=null)};
 }
+
+// gộp 11 kỳ tháng (T1+T2 gộp) -> 4 quý
+const M2Q=[[0,1],[2,3,4],[5,6,7],[8,9,10]];
+const sumOrNull=a=>a.some(v=>v==null)?null:a.reduce((x,y)=>x+y,0);
+const monthsToQ=v=>M2Q.map(ix=>sumOrNull(ix.map(i=>v[i])));
+const monthsToY=v=>sumOrNull(v);
 
 /* ---------- 2. Gộp tab Mảng kinh doanh + Cửa hàng & Mạng lưới ---------- */
 function mergeSegTab(){
@@ -1567,7 +1582,7 @@ function renderSegFlow(){
   const tot=f.nodes.reduce((a,n)=>a+(n.rev||0),0);
   const step=(k,v,s)=>`<div class="flowstep"><div class="k">${esc(k)}</div><div class="v">${v}</div><div class="s">${s||''}</div></div>`;
   box.innerHTML=`<div class="card">
-    <h3 class="sub">${esc(f.title||'Cỗ máy doanh thu')} ${f.period?'<span class="tsb">'+esc(f.period)+'</span>':''}</h3>
+    <h3 class="sub">${esc(f.title||'Cỗ máy doanh thu')} ${f.period?'<span class="chip">'+esc(f.period)+'</span>':''}</h3>
     <div class="flowlegend">Doanh thu <span class="flowarrow">▸</span> số cửa hàng <span class="flowarrow">▸</span> doanh thu/cửa hàng/tháng <span class="flowarrow">▸</span> biên lợi nhuận</div>
     ${f.nodes.map((n,i)=>`<div class="flowrow">
       <div class="flowhead" style="border-left-color:${CAT[i%CAT.length]}"><div class="n">${esc(n.name)}</div><div class="p">${esc(n.sub||'')}</div></div>
@@ -2002,7 +2017,7 @@ function tsWire(){
   const ncDs=s=>[...s.stacks.map(x=>({label:x.label,data:x.values,backgroundColor:colMap[x.color]||BLUE,stack:'s',maxBarThickness:48})),
                  {type:'line',label:s.net.label||'Tiền mặt ròng',data:s.net.values,borderColor:GREEN,backgroundColor:GREEN,borderWidth:3,pointRadius:4,tension:.2}];
   if(b.netCashSeries){
-    mkTS('netCashChart',{y:{labels:b.netCashSeries.labels,datasets:ncDs(b.netCashSeries)},
+    mkTS('netCashChart',{def:'y',y:{labels:b.netCashSeries.labels,datasets:ncDs(b.netCashSeries)},
       q:b.netCashSeriesQ?{labels:b.netCashSeriesQ.labels,datasets:ncDs(b.netCashSeriesQ)}:null,
       cfg:(labels,datasets)=>({type:'bar',data:{labels,datasets},options:baseOpts({scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,grid:{color:'#EEF0F6'},ticks:{callback:v=>vnd(v)}}}})})});
   }
@@ -2036,15 +2051,6 @@ function tsWire(){
 
 /* ---------- 7. Dựng khung HTML mới & khởi động ---------- */
 function v2Scaffold(){
-  // thanh điều khiển thời gian
-  const nav=document.querySelector('nav.tabs');
-  if(nav&&!$('tsBar')){
-    const d=document.createElement('div'); d.className='tsbar'; d.id='tsBar';
-    d.innerHTML='<div class="in"><span class="lbl">Chu kỳ</span><div class="seg" id="tsPeriod"></div>'
-      +'<span class="lbl">Khung thời gian</span><div class="seg" id="tsHorizon"></div>'
-      +'<span class="hint">Áp dụng cho mọi biểu đồ theo thời gian. Nhãn cạnh tiêu đề cho biết chart đang vẽ theo chu kỳ nào.</span></div>';
-    nav.after(d);
-  }
   // tab Tài chính: đổi nhãn + chèn 3 khối mới
   const bsBtn=document.querySelector('.tabs button[data-tab="bs"]'); if(bsBtn)bsBtn.textContent='Tài chính';
   const bs=$('bs');
@@ -2072,7 +2078,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   const steps=[['scaffold',v2Scaffold],['mergeSeg',mergeSegTab],['segFlow',renderSegFlow],['finTable',renderFinTable],
     ['breakdown',renderBreakdown],['multiples',renderMultiples],['consFcst',renderConsFcst],['consTable',patchConsTable],
     ['tpChart',fixTpChart],['finSuccessTab',buildFinSuccessTab],['valZone',renderValZone],['tsWire',tsWire],
-    ['tsBar',()=>{renderTSBar();tsInit();}],['chartTips',applyChartTips]];
+    ['chartTips',applyChartTips]];
   const failed=[];
   steps.forEach(([n,fn])=>{ try{ fn(); }catch(e){ failed.push(n+': '+e.message); console.error('v2 ['+n+']',e); } });
   if(failed.length)document.documentElement.setAttribute('data-v2-error',failed.join(' | '));
