@@ -579,6 +579,8 @@ window.PVS_DATA = {
 
 
 
+
+
 <style>/*V2CSS-BEGIN*/
 /* ===== v2: bộ điều khiển thời gian, flow mảng, bảng tài chính chuẩn, sankey, band định giá ===== */
 /* --- bộ chọn chu kỳ & khung thời gian, RIÊNG mỗi chart --- */
@@ -589,6 +591,9 @@ window.PVS_DATA = {
 .tsctl button:hover{border-color:var(--green-d)}
 .tsctl button.on{background:var(--navy);color:#fff;border-color:var(--navy)}
 .tsctl button:focus-visible{outline:2px solid var(--green-d);outline-offset:1px}
+.tsctl select.tsn{border:1px solid var(--line);background:#fff;color:#514f75;border-radius:6px;padding:2px 6px;font-size:11.5px;font-weight:700;cursor:pointer;line-height:1.6;max-width:180px}
+.tsctl select.tsn:hover{border-color:var(--green-d)}
+.tsctl select.tsn:focus-visible{outline:2px solid var(--green-d);outline-offset:1px}
 @media(max-width:560px){.tsctl .lb{display:none}}
 /* --- flow mảng kinh doanh --- */
 .flowlegend{font-size:11.5px;color:var(--muted);margin:2px 0 12px}
@@ -1461,10 +1466,13 @@ document.addEventListener('DOMContentLoaded',()=>{
 
 
 
+
+
 <script>//V2JS-BEGIN
 /* ============================================================================
    FINSUCCESS DASHBOARD — LỚP v2 (dùng chung cho mọi mã)
-   1. Bộ điều khiển thời gian toàn cục: chu kỳ (tháng/quý/năm) + khung (1N/3N/5N/10N)
+   1. Bộ điều khiển thời gian — CỦA TỪNG CHART: xem theo Quý hoặc Năm + dropdown
+      chọn số kỳ gần nhất (vd Quý + 10 → 10 quý gần nhất; Năm + 10 → 10 năm gần nhất)
    2. Gộp "Mảng kinh doanh" + "Cửa hàng & Mạng lưới"; dải flow DT → cửa hàng → DT/CH → biên
    3. Tab "Tài chính": bảng tóm tắt chuẩn ngành (chụp gửi KH) · waterfall/sankey KQKD ·
       P/E · P/B · EV/EBITDA kèm trung vị và ±1σ/±2σ
@@ -1474,58 +1482,74 @@ document.addEventListener('DOMContentLoaded',()=>{
    ========================================================================== */
 
 /* ---------- 1. Bộ điều khiển thời gian — RIÊNG CHO TỪNG CHART ---------- */
+// Chỉ áp dụng cho chart nào bản chất là dữ liệu theo kỳ (quý/năm) — chart nguyên bản
+// theo tháng (doanh thu tháng theo chuỗi, DT/cửa hàng/tháng) KHÔNG dùng bộ này.
 const TSKEY='ts_chart_v1';
-let TSC={};                       // { chartId: {p:'m|q|y', h:'1|3|5|10|all'} }
+let TSC={};                       // { chartId: {p:'q'|'y', n:'4'|'8'|...|'all'} }
 try{ TSC=JSON.parse(localStorage.getItem(TSKEY)||'{}'); }catch(e){}
 const TSREG={};
-const TS_PER=[['m','Tháng'],['q','Quý'],['y','Năm']];
-const TS_HOR=[['1','1N'],['3','3N'],['5','5N'],['10','10N'],['all','Tất cả']];
-const TS_PTS={m:12,q:4,y:1};
-const TS_NAME={m:'tháng',q:'quý',y:'năm'};
-// ghi đè toàn cục để test: ?per=q&hor=3
+const TS_PER=[['q','Quý'],['y','Năm']];
+const TS_NAME={q:'quý',y:'năm'};
+// ghi đè toàn cục để test: ?per=q&n=8
 let TS_FORCE={};
-try{ const u=new URLSearchParams(location.search); if(u.get('per'))TS_FORCE.p=u.get('per'); if(u.get('hor'))TS_FORCE.h=u.get('hor'); }catch(e){}
+try{ const u=new URLSearchParams(location.search); if(u.get('per'))TS_FORCE.p=u.get('per'); if(u.get('n'))TS_FORCE.n=u.get('n'); }catch(e){}
 function tsSave(){ try{ localStorage.setItem(TSKEY,JSON.stringify(TSC)); }catch(e){} }
-function tsAvail(spec){ return ['m','q','y'].filter(p=>spec[p]&&spec[p].labels&&spec[p].labels.length); }
+function tsAvail(spec){ return ['q','y'].filter(p=>spec[p]&&spec[p].labels&&spec[p].labels.length); }
+// Số kỳ cho dropdown: đơn vị luôn khớp với chu kỳ đang chọn (quý → đếm quý; năm → đếm năm)
+function tsCountOpts(total,p){
+  const base=p==='q'?[4,8,12,20,40]:[3,5,10,20];
+  return base.filter(x=>x<total);
+}
 function tsState(id,spec){
   const av=tsAvail(spec); if(!av.length)return null;
   const saved=TSC[id]||{};
-  let p=TS_FORCE.p||saved.p||spec.def;
-  if(!av.includes(p))p=av[0];                      // mặc định = chu kỳ chi tiết nhất mà khối có
-  const h=TS_FORCE.h||saved.h||'all';
-  return {p,h,av};
+  let p=TS_FORCE.p||saved.p||av[0];                 // mặc định = Quý nếu chart có cả hai
+  if(!av.includes(p))p=av[0];
+  const total=spec[p].labels.length;
+  let n=TS_FORCE.n||saved.n||'all';
+  if(n!=='all'&&(isNaN(+n)||+n>=total))n='all';
+  return {p,n,av,total};
 }
-function tsCut(labels,datasets,period,h){
-  if(h==='all')return {labels,datasets};
-  const n=Math.max(2,parseInt(h,10)*TS_PTS[period]);
-  if(labels.length<=n)return {labels,datasets};
-  const c=labels.length-n;
+function tsCut(labels,datasets,n){
+  if(n==='all')return {labels,datasets};
+  const k=Math.max(2,+n);
+  if(labels.length<=k)return {labels,datasets};
+  const c=labels.length-k;
   return {labels:labels.slice(c),datasets:datasets.map(d=>Object.assign({},d,{data:d.data.slice(c)}))};
 }
-// spec = {m:{labels,datasets}, q:{...}, y:{...}, def:'m|q|y', cfg:(labels,datasets,period)=>chartConfig}
+// spec = {q:{labels,datasets}, y:{labels,datasets}, cfg:(labels,datasets,period)=>chartConfig}
 function mkTS(id,spec){
   if(!$(id))return; TSREG[id]=spec;
   const st=tsState(id,spec); if(!st)return;
-  const cut=tsCut(spec[st.p].labels,deep(spec[st.p].datasets),st.p,st.h);
+  const cut=tsCut(spec[st.p].labels,deep(spec[st.p].datasets),st.n);
   mk(id,spec.cfg(cut.labels,cut.datasets,st.p));
-  tsControls(id,spec,st,spec[st.p].labels.length);
+  tsControls(id,spec,st);
 }
-function tsControls(id,spec,st,npts){
+function tsControls(id,spec,st){
   const box=$(id).closest('.chart'); if(!box)return;
-  const showP=st.av.length>1, showH=npts>4;
+  const showP=st.av.length>1, showN=st.total>4;
   let bar=box.previousElementSibling;
   if(!bar||!bar.classList||!bar.classList.contains('tsctl')){
-    if(!showP&&!showH)return;
+    if(!showP&&!showN)return;
     bar=document.createElement('div'); bar.className='tsctl'; box.parentNode.insertBefore(bar,box);
   }
-  if(!showP&&!showH){ bar.remove(); return; }
-  bar.innerHTML=(showP?'<span class="lb">Chu kỳ</span>'+TS_PER.filter(x=>st.av.includes(x[0]))
+  if(!showP&&!showN){ bar.remove(); return; }
+  const opts=tsCountOpts(st.total,st.p);
+  const sel='<select class="tsn" aria-label="Số kỳ hiển thị">'
+    +opts.map(o=>`<option value="${o}" ${String(o)===String(st.n)?'selected':''}>${o} ${TS_NAME[st.p]} gần nhất</option>`).join('')
+    +`<option value="all" ${st.n==='all'?'selected':''}>Tất cả (${st.total} ${TS_NAME[st.p]})</option></select>`;
+  bar.innerHTML=(showP?'<span class="lb">Xem theo</span>'+TS_PER.filter(x=>st.av.includes(x[0]))
       .map(([k,l])=>`<button data-p="${k}" class="${k===st.p?'on':''}">${l}</button>`).join(''):'')
-    +(showP&&showH?'<span class="sep"></span>':'')
-    +(showH?'<span class="lb">Xem</span>'+TS_HOR.map(([k,l])=>`<button data-h="${k}" class="${k===st.h?'on':''}">${l}</button>`).join(''):'');
+    +(showP&&showN?'<span class="sep"></span>':'')
+    +(showN?'<span class="lb">Số kỳ</span>'+sel:'');
   bar.onclick=e=>{
-    const b=e.target.closest('button[data-p],button[data-h]'); if(!b)return;
-    TSC[id]=Object.assign({},TSC[id],b.dataset.p?{p:b.dataset.p}:{h:b.dataset.h});
+    const b=e.target.closest('button[data-p]'); if(!b)return;
+    TSC[id]=Object.assign({},TSC[id],{p:b.dataset.p,n:'all'});
+    TS_FORCE={}; tsSave(); mkTS(id,TSREG[id]); applyChartTips();
+  };
+  const selEl=bar.querySelector('select.tsn');
+  if(selEl)selEl.onchange=()=>{
+    TSC[id]=Object.assign({},TSC[id],{n:selEl.value});
     TS_FORCE={}; tsSave(); mkTS(id,TSREG[id]); applyChartTips();
   };
 }
@@ -1541,12 +1565,6 @@ function statOf(arr){
   const sd=Math.sqrt(a.reduce((x,y)=>x+(y-mean)*(y-mean),0)/(a.length-1));
   return {med,mean,sd,min:s[0],max:s[s.length-1],n:a.length,last:[...arr].reverse().find(v=>v!=null)};
 }
-
-// gộp 11 kỳ tháng (T1+T2 gộp) -> 4 quý
-const M2Q=[[0,1],[2,3,4],[5,6,7],[8,9,10]];
-const sumOrNull=a=>a.some(v=>v==null)?null:a.reduce((x,y)=>x+y,0);
-const monthsToQ=v=>M2Q.map(ix=>sumOrNull(ix.map(i=>v[i])));
-const monthsToY=v=>sumOrNull(v);
 
 /* ---------- 2. Gộp tab Mảng kinh doanh + Cửa hàng & Mạng lưới ---------- */
 function mergeSegTab(){
@@ -1961,7 +1979,11 @@ function renderValZone(){
       <div class="grid g2" style="margin-top:10px">${body}</div></div>`:'';
 }
 
-/* ---------- 6. Gắn bộ điều khiển thời gian vào các chart sẵn có ---------- */
+/* ---------- 6. Gắn bộ điều khiển thời gian vào các chart sẵn có ----------
+   Chỉ chart nào có dữ liệu ở CẢ hai mức quý/năm (hoặc ít nhất một mức, với
+   chuỗi đủ dài) mới được bọc qua mkTS(). Chart doanh thu tháng theo chuỗi và
+   DT/cửa hàng/tháng giữ nguyên bản gốc của template (renderSeg/renderStores)
+   vì bản chất là chuỗi THEO THÁNG, không đổi được sang quý/năm. */
 function tsWire(){
   // 6.1 KQKD theo quý (tab Tổng quan) — thêm chuỗi năm nếu data.js có quarterly.annual
   const q=D.quarterly, qa=q&&q.annual;
@@ -1976,37 +1998,12 @@ function tsWire(){
       y:qa?{labels:qa.labels,datasets:npSets(qa.npat,qa.npatCore||qa.npat)}:null,
       cfg:(labels,datasets)=>({type:'bar',data:{labels,datasets},options:baseOpts()})});
   }
-  // 6.2 Doanh thu tháng theo chuỗi (bán lẻ): tháng → quý → năm
-  const mo=D.segments&&D.segments.monthly;
-  if(mo){
-    mo.chains.forEach((c,i)=>{
-      const years=Object.keys(c.data);
-      const ds=(getter,lbls)=>years.map((y,k)=>({label:y,data:getter(c.data[y]),borderColor:CAT[k%CAT.length],backgroundColor:CAT[k%CAT.length],borderWidth:k===years.length-1?3:2,pointRadius:3,tension:.25,spanGaps:false}));
-      // kỳ 'Năm': cộng các tháng đã công bố, nhãn ghi rõ năm chưa đủ 12 tháng
-      const yLab=years.map(y=>{ const n=c.data[y].filter(v=>v!=null).length; const mo2=n?n+1:0; return mo2>=12?y:y+' ('+mo2+'T)'; });
-      const yVal=years.map(y=>{ const a=c.data[y].filter(v=>v!=null); return a.length?a.reduce((x,z)=>x+z,0):null; });
-      const h3=$('segM'+i)&&$('segM'+i).closest('.card').querySelector('h3.sub');
-      if(h3)h3.childNodes[0].nodeValue=esc(c.name)+' — doanh thu (tỷ VND)';
-      mkTS('segM'+i,{
-        m:{labels:mo.months,datasets:ds(v=>v)},
-        q:{labels:['Q1','Q2','Q3','Q4'],datasets:ds(monthsToQ)},
-        y:{labels:yLab,datasets:[{label:'Doanh thu',data:yVal,backgroundColor:BLUE,borderRadius:4,maxBarThickness:60}]},
-        cfg:(labels,datasets,p)=>{
-          if(p==='y')return {type:'bar',data:{labels,datasets},
-            options:baseOpts({plugins:{legend:{display:false},tooltip:{callbacks:{label:x=>x.parsed.y==null?'chưa có số':money(x.parsed.y)+' tỷ'}}}})};
-          return {type:'line',data:{labels,datasets},options:{responsive:true,maintainAspectRatio:false,
-            plugins:{legend:{position:'bottom',labels:{boxWidth:12,usePointStyle:true}},tooltip:{mode:'index',intersect:false,callbacks:{label:x=>x.dataset.label+': '+money(x.parsed.y)+' tỷ'}}},
-            interaction:{mode:'index',intersect:false},
-            scales:{x:{grid:{display:false}},y:{beginAtZero:true,grid:{color:'#EEF0F6'},ticks:{callback:v=>vnd(v)}}}}};
-        }});
-    });
-  }
-  // 6.3 Tiền mặt ròng & chuỗi tài chính (năm + quý nếu có)
+  // 6.2 Tiền mặt ròng & chuỗi tài chính (chỉ có theo năm hiện nay — vẫn cho chọn số kỳ)
   const b=D.balance||{}, colMap={blue:BLUE,green:GREEN,neg:NEG,grey:GREY,purple:PURPLE,gold:GOLD,navy:NAVY};
   const ncDs=s=>[...s.stacks.map(x=>({label:x.label,data:x.values,backgroundColor:colMap[x.color]||BLUE,stack:'s',maxBarThickness:48})),
                  {type:'line',label:s.net.label||'Tiền mặt ròng',data:s.net.values,borderColor:GREEN,backgroundColor:GREEN,borderWidth:3,pointRadius:4,tension:.2}];
   if(b.netCashSeries){
-    mkTS('netCashChart',{def:'y',y:{labels:b.netCashSeries.labels,datasets:ncDs(b.netCashSeries)},
+    mkTS('netCashChart',{y:{labels:b.netCashSeries.labels,datasets:ncDs(b.netCashSeries)},
       q:b.netCashSeriesQ?{labels:b.netCashSeriesQ.labels,datasets:ncDs(b.netCashSeriesQ)}:null,
       cfg:(labels,datasets)=>({type:'bar',data:{labels,datasets},options:baseOpts({scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,grid:{color:'#EEF0F6'},ticks:{callback:v=>vnd(v)}}}})})});
   }
@@ -2019,23 +2016,15 @@ function tsWire(){
     mkTS('finRatioChart',{y:{labels:fs.labels,datasets:[{label:fs.ratio.label,data:fs.ratio.values,borderColor:PURPLE,backgroundColor:PURPLE,borderWidth:2.5,pointRadius:4,tension:.2}]},
       cfg:(labels,datasets)=>({type:'line',data:{labels,datasets},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.parsed.y+'%'}}},scales:{x:{grid:{display:false}},y:{beginAtZero:true,grid:{color:'#EEF0F6'},ticks:{callback:v=>v+'%'}}}}})});
   }
-  // 6.4 Cửa hàng theo chuỗi & doanh thu/cửa hàng
+  // 6.3 Số cửa hàng theo chuỗi (đã là snapshot theo năm) — thêm dropdown chọn số kỳ
   const st=D.stores;
   if(st&&st.network){
     const nw=st.network;
     mkTS('stChain',{y:{labels:nw.periods,datasets:nw.chains.map((c,k)=>({label:c.name,data:c.counts,backgroundColor:CAT[k%CAT.length],borderRadius:3,maxBarThickness:40}))},
       cfg:(labels,datasets)=>({type:'bar',data:{labels,datasets},options:baseOpts({plugins:{legend:{position:'bottom',labels:{boxWidth:12,usePointStyle:true}},tooltip:{callbacks:{label:c=>c.dataset.label+': '+vnd(c.parsed.y)+' cửa hàng'}}}})})});
   }
-  if(st&&st.perStore){
-    const ps=st.perStore;
-    const ds=ps.series.map((x,k)=>({label:x.name,data:x.values,borderColor:CAT[k],backgroundColor:CAT[k],borderWidth:2,pointRadius:3,tension:.25}));
-    if(ps.threshold)ds.push({label:ps.threshold.label,data:ps.labels.map(()=>ps.threshold.value),borderColor:NEG,borderDash:[6,4],pointRadius:0,borderWidth:2});
-    mkTS('stPerStore',{m:{labels:ps.labels,datasets:ds},
-      y:ps.annual?{labels:ps.annual.labels,datasets:ps.annual.series.map((x,k)=>({label:x.name,data:x.values,borderColor:CAT[k],backgroundColor:CAT[k],borderWidth:2,pointRadius:4,tension:.25}))}:null,
-      cfg:(labels,datasets)=>({type:'line',data:{labels,datasets},options:{responsive:true,maintainAspectRatio:false,
-        plugins:{legend:{position:'bottom',labels:{boxWidth:12,usePointStyle:true}},tooltip:{callbacks:{label:c=>c.dataset.label+': '+Number(c.parsed.y).toFixed(2)+' tỷ'}}},
-        scales:{x:{grid:{display:false},ticks:{maxTicksLimit:14,font:{size:10}}},y:{beginAtZero:true,grid:{color:'#EEF0F6'}}}}})});
-  }
+  // Doanh thu tháng theo chuỗi (segM…) và DT/cửa hàng/tháng (stPerStore) KHÔNG bọc qua
+  // mkTS — giữ nguyên chart theo tháng do renderSeg()/renderStores() của template vẽ.
 }
 
 /* ---------- 7. Dựng khung HTML mới & khởi động ---------- */
