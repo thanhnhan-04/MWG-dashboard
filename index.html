@@ -585,6 +585,7 @@ window.PVS_DATA = {
 
 
 
+
 <style>/*V2CSS-BEGIN*/
 /* ===== v2: bộ điều khiển thời gian, flow mảng, bảng tài chính chuẩn, sankey, band định giá ===== */
 /* --- bộ chọn chu kỳ & khung thời gian, RIÊNG mỗi chart --- */
@@ -1472,6 +1473,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 
 
 
+
 <script>//V2JS-BEGIN
 /* ============================================================================
    FINSUCCESS DASHBOARD — LỚP v2 (dùng chung cho mọi mã)
@@ -1872,12 +1874,16 @@ function renderConsFcst(){
   if(!lat.length){ box.style.display='none'; return; }
   const L=(D.consensusFY||['2026F','2027F']);
   const names=lat.map(c=>c.broker);
+  const mfmt=d=>{ if(!d)return ''; const m=/^(\d{4})-(\d{2})/.exec(d); return m?m[2]+'/'+m[1]:d; };
+  const dates=lat.map(c=>c.date);
   const mkChart=(id,get,get1,unitLbl)=>({
     y:{labels:names,datasets:[
       {label:L[0],data:lat.map(get),backgroundColor:BLUE,borderRadius:3,maxBarThickness:26},
       {label:L[1],data:lat.map(get1),backgroundColor:GREEN,borderRadius:3,maxBarThickness:26}]},
     cfg:(labels,datasets)=>({type:'bar',data:{labels,datasets},options:baseOpts({plugins:{legend:{position:'bottom',labels:{boxWidth:12,usePointStyle:true}},
-      tooltip:{callbacks:{label:x=>x.dataset.label+': '+(x.parsed.y==null?'—':money(x.parsed.y)+' tỷ')}}},
+      tooltip:{callbacks:{
+        title:items=>{ const i=items[0].dataIndex; const d=mfmt(dates[i]); return names[i]+(d?' · báo cáo '+d:''); },
+        label:x=>x.dataset.label+': '+(x.parsed.y==null?'—':money(x.parsed.y)+' tỷ')}}},
       scales:{x:{grid:{display:false},ticks:{font:{size:10.5}}},y:{beginAtZero:true,grid:{color:'#EEF0F6'},ticks:{callback:v=>vnd(v)}}}})})
   });
   const med=a=>{ const s=a.filter(v=>v!=null).sort((x,y)=>x-y); return s.length?(s.length%2?s[(s.length-1)/2]:(s[s.length/2-1]+s[s.length/2])/2):null; };
