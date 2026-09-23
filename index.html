@@ -627,13 +627,13 @@ window.PVS_DATA = {
   <div class="callout" id="valNote"></div>
   <div id="modelBlock" hidden>
     <div class="card">
-      <div class="row" style="justify-content:space-between"><h3 class="sub" style="margin:0">Dự phóng — biến đầu vào</h3><div class="row"><span class="saved" id="modelSaved"></span><button class="btn ghost sm" onclick="setModelDefault()">Set làm mặc định</button></div></div>
+      <div class="row" style="justify-content:space-between"><h3 class="sub" style="margin:0">Dự phóng — biến đầu vào</h3><div class="row"><span class="saved" id="modelSaved"></span><button class="btn ghost sm" onclick="setModelDefault('inputs','modelSaved')">Set làm mặc định</button></div></div>
       <div class="tbl-wrap" style="margin-top:10px"><table id="modelInputs"></table></div>
       <div class="note" id="modelNote"></div>
     </div>
     <div class="card" style="margin-top:16px"><h3 class="sub">Kết quả dự phóng (tỷ VND)</h3><div class="tbl-wrap"><table id="modelIS"></table></div></div>
     <div class="card" style="margin-top:16px">
-      <h3 class="sub">SOTP</h3>
+      <div class="row" style="justify-content:space-between"><h3 class="sub" style="margin:0">SOTP</h3><div class="row"><span class="saved" id="sotpSaved"></span><button class="btn ghost sm" onclick="setModelDefault('sotp','sotpSaved')">Set làm mặc định</button></div></div>
       <div class="tbl-wrap"><table id="sotpInputs"></table></div>
       <div class="tbl-wrap" style="margin-top:12px"><table id="sotpOut"></table></div>
     </div>
@@ -1085,7 +1085,21 @@ function renderCons(){
 let M=null;
 function loadModel(){ try{ const raw=localStorage.getItem(KEY+'_model'); if(raw)return JSON.parse(raw); }catch(e){} return null; }
 function previewModel(){ renderModel(); setTimeout(()=>{renderSignal();renderCons();},0); }
-function setModelDefault(){ try{ localStorage.setItem(KEY+'_model',JSON.stringify(M)); $('modelSaved').textContent='✓ Đã set mặc định '+new Date().toLocaleTimeString('vi-VN'); }catch(e){ $('modelSaved').textContent='Không thể lưu mặc định'; } }
+function freshModelDefaults(){ const x={inputs:D.model.inputs,sotp:D.model.sotp}; if(D.model.version!=null)x.version=D.model.version; if(D.model.isAssumptions)x.isAssumptions=D.model.isAssumptions; return deep(x); }
+function setModelDefault(scope='all',statusId='modelSaved'){
+ try{
+  let saved=loadModel(); if(!saved||(D.model.version!=null&&saved.version!==D.model.version))saved=freshModelDefaults();
+  if(scope==='all')saved=deep(M);
+  else if(scope==='inputs')saved.inputs=deep(M.inputs);
+  else if(scope==='drivers')Object.keys(M.inputs).forEach(c=>{Object.keys(M.inputs[c]).filter(k=>k!=='gm_mc').forEach(k=>saved.inputs[c][k]=M.inputs[c][k]);});
+  else if(scope==='mc')Object.keys(M.inputs).forEach(c=>saved.inputs[c].gm_mc=M.inputs[c].gm_mc);
+  else if(scope==='isAssumptions')saved.isAssumptions=deep(M.isAssumptions);
+  else if(scope==='sotp')saved.sotp=deep(M.sotp);
+  else if(scope==='netCash')['parentCash','parentDebt','ownershipProxy'].forEach(k=>saved.sotp[k]=M.sotp[k]);
+  else if(scope==='valuation')['peCore','jvNpat','peJv'].forEach(k=>saved.sotp[k]=M.sotp[k]);
+  localStorage.setItem(KEY+'_model',JSON.stringify(saved)); const e=$(statusId); if(e)e.textContent='✓ Đã set mặc định '+new Date().toLocaleTimeString('vi-VN');
+ }catch(e){ const out=$(statusId); if(out)out.textContent='Không thể lưu mặc định'; }
+}
 function calcModel(){
   const md=D.model, h=md.hist, m=D.meta; const cases=['2026F','Worst','Best','Base']; // compute base year first
   const out={}; const baseIct=h.rev_ict[h.rev_ict.length-1];
