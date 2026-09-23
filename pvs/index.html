@@ -13,7 +13,7 @@
 // ============================================================
 window.PVS_DATA = {
 
-  config: { usdVnd: 25500 },
+  config: { usdVnd: 26000 },
 
   meta: {
     ticker: "PVS",
@@ -942,20 +942,27 @@ window.PVS_DATA = {
     remainingConfirmedUSDbn: 2.0,
     remainingNote: "Chỉ gồm backlog đã ký/confirmed; không gồm Qatar LOA và pipeline",
     projects: [
-      { id:"lo-b-epci-1", name:"Lô B – EPCI#1", category:"LÔ B", timeline:"10/2023 – 03/2027", valueUsdM:550, valueType:"official", statusGroup:"confirmed", statusLabel:"Đang thi công", recognition:{2025:.32,2026:.60,2027:1}, updateNote:"Hạ thủy chân đế giàn nhà ở trong 2026." },
-      { id:"lo-b-epci-2", name:"Lô B – EPCI#2", category:"LÔ B", timeline:"11/2023 – 04/2027", valueUsdM:400, valueType:"official", statusGroup:"confirmed", statusLabel:"Đang thi công", recognition:{2025:.70,2026:.90,2027:1} },
-      { id:"lo-b-epci-3", name:"Lô B – EPCI#3", category:"LÔ B", timeline:"Cuối 2024 – 2027", valueUsdM:257, valueType:"official", statusGroup:"confirmed", statusLabel:"Đang thi công", recognition:{2025:.30,2026:.80,2027:1} },
-      { id:"lac-da-vang-1", name:"Lạc Đà Vàng GĐ1 (CPP)", category:"DỰ ÁN DẦU KHÍ NGOÀI KHƠI", timeline:"05/2024 – 09/2026", valueUsdM:245, valueType:"official", statusGroup:"confirmed", statusLabel:"Hạ thủy T7/2026", recognition:{2025:.85,2026:1}, updateNote:"Giàn xử lý trung tâm hạ thủy tháng 7/2026; first oil dự kiến Q4/2026." },
-      { id:"lac-da-vang-2", name:"Lạc Đà Vàng GĐ2", category:"DỰ ÁN DẦU KHÍ NGOÀI KHƠI", timeline:"2026 – 2029E", valueUsdM:88, valueType:"official", statusGroup:"confirmed", statusLabel:"Bắt đầu", recognition:{2026:.20,2027:.30,2028:.65,2029:1}, updateNote:"Đã bắt đầu triển khai theo dữ liệu hiện có." },
-      { id:"su-tu-trang-2b", name:"Sư Tử Trắng GĐ2B", category:"DỰ ÁN DẦU KHÍ NGOÀI KHƠI", timeline:"04/2026 – 2028E", valueUsdM:385, valueType:"estimate", statusGroup:"confirmed", statusLabel:"Đã ký", recognition:{2026:.15,2027:.60}, updateNote:"Ký HĐ ngày 22/04/2026. Giá trị HĐ >10.000 tỷ VND; 385 triệu USD là quy đổi/ước tính. Lịch hiện mới phân bổ 60%, phần còn lại chưa xếp năm." },
-      { id:"nam-du-u-minh", name:"Nam Du – U Minh", category:"DỰ ÁN DẦU KHÍ NGOÀI KHƠI", timeline:"2026 – 2030E", valueUsdM:90, valueType:"estimate", statusGroup:"pipeline", statusLabel:"Kỳ vọng", recognition:{2026:.10,2027:.50}, updateNote:"Chưa có hợp đồng chính thức trong dữ liệu hiện tại; không vào tổng confirmed." },
-      { id:"qatar-epic-1", name:"Qatar – EPIC-1 Maydan Mahzam", category:"DỰ ÁN DẦU KHÍ NGOÀI KHƠI", timeline:"2027 – 2030E", valueUsdM:3000, valueType:"estimate", statusGroup:"loa", statusLabel:"LOA 13/09/2026", recognition:{2026:0,2027:.10,2028:.40,2029:.75,2030:1}, updateNote:"Đã nhận LOA ngày 13/09/2026. Giá trị 3 tỷ USD là analyst estimate; hợp đồng chính thức và giá trị cuối cùng chưa được công bố." },
-      { id:"crpo-saudi", name:"CRPO 125/126/135 – Saudi", category:"DỰ ÁN DẦU KHÍ NGOÀI KHƠI", timeline:"2025 – 2027E", valueUsdM:79, valueType:"official", statusGroup:"confirmed", statusLabel:"Đang thi công", recognition:{2026:.60,2027:.90}, updateNote:"Lịch hiện mới phân bổ 90%, phần còn lại chưa xếp năm." },
-      { id:"baltica-2", name:"Baltica 2 – 4 OSS", category:"ĐIỆN GIÓ NGOÀI KHƠI", timeline:"06/2023 – 09/2026", valueUsdM:180, valueType:"official", statusGroup:"confirmed", statusLabel:"Đã giao", recognition:{2025:.10,2026:.95,2027:1}, updateNote:"Bốn OSS đã được giao/xuất khẩu trong tháng 9/2026; tiến độ giao hàng không đồng nghĩa tiến độ ghi nhận kế toán." },
-      { id:"fengmiao-1", name:"Fengmiao 1 – OSS", category:"ĐIỆN GIÓ NGOÀI KHƠI", timeline:"10/2023 – 2026E", valueUsdM:100, valueType:"official", statusGroup:"confirmed", statusLabel:"Gần hoàn thành", recognition:{2025:.25,2026:.98,2027:1}, updateNote:"Dự án ở giai đoạn gần hoàn thành trong 2026." },
-      { id:"formosa-4", name:"Formosa 4 – OSS", category:"ĐIỆN GIÓ NGOÀI KHƠI", timeline:"2026 – 2027E", valueUsdM:100, valueType:"estimate", statusGroup:"confirmed", statusLabel:"Đang thi công", recognition:{2026:.50,2027:1}, updateNote:"Khoảng 100 triệu USD attributable to PVS là base-case estimate." },
-      { id:"formosa-35", name:"Formosa – 35 chân đế", category:"ĐIỆN GIÓ NGOÀI KHƠI", timeline:"Đã hủy", valueUsdM:160, valueType:"official", statusGroup:"cancelled", statusLabel:"Đã hủy", recognition:{}, updateNote:"Bồi thường khoảng 459 tỷ VND ghi nhận trong 6T/2026 là one-off, không phải backlog revenue." },
-      { id:"korea-offshore-wind", name:"Điện gió khách hàng Hàn Quốc", category:"ĐIỆN GIÓ NGOÀI KHƠI", timeline:"2026 – 2029E", valueUsdM:80, valueType:"estimate", statusGroup:"pipeline", statusLabel:"Kỳ vọng", recognition:{2026:.20,2027:.70}, updateNote:"Chưa ký chính thức; không vào tổng confirmed." }
+      { id:"lo-b-epci-1", name:"Lô B – EPCI#1", category:"LÔ B", timeline:"10/2023 – 03/2027", valueUsdM:550, valueType:"official", statusGroup:"confirmed", statusLabel:"Đang thi công", annualPlanUsd:{2025:123.25,2026:173,2027:134}, updateNote:"Hạ thủy chân đế giàn nhà ở trong 2026. Lịch ghi nhận giữ theo bảng backlog nguồn." },
+      { id:"lo-b-epci-2", name:"Lô B – EPCI#2", category:"LÔ B", timeline:"11/2023 – 04/2027", valueUsdM:400, valueType:"official", statusGroup:"confirmed", statusLabel:"Đang thi công", annualPlanUsd:{2025:140,2026:140,2027:24} },
+      { id:"lo-b-epci-3", name:"Lô B – EPCI#3", category:"LÔ B", timeline:"Cuối 2024 – 2027", valueUsdM:257, valueType:"official", statusGroup:"confirmed", statusLabel:"Đang thi công", annualPlanUsd:{2025:51,2026:103,2027:154} },
+      { id:"lo-b-epci-4", name:"Lô B – EPCI#4", category:"LÔ B", timeline:"2026 – 2027E", valueUsdM:310, valueType:"official", statusGroup:"confirmed", statusLabel:"Triển khai", annualPlanUsd:{2026:93,2027:217}, updateNote:"Bổ sung lại theo bảng backlog nguồn; điểm rơi chính 2026–2027." },
+      { id:"fso-lo-b", name:"FSO Lô B", category:"LÔ B", timeline:"08/2027 – 2041+", valueUsdM:600, valueType:"official", statusGroup:"confirmed", statusLabel:"LDLK/FSO", includeInProjectPlan:false, annualPlanUsd:{2027:9,2028:34,2029:34,2030:34}, updateNote:"Trình bày để theo dõi nhưng không cộng vào doanh thu M&C; lợi nhuận được xử lý tại mô hình FSO/LDLK." },
+      { id:"lac-da-vang-cpp", name:"Lạc Đà Vàng – Giàn xử lý trung tâm", category:"DỰ ÁN DẦU KHÍ NGOÀI KHƠI", timeline:"05/2024 – 09/2026", valueUsdM:245, valueType:"official", statusGroup:"confirmed", statusLabel:"Hạ thủy T7/2026", annualPlanUsd:{2025:60,2026:91}, updateNote:"Giàn xử lý trung tâm hạ thủy tháng 7/2026; first oil dự kiến Q4/2026." },
+      { id:"fso-lac-da-vang", name:"Lạc Đà Vàng – FSO", category:"DỰ ÁN DẦU KHÍ NGOÀI KHƠI", timeline:"Q4/2026 – Q4/2040", valueUsdM:416, valueType:"official", statusGroup:"confirmed", statusLabel:"Vận hành từ Q4/2026", annualPlanUsd:{2026:7,2027:28,2028:28,2029:28,2030:28}, updateNote:"Giá trị tối đa 416 triệu USD, gồm thời hạn chắc chắn và quyền gia hạn; dòng doanh thu là lịch model nguồn." },
+      { id:"gallaf-3", name:"Gallaf 3", category:"DỰ ÁN DẦU KHÍ NGOÀI KHƠI", timeline:"2024 – 2025", valueUsdM:380, valueType:"official", statusGroup:"confirmed", statusLabel:"Hoàn thành", annualPlanUsd:{2025:190} },
+      { id:"su-tu-trang-2b", name:"Sư Tử Trắng – Giai đoạn 2B", category:"DỰ ÁN DẦU KHÍ NGOÀI KHƠI", timeline:"04/2026 – 2028E", valueUsdM:385, valueType:"estimate", statusGroup:"confirmed", statusLabel:"Đã ký", annualPlanUsd:{2025:20,2026:140,2027:200,2028:40}, updateNote:"Ký HĐ ngày 22/04/2026. Giá trị HĐ >10.000 tỷ VND; 385 triệu USD là quy đổi/ước tính." },
+      { id:"nam-du-u-minh", name:"Nam Du – U Minh", category:"DỰ ÁN DẦU KHÍ NGOÀI KHƠI", timeline:"2026 – 2030E", valueUsdM:225, valueType:"estimate", statusGroup:"pipeline", statusLabel:"Kế hoạch model", annualPlanUsd:{2025:11,2026:90,2027:113,2028:11}, updateNote:"Chưa có hợp đồng chính thức trong dữ liệu hiện tại; nằm trong tổng kế hoạch nhưng tách khỏi subtotal confirmed." },
+      { id:"ca-voi-xanh", name:"Cá Voi Xanh / Khánh Mỹ – Đầm Dơi / Thiên Nga – Hải Âu", category:"DỰ ÁN DẦU KHÍ NGOÀI KHƠI", timeline:"2028E+", valueUsdM:600, valueType:"estimate", statusGroup:"pipeline", statusLabel:"Theo tiến độ FID", annualPlanUsd:{2028:120,2029:120}, updateNote:"Cơ hội tiềm năng; chưa phải signed backlog." },
+      { id:"qatar-epic-1", name:"Qatar – EPIC-1 Maydan Mahzam", category:"DỰ ÁN DẦU KHÍ NGOÀI KHƠI", timeline:"2027 – 2030E", valueUsdM:3000, valueType:"estimate", statusGroup:"loa", statusLabel:"LOA 13/09/2026", annualPlanUsd:{2027:300,2028:900,2029:1050,2030:750}, updateNote:"Đã nhận LOA ngày 13/09/2026. Giá trị 3 tỷ USD là analyst estimate; LOA tách khỏi kế hoạch cơ sở và hiển thị riêng." },
+      { id:"long-thanh", name:"Long Thành", category:"DỰ ÁN CÔNG NGHIỆP", timeline:"2024 – 2026E", valueUsdM:60, valueType:"official", statusGroup:"confirmed", statusLabel:"Thi công", annualPlanUsd:{2025:18,2026:33} },
+      { id:"greater-changhua", name:"Greater Changhua 2b & 4", category:"ĐIỆN GIÓ NGOÀI KHƠI", timeline:"2023 – 2025", valueUsdM:320, valueType:"official", statusGroup:"confirmed", statusLabel:"Hoàn thành", annualPlanUsd:{2025:100} },
+      { id:"baltica-2", name:"Baltica 2 – 4 OSS", category:"ĐIỆN GIÓ NGOÀI KHƠI", timeline:"06/2023 – 09/2026", valueUsdM:180, valueType:"official", statusGroup:"confirmed", statusLabel:"Đã giao", annualPlanUsd:{2025:40,2026:80}, updateNote:"Bốn OSS đã được giao/xuất khẩu trong tháng 9/2026." },
+      { id:"fengmiao-1", name:"Fengmiao 1 – OSS", category:"ĐIỆN GIÓ NGOÀI KHƠI", timeline:"10/2023 – 2026E", valueUsdM:200, valueType:"estimate", statusGroup:"confirmed", statusLabel:"Gần hoàn thành", annualPlanUsd:{2025:50,2026:84}, updateNote:"Giá trị và lịch ghi nhận theo bảng backlog nguồn; dự án gần hoàn thành trong 2026." },
+      { id:"hai-long-2-3", name:"Hai Long 2 & 3", category:"ĐIỆN GIÓ NGOÀI KHƠI", timeline:"07/2023 – 03/2025", valueUsdM:90, valueType:"official", statusGroup:"confirmed", statusLabel:"Hoàn thành", annualPlanUsd:{2025:40} },
+      { id:"formosa-4", name:"Formosa 4 – OSS", category:"ĐIỆN GIÓ NGOÀI KHƠI", timeline:"2026 – 2029E", valueUsdM:100, valueType:"estimate", statusGroup:"confirmed", statusLabel:"Đang thi công", annualPlanUsd:{2026:20,2027:30,2028:30,2029:20}, updateNote:"Khoảng 100 triệu USD attributable to PVS là base-case estimate." },
+      { id:"korea-offshore-wind", name:"Điện gió khách hàng Hàn Quốc", category:"ĐIỆN GIÓ NGOÀI KHƠI", timeline:"2026 – 2029E", valueUsdM:400, valueType:"estimate", statusGroup:"pipeline", statusLabel:"Kế hoạch model", annualPlanUsd:{2026:80,2027:30,2028:30,2029:260}, updateNote:"Chưa ký chính thức; nằm trong tổng kế hoạch nhưng tách khỏi subtotal confirmed." },
+      { id:"other-projects", name:"Các dự án khác", category:"ĐIỆN GIÓ NGOÀI KHƠI", timeline:"2026 – 2030E", valueUsdM:1200, valueType:"estimate", statusGroup:"pipeline", statusLabel:"Kế hoạch model", annualPlanUsd:{2026:239,2027:30,2028:30,2029:900}, updateNote:"Khoản gộp theo bảng backlog nguồn, bao gồm các gói nhỏ/chưa tách riêng; dùng 239 triệu USD năm 2026 để tổng khớp 1.373 triệu USD." },
+      { id:"formosa-35", name:"Formosa – 35 chân đế", category:"ĐIỆN GIÓ NGOÀI KHƠI", timeline:"Đã hủy", valueUsdM:160, valueType:"official", statusGroup:"cancelled", statusLabel:"Đã hủy", annualPlanUsd:{}, updateNote:"Bồi thường khoảng 459 tỷ VND ghi nhận trong 6T/2026 là one-off, không phải backlog revenue." }
     ],
     pipeline: [
       { name:"Cá Voi Xanh (~5 tỷ USD)",        window:"FID 2027",  prob:45, type:"Dầu khí" },
@@ -3343,53 +3350,40 @@ function renderCapex(){
  };$('capexInputs').oninput=update;$('capexInputs').onchange=update;$('capexBase').oninput=update;$('capexTiming').onchange=update;$('capexSetDefault').onclick=()=>{if(!currentCapex)return;try{localStorage.setItem(KEY+'_capex_model',JSON.stringify(currentCapex));$('capexSaved').textContent='✓ Đã set mặc định '+new Date().toLocaleTimeString('vi-VN');}catch(e){$('capexSaved').textContent='Không thể lưu mặc định';}};update();applyChartTips($('capex'));
 }
 
-// Backlog has one source of truth: project value + cumulative recognition assumptions.
-function getCumulativeRecognitionPct(project,year){
- const points=Object.entries(project.recognition||{}).map(([y,p])=>[Number(y),Number(p)]).filter(([y,p])=>Number.isFinite(y)&&Number.isFinite(p)&&y<=Number(year)).sort((a,b)=>a[0]-b[0]);
- return points.length?points.at(-1)[1]:0;
-}
-function getPreviousCumulativePct(project,year){
- const points=Object.entries(project.recognition||{}).map(([y,p])=>[Number(y),Number(p)]).filter(([y,p])=>Number.isFinite(y)&&Number.isFinite(p)&&y<Number(year)).sort((a,b)=>a[0]-b[0]);
- return points.length?points.at(-1)[1]:0;
-}
-function getIncrementalRecognitionPct(project,year){
- return Math.max(0,getCumulativeRecognitionPct(project,year)-getPreviousCumulativePct(project,year));
-}
+// Backlog has one source of truth: the annual project plan in the analyst model.
 function getAnnualRecognitionUsd(project,year){
- return Number(project.valueUsdM||0)*getIncrementalRecognitionPct(project,year);
+ return Number(project.annualPlanUsd?.[year]||0);
 }
 function getAnnualRecognitionVnd(project,year){
  return getAnnualRecognitionUsd(project,year)*PVS_USD_VND/1000;
 }
 function getAnnualTotalUsd(projects,year,statusGroups){
  const groups=Array.isArray(statusGroups)?statusGroups:[statusGroups];
- return projects.filter(p=>groups.includes(p.statusGroup)).reduce((sum,p)=>sum+getAnnualRecognitionUsd(p,year),0);
+ return projects.filter(p=>p.includeInProjectPlan!==false&&groups.includes(p.statusGroup)).reduce((sum,p)=>sum+getAnnualRecognitionUsd(p,year),0);
 }
 function getAnnualTotalVnd(projects,year,statusGroups){
  const groups=Array.isArray(statusGroups)?statusGroups:[statusGroups];
- return projects.filter(p=>groups.includes(p.statusGroup)).reduce((sum,p)=>sum+getAnnualRecognitionVnd(p,year),0);
+ return projects.filter(p=>p.includeInProjectPlan!==false&&groups.includes(p.statusGroup)).reduce((sum,p)=>sum+getAnnualRecognitionVnd(p,year),0);
 }
 function validateBacklogModel(){
- const errors=[],years=D.backlog.config.years;
+ const errors=[],ids=new Set();
  D.backlog.projects.forEach(project=>{
-  const points=Object.entries(project.recognition||{}).map(([y,p])=>[Number(y),Number(p)]).sort((a,b)=>a[0]-b[0]);
-  points.forEach(([year,pct],i)=>{if(pct<0||pct>1)errors.push(`${project.id}: ${year} nằm ngoài 0–100%`);if(i&&pct<points[i-1][1])errors.push(`${project.id}: tỷ lệ lũy kế giảm tại ${year}`);});
-  if(points.length&&Math.abs(points.at(-1)[1]-1)<1e-9){
-   const annual=years.reduce((sum,year)=>sum+getAnnualRecognitionVnd(project,year),0),contract=project.valueUsdM*PVS_USD_VND/1000;
-   if(Math.abs(annual-contract)>1e-6)errors.push(`${project.id}: tổng ghi nhận không khớp giá trị hợp đồng`);
-  }
+  if(ids.has(project.id))errors.push(`${project.id}: trùng mã dự án`);ids.add(project.id);
+  Object.entries(project.annualPlanUsd||{}).forEach(([year,value])=>{if(!Number.isFinite(Number(value))||Number(value)<0)errors.push(`${project.id}: kế hoạch ${year} không hợp lệ`);});
  });
+ const plan2026=getAnnualTotalUsd(D.backlog.projects,2026,['confirmed','pipeline']);
+ if(Math.abs(plan2026-1373)>1e-9)errors.push(`Tổng kế hoạch 2026 phải là 1.373 triệu USD, hiện là ${plan2026}`);
  return errors;
 }
 const backlogYearLabel=year=>year===2025?'2025':year+'F';
 const formatBacklogVnd=value=>fmt(Math.round(value),0)+' tỷ';
 const formatBacklogUsd=value=>Math.abs(value-Math.round(value))<.05?fmt(value,0):fmt(value,1);
 const yearCellClass=year=>year===2025?' year-hist':year===2026?' year-current':'';
-const backlogStatusMini=project=>project.statusGroup==='confirmed'?'':`<span class="status-mini ${project.statusGroup}">${project.statusGroup==='loa'?'LOA · ':project.statusGroup==='pipeline'?'Pipeline · ':'Đã hủy · '}${esc(project.statusLabel||'')}</span>`;
+const backlogStatusMini=project=>project.includeInProjectPlan===false?`<span class="status-mini pipeline">LDLK · không cộng vào doanh thu M&amp;C</span>`:project.statusGroup==='confirmed'?'':`<span class="status-mini ${project.statusGroup}">${project.statusGroup==='loa'?'LOA · ':project.statusGroup==='pipeline'?'Pipeline · ':'Đã hủy · '}${esc(project.statusLabel||'')}</span>`;
 function backlogRecognitionCell(project,year){
  if(project.statusGroup==='cancelled')return `<td class="rec-year${yearCellClass(year)}"><span class="rec-cum">—</span></td>`;
- const cumulative=getCumulativeRecognitionPct(project,year),annual=getAnnualRecognitionUsd(project,year);
- return `<td class="rec-year${yearCellClass(year)}"><div class="rec-cell"><div class="rec-usd">${annual>0?(project.valueType==='estimate'?'~':'')+formatBacklogUsd(annual):'—'}</div><div class="rec-cum">Lũy kế ${Math.round(cumulative*100)}%</div></div></td>`;
+ const annual=getAnnualRecognitionUsd(project,year);
+ return `<td class="rec-year${yearCellClass(year)}"><div class="rec-cell"><div class="rec-usd">${annual>0?(project.valueType==='estimate'?'~':'')+formatBacklogUsd(annual):'—'}</div></div></td>`;
 }
 renderProjTable=function(){
  const b=D.backlog,years=b.config.years,shown=b.projects.filter(p=>projFilter==='Tất cả'||p.category===projFilter);
@@ -3400,7 +3394,7 @@ renderProjTable=function(){
  }).join('')).join('');
  const totalUsd=(cls,label,groups)=>`<tr class="${cls}"><td>${label}</td><td colspan="2">triệu USD</td>${years.map(year=>`<td class="num${yearCellClass(year)}">${getAnnualTotalUsd(b.projects,year,groups)>0?formatBacklogUsd(getAnnualTotalUsd(b.projects,year,groups)):'—'}</td>`).join('')}</tr>`;
  const totalVnd=(cls,label,groups)=>`<tr class="${cls}"><td>${label}</td><td colspan="2">tỷ VND · FX ${fmt(PVS_USD_VND,0)}</td>${years.map(year=>`<td class="num${yearCellClass(year)}">${getAnnualTotalVnd(b.projects,year,groups)>0?fmt(Math.round(getAnnualTotalVnd(b.projects,year,groups)),0):'—'}</td>`).join('')}</tr>`;
- $('projTable').innerHTML='<tr><th>Dự án</th><th>Thời gian</th><th class="num">Giá trị PVS<br>(triệu USD)</th>'+years.map(year=>`<th class="num${yearCellClass(year)}">${backlogYearLabel(year)}</th>`).join('')+'</tr>'+rows+totalUsd('total-confirmed','SUM CONFIRMED',['confirmed'])+totalVnd('total-vnd','tỷ VND',['confirmed'])+totalUsd('total-loa','+ LOA / chưa ký',['loa'])+totalVnd('total-incl','= TỔNG GỒM LOA',['confirmed','loa']);
+ $('projTable').innerHTML='<tr><th>Dự án</th><th>Thời gian</th><th class="num">Giá trị PVS<br>(triệu USD)</th>'+years.map(year=>`<th class="num${yearCellClass(year)}">${backlogYearLabel(year)}</th>`).join('')+'</tr>'+rows+totalUsd('total-confirmed','SUM KẾ HOẠCH',['confirmed','pipeline'])+totalVnd('total-vnd','tỷ VND',['confirmed','pipeline'])+totalUsd('total-confirmed','Trong đó confirmed',['confirmed'])+totalUsd('total-loa','+ LOA / chưa ký',['loa'])+totalVnd('total-incl','= TỔNG GỒM LOA',['confirmed','pipeline','loa']);
 };
 function updatePvsFx(value){
  const next=Number(value);if(!Number.isFinite(next)||next<=0)return;PVS_USD_VND=next;renderBacklog();if($('pvsFso')?.oninput)$('pvsFso').oninput();else renderFso();
@@ -3409,18 +3403,18 @@ function setPvsFxDefault(){
  try{localStorage.setItem(KEY+'_usd_vnd',String(PVS_USD_VND));$('pvsFxSaved').textContent='✓ Đã set mặc định';}catch(e){$('pvsFxSaved').textContent='Không thể lưu mặc định';}
 }
 renderBacklog=function(){
- const b=D.backlog,years=b.config.years,confirmed=years.map(y=>getAnnualTotalVnd(b.projects,y,['confirmed'])),loa=years.map(y=>getAnnualTotalVnd(b.projects,y,['loa'])),confirmedValue=b.projects.filter(p=>p.statusGroup==='confirmed').reduce((sum,p)=>sum+p.valueUsdM,0),loaValue=b.projects.filter(p=>p.statusGroup==='loa').reduce((sum,p)=>sum+p.valueUsdM,0),total2026=getAnnualTotalVnd(b.projects,2026,['confirmed']),loa2026=getAnnualTotalVnd(b.projects,2026,['loa']);
+ const b=D.backlog,years=b.config.years,confirmed=years.map(y=>getAnnualTotalVnd(b.projects,y,['confirmed'])),pipeline=years.map(y=>getAnnualTotalVnd(b.projects,y,['pipeline'])),loa=years.map(y=>getAnnualTotalVnd(b.projects,y,['loa'])),confirmed2026=getAnnualTotalVnd(b.projects,2026,['confirmed']),pipeline2026=getAnnualTotalVnd(b.projects,2026,['pipeline']),total2026=confirmed2026+pipeline2026;
  $('blKpi').innerHTML=[
-  ['Backlog confirmed thực hiện 2026F',formatBacklogVnd(total2026),loa2026?`+ ${formatBacklogVnd(loa2026)} LOA`:'Không gồm LOA, pipeline và dự án đã hủy'],
-  ['Backlog còn lại hiện hữu','~'+fmt(b.remainingConfirmedUSDbn,1)+' tỷ USD',b.remainingNote],
-  ['Qatar EPIC-1 (LOA)','~3 tỷ USD*','Analyst estimate; chưa vào confirmed backlog'],
-  ['Giá trị dự án đang theo dõi',fmt(confirmedValue,0)+' + '+fmt(loaValue,0)+' tr USD','Confirmed + LOA; pipeline tách riêng']
+  ['Kế hoạch dự án thực hiện 2026F',formatBacklogVnd(total2026),'1.373 triệu USD · dùng cho doanh thu M&C'],
+  ['Trong đó confirmed',formatBacklogVnd(confirmed2026),formatBacklogUsd(getAnnualTotalUsd(b.projects,2026,['confirmed']))+' triệu USD'],
+  ['Pipeline / giả định model',formatBacklogVnd(pipeline2026),formatBacklogUsd(getAnnualTotalUsd(b.projects,2026,['pipeline']))+' triệu USD'],
+  ['Qatar EPIC-1 (LOA)','~3 tỷ USD*','Chưa cộng vào kế hoạch cơ sở']
  ].map(k=>`<div class="card kpi tight"><div class="l">${k[0]}</div><div class="v">${k[1]}</div><div class="s">${k[2]}</div></div>`).join('');
- mk('blExec',{type:'bar',data:{labels:years.map(backlogYearLabel),datasets:[{label:'Confirmed',data:confirmed,backgroundColor:GREEN,stack:'s',borderRadius:4,maxBarThickness:70},{label:'LOA / chưa ký chính thức',data:loa,backgroundColor:GOLD,stack:'s',borderRadius:4,maxBarThickness:70}]},options:baseOpts({scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,beginAtZero:true,grid:{color:'#EEF0F6'},ticks:{callback:v=>vnd(v)}}},plugins:{tooltip:{callbacks:{label:c=>c.dataset.label+': '+formatBacklogVnd(c.parsed.y)}}}})});
- $('blExecNote').textContent='Confirmed và LOA được tính trực tiếp từ phần tăng thêm của tỷ lệ ghi nhận lũy kế từng dự án. Pipeline không được đưa vào biểu đồ.';
+ mk('blExec',{type:'bar',data:{labels:years.map(backlogYearLabel),datasets:[{label:'Confirmed',data:confirmed,backgroundColor:GREEN,stack:'s',borderRadius:4,maxBarThickness:70},{label:'Pipeline / giả định model',data:pipeline,backgroundColor:BLUE,stack:'s',borderRadius:4,maxBarThickness:70},{label:'LOA / chưa ký chính thức',data:loa,backgroundColor:GOLD,stack:'s',borderRadius:4,maxBarThickness:70}]},options:baseOpts({scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,beginAtZero:true,grid:{color:'#EEF0F6'},ticks:{callback:v=>vnd(v)}}},plugins:{tooltip:{callbacks:{label:c=>c.dataset.label+': '+formatBacklogVnd(c.parsed.y)}}}})});
+ $('blExecNote').textContent='Kế hoạch cơ sở gồm confirmed và pipeline/giả định model. LOA được tách riêng; FSO Lô B không cộng vào doanh thu M&C vì được xử lý tại mô hình FSO/LDLK.';
  $('milestones').innerHTML=(b.milestones||[]).map(m=>`<li><span class="d">${m.d}</span><span>${m.ok?'✅':'⏳'} ${esc(m.t)}</span></li>`).join('');
  const title=$('projTable').closest('.card').querySelector('h3.sub');
- title.innerHTML='Dự án — backlog & điểm rơi ghi nhận <span class="info" tabindex="0" data-tip="Số lớn là giá trị tăng thêm ước tính ghi nhận riêng trong năm, đơn vị triệu USD. Dòng nhỏ là tỷ lệ ghi nhận lũy kế đến cuối năm." aria-label="Giải thích bảng backlog">i</span>';
+ title.innerHTML='Dự án — backlog & điểm rơi ghi nhận <span class="info" tabindex="0" data-tip="Giá trị theo từng năm là kế hoạch ghi nhận của model, đơn vị triệu USD. Kế hoạch cơ sở gồm confirmed và pipeline; LOA tách riêng. FSO Lô B không cộng vào doanh thu M&C." aria-label="Giải thích bảng backlog">i</span>';
  const categories=['Tất cả',...new Set(b.projects.map(p=>p.category))];
  $('projFilters').innerHTML=categories.map(category=>`<button class="${category===projFilter?'on':''}" data-category="${esc(category)}">${esc(category)}</button>`).join('')+`<span style="flex:1"></span><label for="pvsUsdVnd" class="note">USD/VND</label><input id="pvsUsdVnd" type="number" min="1" step="100" value="${PVS_USD_VND}" onchange="updatePvsFx(this.value)" style="width:120px;padding:4px 8px"><span class="saved" id="pvsFxSaved"></span><button class="btn ghost sm" onclick="setPvsFxDefault()">Set làm mặc định</button>`;
  $('projFilters').onclick=e=>{const button=e.target.closest('button[data-category]');if(!button)return;projFilter=button.dataset.category;renderBacklog();};
@@ -3428,7 +3422,7 @@ renderBacklog=function(){
  const projectPipeline=b.projects.filter(p=>p.statusGroup==='pipeline').map(p=>({name:p.name,type:p.category,window:p.statusLabel,prob:null}));
  $('pipeTable').innerHTML='<tr><th>Dự án</th><th>Loại</th><th>Window / trạng thái</th><th>Xác suất (analyst)</th></tr>'+projectPipeline.concat(b.pipeline||[]).map(p=>`<tr><td>${esc(p.name)}</td><td><span class="pill blue">${esc(p.type)}</span></td><td>${esc(p.window)}</td><td>${p.prob==null?'<span class="pill grey">Chưa vào backlog</span>':`<div class="row"><div class="bar" style="width:120px"><i style="width:${p.prob}%"></i></div><span>${p.prob}%</span></div>`}</td></tr>`).join('');
  const errors=validateBacklogModel();
- $('blSrc').innerHTML='<b>Dùng chung USD/VND: '+fmt(PVS_USD_VND,0)+'.</b> Giá trị từng năm = giá trị dự án × phần tăng thêm của tỷ lệ ghi nhận lũy kế. Pipeline và dự án hủy không vào tổng; LOA được tách riêng. Nguồn: '+esc(b.src)+'.'+(errors.length?' <span style="color:var(--neg)">Lỗi kiểm tra: '+esc(errors.join('; '))+'</span>':'');
+ $('blSrc').innerHTML='<b>Dùng chung USD/VND: '+fmt(PVS_USD_VND,0)+'.</b> Kế hoạch 2026 = 1.373 triệu USD × '+fmt(PVS_USD_VND,0)+' = '+fmt(Math.round(total2026),0)+' tỷ VND. Chênh nhẹ với 35.695 tỷ trong bảng nguồn do làm tròn tỷ giá/số dự án. Kế hoạch cơ sở gồm confirmed và pipeline; dự án hủy không vào tổng, LOA tách riêng. Nguồn: '+esc(b.src)+'.'+(errors.length?' <span style="color:var(--neg)">Lỗi kiểm tra: '+esc(errors.join('; '))+'</span>':'');
 };
 function linkedCapexDA(year){
  const i=year-2026;if(i<0||i>4)return null;
@@ -3442,7 +3436,7 @@ function linkedJvProfit(year){
  return f.baseJv+inc;
 }
 function backlogRevenue(label){
- const year=Number.parseInt(label,10);return Number.isFinite(year)?getAnnualTotalVnd(D.backlog.projects,year,['confirmed']):0;
+ const year=Number.parseInt(label,10);return Number.isFinite(year)?getAnnualTotalVnd(D.backlog.projects,year,['confirmed','pipeline']):0;
 }
 function pvsFreshModel(){return deep({version:D.model.version,inputs:D.model.inputs,isAssumptions:D.model.isAssumptions,sotp:D.model.sotp});}
 calcModel=function(){
