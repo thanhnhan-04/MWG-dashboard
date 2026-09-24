@@ -1053,6 +1053,8 @@ const D = window.PVS_DATA;
 const NAVY='#141971',GREEN='#6BA018',PURPLE='#9E2FB0',GOLD='#C4850A',BLUE='#141971',NEG='#D1495B',GREY='#9AA0C4',BRAND_NAVY='#141971';
 const TEAL='#0F9B9B',ROSE='#B03A5B';
 const CAT=[BLUE,GREEN,PURPLE,GOLD,NAVY,TEAL,ROSE]; // 7 màu đã validate CVD (dataviz validator); GREY dành cho 'Khác'
+// Chỉ dùng cho chart đầu tiên của tab Mảng kinh doanh & Cửa hàng (BHX).
+const FIRST_SEG_CHART_COLORS=['#102332','#18276F','#3057EB','#4DA4DF','#B5E9FA','#D1D3D6'];
 Chart.defaults.font.family="Arial,system-ui,sans-serif"; Chart.defaults.font.size=12; Chart.defaults.color='#4a4a60';
 Chart.defaults.scales.linear.beginAtZero=true; // QUY TẮC: mọi trục giá trị bắt đầu từ 0
 const vnd=v=>v==null?'—':Number(v).toLocaleString('vi-VN');
@@ -1188,7 +1190,7 @@ function renderSeg(){
       +'<div class="card" style="margin-bottom:16px"><details class="dd"><summary>Bảng doanh thu tháng (tỷ VND) <span class="hint">bấm để mở/đóng</span></summary><div class="body"><div class="filters" id="segMFilters"></div><div class="tbl-wrap"><table id="segMTable"></table></div><div class="note">'+esc(m.note||'')+'</div></div></details></div>';
     m.chains.forEach((c,i)=>{
       const years=Object.keys(c.data);
-      mk('segM'+i,{type:'line',data:{labels:m.months,datasets:years.map((y,k)=>({label:y,data:c.data[y],borderColor:CAT[k%CAT.length],backgroundColor:CAT[k%CAT.length],borderWidth:k===years.length-1?3:2,pointRadius:3,tension:.25,spanGaps:false}))},
+      mk('segM'+i,{type:'line',data:{labels:m.months,datasets:years.map((y,k)=>({label:y,data:c.data[y],borderColor:i===0?FIRST_SEG_CHART_COLORS[k%FIRST_SEG_CHART_COLORS.length]:CAT[k%CAT.length],backgroundColor:i===0?FIRST_SEG_CHART_COLORS[k%FIRST_SEG_CHART_COLORS.length]:CAT[k%CAT.length],borderWidth:k===years.length-1?3:2,pointRadius:3,tension:.25,spanGaps:false}))},
         options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:12,usePointStyle:true}},tooltip:{mode:'index',intersect:false,callbacks:{label:c=>c.dataset.label+': '+money(c.parsed.y)+' tỷ'}}},interaction:{mode:'index',intersect:false},scales:{x:{grid:{display:false}},y:{beginAtZero:true,grid:{color:'#EEF0F6'},ticks:{callback:v=>vnd(v)}}}}});
     });
     window.segMSel=window.segMSel??0;
@@ -2167,14 +2169,14 @@ function tsWire(){
   if(mo){
     mo.chains.forEach((c,i)=>{
       const years=Object.keys(c.data);
-      const mDs=years.map((y,k)=>({label:y,data:c.data[y],borderColor:CAT[k%CAT.length],backgroundColor:CAT[k%CAT.length],borderWidth:k===years.length-1?3:2,pointRadius:3,tension:.25,spanGaps:false}));
+      const mDs=years.map((y,k)=>({label:y,data:c.data[y],borderColor:i===0?FIRST_SEG_CHART_COLORS[k%FIRST_SEG_CHART_COLORS.length]:CAT[k%CAT.length],backgroundColor:i===0?FIRST_SEG_CHART_COLORS[k%FIRST_SEG_CHART_COLORS.length]:CAT[k%CAT.length],borderWidth:k===years.length-1?3:2,pointRadius:3,tension:.25,spanGaps:false}));
       const yLab=years.map(y=>{ const n=c.data[y].filter(v=>v!=null).length; const doneM=n?n+1:0; return doneM>=12?y:y+' ('+doneM+'T)'; });
       const yVal=years.map(y=>{ const a=c.data[y].filter(v=>v!=null); return a.length?a.reduce((x,z)=>x+z,0):null; });
       const fq=monthsToFlatQ(c.data);
       mkTS('segM'+i,{
         m:{labels:mo.months,datasets:mDs},
-        q:{labels:fq.labels,datasets:[{label:'Doanh thu',data:fq.values,backgroundColor:BLUE,borderRadius:4,maxBarThickness:44}]},
-        y:{labels:yLab,datasets:[{label:'Doanh thu',data:yVal,backgroundColor:BLUE,borderRadius:4,maxBarThickness:60}]},
+        q:{labels:fq.labels,datasets:[{label:'Doanh thu',data:fq.values,backgroundColor:i===0?FIRST_SEG_CHART_COLORS[2]:BLUE,borderRadius:4,maxBarThickness:44}]},
+        y:{labels:yLab,datasets:[{label:'Doanh thu',data:yVal,backgroundColor:i===0?FIRST_SEG_CHART_COLORS[2]:BLUE,borderRadius:4,maxBarThickness:60}]},
         cfg:(labels,datasets,p)=>{
           if(p==='q'||p==='y')return {type:'bar',data:{labels,datasets},
             options:baseOpts({plugins:{legend:{display:false},tooltip:{callbacks:{label:x=>x.parsed.y==null?'chưa có số':money(x.parsed.y)+' tỷ'}}}})};
