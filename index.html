@@ -1055,6 +1055,11 @@ const TEAL='#0F9B9B',ROSE='#B03A5B';
 const CAT=[BLUE,GREEN,PURPLE,GOLD,NAVY,TEAL,ROSE]; // 7 màu đã validate CVD (dataviz validator); GREY dành cho 'Khác'
 // Chỉ dùng cho chart đầu tiên của tab Mảng kinh doanh & Cửa hàng (BHX).
 const FIRST_SEG_CHART_COLORS=['#102332','#18276F','#3057EB','#4DA4DF','#B5E9FA','#D1D3D6'];
+// FinSuccess palette: áp trước cho 2 chart đầu tab Tài chính MWG.
+const FINANCE_PALETTE={navy:'#203F63',deepBlue:'#1F5B9B',blue:'#2D7ED8',sky:'#179FE0',cyan:'#0CBED2',teal:'#05C4A3',purple:'#9158E8'};
+const NET_CASH_COLORS=[FINANCE_PALETTE.sky,FINANCE_PALETTE.deepBlue,FINANCE_PALETTE.cyan,FINANCE_PALETTE.teal,FINANCE_PALETTE.navy,FINANCE_PALETTE.purple];
+const netCashDatasets=s=>[...s.stacks.map((x,i)=>({label:x.label,data:x.values,backgroundColor:NET_CASH_COLORS[i%NET_CASH_COLORS.length],stack:'s',maxBarThickness:48})),{type:'line',label:s.net.label||'Tiền mặt ròng',data:s.net.values,borderColor:FINANCE_PALETTE.blue,backgroundColor:FINANCE_PALETTE.blue,borderWidth:3,pointRadius:4,tension:.2}];
+const financeRatioDataset=r=>[{label:r.ratio.label,data:r.ratio.values,borderColor:FINANCE_PALETTE.purple,backgroundColor:FINANCE_PALETTE.purple,borderWidth:2.5,pointRadius:4,tension:.2}];
 Chart.defaults.font.family="Arial,system-ui,sans-serif"; Chart.defaults.font.size=12; Chart.defaults.color='#4a4a60';
 Chart.defaults.scales.linear.beginAtZero=true; // QUY TẮC: mọi trục giá trị bắt đầu từ 0
 const vnd=v=>v==null?'—':Number(v).toLocaleString('vi-VN');
@@ -1345,7 +1350,7 @@ function renderBS(){
   const colMap2={blue:BLUE,green:GREEN,neg:NEG,grey:GREY,purple:PURPLE,gold:GOLD,navy:NAVY};
   const ncs=b.netCashSeries;
   if(ncs){ $('bsSeriesRow').hidden=false; if(ncs.title)$('ncTitle').textContent=ncs.title;
-    mk('netCashChart',{type:'bar',data:{labels:ncs.labels,datasets:[...ncs.stacks.map(x=>({label:x.label,data:x.values,backgroundColor:colMap2[x.color]||BLUE,stack:'s',maxBarThickness:48})),{type:'line',label:ncs.net.label||'Tiền mặt ròng',data:ncs.net.values,borderColor:GREEN,backgroundColor:GREEN,borderWidth:3,pointRadius:4,tension:.2}]},
+    mk('netCashChart',{type:'bar',data:{labels:ncs.labels,datasets:netCashDatasets(ncs)},
       options:baseOpts({scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,grid:{color:'#EEF0F6'},ticks:{callback:v=>vnd(v)}}}})});
     $('ncNote').textContent=ncs.note||''; }
   const fs=b.finSeries;
@@ -1353,7 +1358,7 @@ function renderBS(){
     if(fs.bars&&fs.bars.length){ mk('finChart',{type:'bar',data:{labels:fs.labels,datasets:fs.bars.map(x=>({label:x.label,data:x.values,backgroundColor:colMap2[x.color]||BLUE,borderRadius:3,maxBarThickness:28}))},options:baseOpts()}); $('finNote').textContent=fs.note||''; }
     else { const fc=$('finCard'); fc.replaceWith($('finRatioCard')); $('bsSeriesTable').closest('.card').style.gridColumn='1/-1'; }
     if(fs.ratio.title)$('finRatioTitle').textContent=fs.ratio.title;
-    mk('finRatioChart',{type:'line',data:{labels:fs.labels,datasets:[{label:fs.ratio.label,data:fs.ratio.values,borderColor:PURPLE,backgroundColor:PURPLE,borderWidth:2.5,pointRadius:4,tension:.2}]},
+    mk('finRatioChart',{type:'line',data:{labels:fs.labels,datasets:financeRatioDataset(fs)},
       options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.parsed.y+'%'}}},scales:{x:{grid:{display:false}},y:{grid:{color:'#EEF0F6'},ticks:{callback:v=>v+'%'}}}}});
     $('finRatioNote').textContent=fs.ratio.note||'';
     const rows=[...(ncs?ncs.stacks.map(x=>[x.label,x.values]):[]),...(ncs?[[ncs.net.label||'Tiền mặt ròng',ncs.net.values]]:[]),...((fs.bars||fs.tableRows||[]).map(x=>[x.label,x.values])),[fs.ratio.label,fs.ratio.values.map(v=>v==null?null:v+'%')]];
@@ -2134,8 +2139,7 @@ function tsWire(){
   }
   // 6.2 Tiền mặt ròng & chuỗi tài chính — quý (nếu data.js có netCashSeriesQ/finSeriesQ) + năm
   const b=D.balance||{}, colMap={blue:BLUE,green:GREEN,neg:NEG,grey:GREY,purple:PURPLE,gold:GOLD,navy:NAVY};
-  const ncDs=s=>[...s.stacks.map(x=>({label:x.label,data:x.values,backgroundColor:colMap[x.color]||BLUE,stack:'s',maxBarThickness:48})),
-                 {type:'line',label:s.net.label||'Tiền mặt ròng',data:s.net.values,borderColor:GREEN,backgroundColor:GREEN,borderWidth:3,pointRadius:4,tension:.2}];
+  const ncDs=netCashDatasets;
   if(b.netCashSeries){
     mkTS('netCashChart',{def:'y',y:{labels:b.netCashSeries.labels,datasets:ncDs(b.netCashSeries)},
       q:b.netCashSeriesQ?{labels:b.netCashSeriesQ.labels,datasets:ncDs(b.netCashSeriesQ)}:null,
@@ -2148,7 +2152,7 @@ function tsWire(){
       cfg:(labels,datasets)=>({type:'bar',data:{labels,datasets},options:baseOpts()})});
   }
   if(fs&&fs.ratio){
-    const ratioCfg=r=>({type:'line',data:{labels:r.labels,datasets:[{label:r.ratio.label,data:r.ratio.values,borderColor:PURPLE,backgroundColor:PURPLE,borderWidth:2.5,pointRadius:4,tension:.2}]}});
+    const ratioCfg=r=>({type:'line',data:{labels:r.labels,datasets:financeRatioDataset(r)}});
     mkTS('finRatioChart',{def:'y',y:{labels:fs.labels,datasets:ratioCfg(fs).data.datasets},
       q:(fsQ&&fsQ.ratio)?{labels:fsQ.labels,datasets:ratioCfg(fsQ).data.datasets}:null,
       cfg:(labels,datasets)=>({type:'line',data:{labels,datasets},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.parsed.y+'%'}}},scales:{x:{grid:{display:false}},y:{beginAtZero:true,grid:{color:'#EEF0F6'},ticks:{callback:v=>v+'%'}}}}})});
