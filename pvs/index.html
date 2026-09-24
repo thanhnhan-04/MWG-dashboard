@@ -2876,7 +2876,7 @@ const NAVY='#1D2678',GREEN='#59C5C8',PURPLE='#861C52',GOLD='#FFD45D',BLUE='#2938
 const TEAL='#59C5C8',ROSE='#861C52';
 const CAT=[BLUE,GREEN,PURPLE,NAVY,GOLD]; // 5 màu chủ đạo FinSuccess
 const STACK_COLORS=['#1D2678','#2938A8','#4354B7','#6171C5','#8997D6','#B3BDE8','#D9DEF4']; // đáy đậm → đỉnh nhạt
-const stackColor=(i,total=1)=>STACK_COLORS[Math.round(i*(STACK_COLORS.length-1)/Math.max(1,total-1))];
+const stackColor=(i,total=1)=>total<=1?NAVY:total<=3?[BLUE,GREEN,PURPLE][i]:STACK_COLORS[Math.round(i*(STACK_COLORS.length-1)/Math.max(1,total-1))];
 const PVS_FIN_PALETTE={navy:'#1D2678',blue:'#2938A8',turquoise:'#59C5C8',purple:'#861C52',yellow:'#FFD45D'};
 const PVS_FIN_CHART_COLORS=[PVS_FIN_PALETTE.blue,PVS_FIN_PALETTE.turquoise,PVS_FIN_PALETTE.purple,PVS_FIN_PALETTE.navy,PVS_FIN_PALETTE.yellow];
 Chart.defaults.font.family="Arial,system-ui,sans-serif"; Chart.defaults.font.size=12; Chart.defaults.color='#4a4a60';

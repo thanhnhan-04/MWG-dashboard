@@ -1060,7 +1060,7 @@ const NAVY='#1D2678',GREEN='#59C5C8',PURPLE='#861C52',GOLD='#FFD45D',BLUE='#2938
 const TEAL='#59C5C8',ROSE='#861C52';
 const CAT=[BLUE,GREEN,PURPLE,NAVY,GOLD]; // 5 màu chủ đạo FinSuccess
 const STACK_COLORS=['#1D2678','#2938A8','#4354B7','#6171C5','#8997D6','#B3BDE8','#D9DEF4']; // đáy đậm → đỉnh nhạt
-const stackColor=(i,total=1)=>STACK_COLORS[Math.round(i*(STACK_COLORS.length-1)/Math.max(1,total-1))];
+const stackColor=(i,total=1)=>total<=1?NAVY:total<=3?[BLUE,GREEN,PURPLE][i]:STACK_COLORS[Math.round(i*(STACK_COLORS.length-1)/Math.max(1,total-1))];
 // Chỉ dùng cho chart đầu tiên của tab Mảng kinh doanh & Cửa hàng (BHX).
 const FIRST_SEG_CHART_COLORS=['#1D2678','#2938A8','#59C5C8','#861C52','#FFD45D'];
 // Bộ 5 màu FinSuccess dùng cho các chuỗi tài chính MWG.
