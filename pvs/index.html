@@ -3135,7 +3135,7 @@ function renderBS(){
   const colMap2={blue:BLUE,green:GREEN,neg:NEG,grey:GREY,purple:PURPLE,gold:GOLD,navy:NAVY};
   const ncs=b.netCashSeries;
   if(ncs){ $('bsSeriesRow').hidden=false; if(ncs.title)$('ncTitle').textContent=ncs.title;
-    mk('netCashChart',{type:'bar',data:{labels:ncs.labels,datasets:[...ncs.stacks.map((x,i)=>({label:x.label,data:x.values,backgroundColor:stackColor(i,ncs.stacks.length),stack:'s',maxBarThickness:48})),{type:'line',label:ncs.net.label||'Tiền mặt ròng',data:ncs.net.values,borderColor:GREEN,backgroundColor:GREEN,borderWidth:3,pointRadius:4,tension:.2}]},
+    mk('netCashChart',{type:'bar',data:{labels:ncs.labels,datasets:[...ncs.stacks.map((x,i)=>({label:x.label,data:x.values,backgroundColor:PVS_FIN_CHART_COLORS[ncs.stacks.length===1?3:i%PVS_FIN_CHART_COLORS.length],stack:'s',maxBarThickness:48})),{type:'line',label:ncs.net.label||'Tiền mặt ròng',data:ncs.net.values,borderColor:GREEN,backgroundColor:GREEN,borderWidth:3,pointRadius:4,tension:.2}]},
       options:baseOpts({scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,grid:{color:'#EEF0F6'},ticks:{callback:v=>vnd(v)}}}})});
     $('ncNote').textContent=ncs.note||''; }
   const fs=b.finSeries;
@@ -3370,7 +3370,11 @@ function timeChart(id,labels,series,{type='bar',unit='tỷ',stacked=false}={}){
   const line=type==='line';
   const finance=id.startsWith('pvs')&&!id.startsWith('pvsModel');
   const stackedCount=series.filter(s=>!s.type).length;
-  const color=(s,i)=>stacked&&!s.type?stackColor(series.slice(0,i).filter(x=>!x.type).length,stackedCount):finance?(id==='pvsFinRatio'?PVS_FIN_PALETTE.purple:PVS_FIN_CHART_COLORS[i%PVS_FIN_CHART_COLORS.length]):(s.color||CAT[i%CAT.length]);
+  const color=(s,i)=>{
+    const rank=series.slice(0,i).filter(x=>!x.type).length;
+    if(stacked&&!s.type)return finance?(s.color||PVS_FIN_CHART_COLORS[stackedCount===1?3:rank%PVS_FIN_CHART_COLORS.length]):stackColor(rank,stackedCount);
+    return s.color||(finance?(id==='pvsFinRatio'?PVS_FIN_PALETTE.purple:PVS_FIN_CHART_COLORS[i%PVS_FIN_CHART_COLORS.length]):CAT[i%CAT.length]);
+  };
   mk(id,{type,data:{labels,datasets:series.map((s,i)=>({label:s.name,data:s.values,backgroundColor:color(s,i),borderColor:color(s,i),borderWidth:line?2:0,pointRadius:line?3:0,tension:.15,spanGaps:false,...(s.type?{type:s.type,borderWidth:3,pointRadius:3,stack:'net-'+i}:{}),...(stacked&&!s.type?{stack:'components'}:{}),maxBarThickness:42}))},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{position:'bottom',labels:{boxWidth:10,usePointStyle:true}},tooltip:{callbacks:{label:c=>`${c.dataset.label}: ${fmt(c.dataset.data[c.dataIndex],2)} ${unit}`}}},scales:{x:{stacked,grid:{display:false}},y:{stacked,beginAtZero:true,grid:{color:'#EEF0F6'},ticks:{callback:v=>fmt(v)+(unit==='%'?'%':'')}}}}});
 }
 let segPeriod='annual';try{segPeriod=localStorage.getItem(KEY+'_seg_period')||segPeriod;}catch(e){}
@@ -4203,7 +4207,7 @@ function tsWire(){
   }
   // 6.2 Tiền mặt ròng & chuỗi tài chính — quý (nếu data.js có netCashSeriesQ/finSeriesQ) + năm
   const b=D.balance||{}, colMap={blue:BLUE,green:GREEN,neg:NEG,grey:GREY,purple:PURPLE,gold:GOLD,navy:NAVY};
-  const ncDs=s=>[...s.stacks.map((x,i)=>({label:x.label,data:x.values,backgroundColor:stackColor(i,s.stacks.length),stack:'s',maxBarThickness:48})),
+  const ncDs=s=>[...s.stacks.map((x,i)=>({label:x.label,data:x.values,backgroundColor:PVS_FIN_CHART_COLORS[s.stacks.length===1?3:i%PVS_FIN_CHART_COLORS.length],stack:'s',maxBarThickness:48})),
                  {type:'line',label:s.net.label||'Tiền mặt ròng',data:s.net.values,borderColor:GREEN,backgroundColor:GREEN,borderWidth:3,pointRadius:4,tension:.2}];
   if(b.netCashSeries){
     mkTS('netCashChart',{def:'y',y:{labels:b.netCashSeries.labels,datasets:ncDs(b.netCashSeries)},
