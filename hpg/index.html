@@ -343,6 +343,19 @@ table.fintbl thead th.gq{background:var(--blue)}
   const options=document.getElementById('stockOptions');
   const message=document.getElementById('stockMessage');
   const stocks=[{code:'MWG',name:'Thế Giới Di Động',path:'../'},{code:'PVS',name:'Dịch vụ Kỹ thuật Dầu khí',path:'../pvs/'},{code:'HPG',name:'Tập đoàn Hòa Phát',path:'../hpg/'}];
+  const catalogPath='../stocks.json', catalogBase='../';
+  async function refreshStocks(){
+    try{
+      const response=await fetch(catalogPath+'?t='+Date.now(),{cache:'no-store'});
+      if(!response.ok)return;
+      const catalog=await response.json();
+      if(!Array.isArray(catalog.stocks))return;
+      catalog.stocks.forEach(row=>{
+        if(!row.code||stocks.some(item=>item.code===row.code))return;
+        stocks.push({code:row.code,name:row.name||row.code,path:catalogBase+(row.folder?row.folder+'/':'')});
+      });
+    }catch(e){}
+  }
   let matches=[],selected=0;
   function close(){options.classList.remove('open');input.setAttribute('aria-expanded','false');}
   function render(){
@@ -363,12 +376,13 @@ table.fintbl thead th.gq{background:var(--blue)}
     options.classList.toggle('open',matches.length>0);
     input.setAttribute('aria-expanded',String(matches.length>0));
   }
-  form.addEventListener('submit',event=>{
+  form.addEventListener('submit',async event=>{
     event.preventDefault();
     const q=input.value.trim().toLocaleLowerCase('vi');
     if(!q){message.textContent='Hãy nhập mã hoặc tên công ty.';input.focus();return;}
     const exact=stocks.find(item=>item.code.toLowerCase()===q||item.name.toLocaleLowerCase('vi')===q);
-    const match=exact||matches[selected]||stocks.find(item=>item.code.toLowerCase().includes(q)||item.name.toLocaleLowerCase('vi').includes(q));
+    let match=exact||matches[selected]||stocks.find(item=>item.code.toLowerCase().includes(q)||item.name.toLocaleLowerCase('vi').includes(q));
+    if(!match){await refreshStocks();match=stocks.find(item=>item.code.toLowerCase()===q||item.name.toLocaleLowerCase('vi')===q);}
     if(match){location.assign(match.path+'#overview');return;}
     close();message.textContent='Chưa có dashboard cho mã này.';
   });
