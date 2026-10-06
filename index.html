@@ -1,7 +1,7 @@
 <!doctype html>
 <!-- Trang chuyển hướng cho một địa chỉ cũ của website. Publish cùng nội dung thành index.html
      và 404.html của repo Pages cũ, sau khi thay hai giá trị:
-       https://finsuccess-investment-jsc.github.io/MWG-dashboard  địa chỉ mới, không có "/" cuối (vd https://dashboard.fisc.vn)
+       https://finsuccess-investment-jsc.github.io/stock-dashboard  địa chỉ mới, không có "/" cuối (vd https://dashboard.fisc.vn)
        /MWG-dashboard    phần đường dẫn của địa chỉ cũ cần bỏ (vd /MWG-dashboard)
      Mang các khóa localStorage của dashboard sang địa chỉ mới (_template/storage-migrate.js nhận).
      Bản đang chạy: thanhnhan-04/MWG-dashboard. -->
@@ -17,7 +17,7 @@ a{color:inherit}
 </style>
 <script>
 (function () {
-  var NEW_BASE = "https://finsuccess-investment-jsc.github.io/MWG-dashboard";
+  var NEW_BASE = "https://finsuccess-investment-jsc.github.io/stock-dashboard";
   var PREFIX = "/MWG-dashboard";
   var ALLOW = /^(chart_types_v1|ts_chart_v1|chart_axis_range_v1|fin_subtab_v1|fs_subtab_v1|fs_analyst_unlocked)$|^(ctd|dhc|fpt|frt|gas|hpg|mwg|php|pow|pvd|pvs|pvt|qns|ree|vhc|vnm)_|_(multiple_visible_v2|valuation_horizon_v1)$/;
   var path = location.pathname.indexOf(PREFIX) === 0 ? location.pathname.slice(PREFIX.length) : location.pathname;
@@ -47,7 +47,7 @@ a{color:inherit}
 <p><a id="go" href="#">Mở dashboard ở địa chỉ mới</a></p>
 <p id="backup" hidden>Dữ liệu bạn đã lưu trên trình duyệt quá lớn để chuyển tự động. <a id="dl" href="#" download="finsuccess-dashboard-backup.json">Tải bản sao lưu</a> trước khi mở địa chỉ mới.</p>
 <script>
-document.getElementById("go").href = window.__fsTarget || "https://finsuccess-investment-jsc.github.io/MWG-dashboard/";
+document.getElementById("go").href = window.__fsTarget || "https://finsuccess-investment-jsc.github.io/stock-dashboard/";
 if (window.__fsBackup) {
   document.getElementById("backup").hidden = false;
   document.getElementById("dl").href = URL.createObjectURL(new Blob([window.__fsBackup], { type: "application/json" }));
