@@ -1,14 +1,56 @@
 <!doctype html>
+<!-- Trang chuyển hướng cho một địa chỉ cũ của website. Publish cùng nội dung thành index.html
+     và 404.html của repo Pages cũ, sau khi thay hai giá trị:
+       https://finsuccess-investment-jsc.github.io/MWG-dashboard  địa chỉ mới, không có "/" cuối (vd https://dashboard.fisc.vn)
+       /MWG-dashboard    phần đường dẫn của địa chỉ cũ cần bỏ (vd /MWG-dashboard)
+     Mang các khóa localStorage của dashboard sang địa chỉ mới (_template/storage-migrate.js nhận).
+     Bản đang chạy: thanhnhan-04/MWG-dashboard. -->
 <html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Stock Dashboard đã chuyển địa chỉ</title>
+<meta name="referrer" content="origin">
 <meta name="robots" content="noindex">
+<title>Stock Dashboard đã chuyển địa chỉ</title>
+<style>
+:root{--ink:#1D2678;--bg:#fff}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--ink:#d9def4;--bg:#10142e}}
+body{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;margin:40px 16px;color:var(--ink);background:var(--bg);line-height:1.5}
+a{color:inherit}
+</style>
 <script>
-// Giữ nguyên đường dẫn mã (/pvs/...), query và hash (#bs) khi chuyển sang địa chỉ mới.
-var NEW_BASE = "https://finsuccess-investment-jsc.github.io/MWG-dashboard";
-var rest = location.pathname.replace(/^\/MWG-dashboard/, "");
-location.replace(NEW_BASE + rest + location.search + location.hash);
+(function () {
+  var NEW_BASE = "https://finsuccess-investment-jsc.github.io/MWG-dashboard";
+  var PREFIX = "/MWG-dashboard";
+  var ALLOW = /^(chart_types_v1|ts_chart_v1|chart_axis_range_v1|fin_subtab_v1|fs_subtab_v1|fs_analyst_unlocked)$|^(ctd|dhc|fpt|frt|gas|hpg|mwg|php|pow|pvd|pvs|pvt|qns|ree|vhc|vnm)_|_(multiple_visible_v2|valuation_horizon_v1)$/;
+  var path = location.pathname.indexOf(PREFIX) === 0 ? location.pathname.slice(PREFIX.length) : location.pathname;
+  var target = NEW_BASE + (path || "/") + location.search;
+  window.__fsTarget = target + location.hash;
+  try {
+    var data = {}, n = 0;
+    for (var i = 0; i < localStorage.length; i++) {
+      var k = localStorage.key(i);
+      if (ALLOW.test(k)) { data[k] = localStorage.getItem(k); n++; }
+    }
+    if (n) {
+      var json = JSON.stringify({ v: 1, from: location.origin, at: new Date().toISOString(), hash: location.hash, data: data });
+      var bytes = new TextEncoder().encode(json), bin = "";
+      for (var j = 0; j < bytes.length; j += 0x8000) bin += String.fromCharCode.apply(null, bytes.subarray(j, j + 0x8000));
+      var b64 = btoa(bin).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+      if (b64.length < 1500000) { location.replace(target + "#fsmig=" + b64); return; }
+      window.__fsBackup = json;   // quá lớn để chuyển qua link: cho tải bản sao lưu
+      return;
+    }
+  } catch (e) { /* trình duyệt chặn localStorage: chuyển hướng bình thường */ }
+  location.replace(window.__fsTarget);
+})();
 </script>
-<style>body{font-family:system-ui,sans-serif;margin:40px 16px;color:#1D2678;background:#fff}</style>
 </head><body>
-<p>Stock Dashboard đã chuyển sang địa chỉ mới: <a id="l" href="https://finsuccess-investment-jsc.github.io/MWG-dashboard/">finsuccess-investment-jsc.github.io/MWG-dashboard</a></p>
+<p>Stock Dashboard đã chuyển sang địa chỉ mới.</p>
+<p><a id="go" href="#">Mở dashboard ở địa chỉ mới</a></p>
+<p id="backup" hidden>Dữ liệu bạn đã lưu trên trình duyệt quá lớn để chuyển tự động. <a id="dl" href="#" download="finsuccess-dashboard-backup.json">Tải bản sao lưu</a> trước khi mở địa chỉ mới.</p>
+<script>
+document.getElementById("go").href = window.__fsTarget || "https://finsuccess-investment-jsc.github.io/MWG-dashboard/";
+if (window.__fsBackup) {
+  document.getElementById("backup").hidden = false;
+  document.getElementById("dl").href = URL.createObjectURL(new Blob([window.__fsBackup], { type: "application/json" }));
+}
+</script>
 </body></html>
